@@ -53,10 +53,9 @@ fs.ensureDir(outputDir).then(() => {
       }
     }, { recursively : false, onlyMp3: false });
     return await Promise.all(promises)
-      .then(() => process.exit(0))
       .catch(e => {
-        console.error(e);
-        process.exit(1);
+        logger(e, 'r');
+        throw e;
       });
   })();
 });
