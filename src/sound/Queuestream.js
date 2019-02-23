@@ -27,7 +27,7 @@ class QueueStream extends EventEmitter {
       this.emit('next', nextTrack);
 
       const trackStream = nextTrack.getSound();
-      trackStream.on('end', () => {
+      trackStream.once('end', () => {
         this.next();
       });
       trackStream.pipe(this.current, { end: false });

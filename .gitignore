@@ -1,1 +1,3 @@
 node_modules
+*.asd
+.DS_Store
