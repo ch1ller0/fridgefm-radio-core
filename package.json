@@ -6,11 +6,11 @@
   "license": "MIT",
   "main": "index.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.3.0"
   },
   "scripts": {
     "lint": "eslint ./src --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest ./src"
   },
   "husky": {
     "hooks": {

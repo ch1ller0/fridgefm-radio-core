@@ -11,7 +11,7 @@ const getId3Tags = ({ path }) => id3.read(path);
 
 const createId3TagsSchema = ({ fileName }) => {
   try {
-    const [ artist, title ] = fileName.split(' - ');
+    const [ artist, title = '' ] = fileName.split(' - ');
 
     return {
       title: title.split('.')[0],
