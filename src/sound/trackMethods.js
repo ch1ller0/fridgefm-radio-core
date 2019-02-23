@@ -1,11 +1,11 @@
 const id3 = require('node-id3');
 const getMP3Duration = require('get-mp3-duration');
-const { getDateFromMsecs } = require('../../utils/time');
+const { getDateFromMsecs } = require('../utils/time');
 const fs = require('fs');
 const _ = require('highland');
 const { Buffer } = require('buffer');
-const { logger } = require('../../utils/logger');
-const { identity } = require('../../utils/funcs');
+const { logger } = require('../utils/logger');
+const { identity } = require('../utils/funcs');
 
 const getId3Tags = ({ path }) => id3.read(path);
 

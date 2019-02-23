@@ -1,9 +1,9 @@
-const { QueueStream } = require('../QueueStream/Queuestream');
-const { Track } = require('../Track/Track');
-const { shuffleArray } = require('../../utils/shuffle');
-const { calculateScheduled, getHHMMSS } = require('../../utils/time');
-const { logger } = require('../../utils/logger');
-const { noop } = require('../../utils/funcs');
+const { QueueStream } = require('./Queuestream');
+const { Track } = require('./Track');
+const { shuffleArray } = require('../utils/shuffle');
+const { calculateScheduled, getHHMMSS } = require('../utils/time');
+const { logger } = require('../utils/logger');
+const { noop } = require('../utils/funcs');
 
 const headers = {
   'icy-name': 'ch1ller radio',
