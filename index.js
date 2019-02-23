@@ -1,5 +1,5 @@
-const { Station } = require('./src/sound/Station/Station');
+const { Station } = require('./src/sound/Station');
 
 module.exports = {
-    Station
-}
+  Station,
+};

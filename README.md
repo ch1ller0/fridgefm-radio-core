@@ -26,3 +26,8 @@ station.start({
     src='/stream'
 />
 ```
+
+or just go to [EXAMPLES](./examples/server.js)
+```
+node examples/server.js
+```
