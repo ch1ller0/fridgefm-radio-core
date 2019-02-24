@@ -1,5 +1,5 @@
 {
-  "name": "@ch1ller/radio-engine",
+  "name": "@kefir100/radio-engine",
   "author": "Grigory Gorshkov",
   "version": "1.0.0",
   "description": "internet radio engine made on NodeJS platform",
@@ -8,14 +8,23 @@
   "engines": {
     "node": ">=8.3.0"
   },
-  "scripts": {
-    "lint": "eslint ./src --fix",
-    "test": "jest ./src"
-  },
+  "keywords": [
+    "radio",
+    "radio engine",
+    "mp3"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kefir100/radio-ch1ller.git"
+  },
+  "scripts": {
+    "lint": "eslint ./src --fix",
+    "test": "jest ./src"
   },
   "dependencies": {
     "chalk": "^2.4.2",
@@ -33,5 +42,12 @@
     "eslint-plugin-node": "^8.0.1",
     "husky": "^1.3.1",
     "jest": "^24.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/Kefir100/radio-ch1ller/issues"
+  },
+  "homepage": "https://github.com/Kefir100/radio-ch1ller#readme",
+  "directories": {
+    "example": "examples"
   }
 }
