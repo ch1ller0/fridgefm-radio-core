@@ -50,7 +50,7 @@ class Station {
   }
 
   connectListener(req, res, cb = noop) {
-    const { current } = this.queuestream;
+    const { current, getPrebuffer } = this.queuestream;
 
     this.stats.connected++;
     this.stats.connections++;
@@ -60,6 +60,7 @@ class Station {
       this.stats.connected--;
     });
 
+    res.write(getPrebuffer());
     current.pipe(res);
     cb();
   }
