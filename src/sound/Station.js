@@ -51,6 +51,9 @@ class Station {
 
   connectListener(req, res, cb = noop) {
     const { current, getPrebuffer } = this.queuestream;
+    current.on('error', e => {
+      logger(e, 'r');
+    });
 
     this.stats.connected++;
     this.stats.connections++;

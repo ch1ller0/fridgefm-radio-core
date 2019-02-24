@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 const devnull = require('dev-null');
 const { Transform } = require('stream');
 const { modifyPrebuffer, getPrebuffer } = require('./methods/prebuffer');
+const { logger } = require('../utils/logger');
 
 class QueueStream extends EventEmitter {
   constructor({ maxListeners }) {
@@ -33,6 +34,9 @@ class QueueStream extends EventEmitter {
       this.emit('next', nextTrack);
 
       const trackStream = nextTrack.getSound();
+      trackStream.once('error', e => {
+        logger(e, 'r');
+      });
       trackStream.once('end', () => {
         this.next();
       });
