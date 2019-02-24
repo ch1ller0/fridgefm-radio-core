@@ -1,18 +1,18 @@
-// const { Track } = require('../Track');
-const { getMp3Stats, getId3Tags } = require('../trackMethods');
+const { getMp3Stats, getId3Tags } = require('../sound');
+const pathToMusic = `${process.cwd()}/examples/music`;
 
 const tracks = [
   {
-    path: `${__dirname}/mp3_test/Artist1 - Track1.mp3`,
+    path: `${pathToMusic}/Artist1 - Track1.mp3`,
     name: 'Artist1 - Track1.mp3',
   },
   {
-    path: `${__dirname}/mp3_test/Artist1 - Track2.mp3`,
+    path: `${pathToMusic}/Artist1 - Track2.mp3`,
     name: 'Artist1 - Track2.mp3',
   },
 ];
 
-describe('sound/trackMethods', () => {
+describe('methods/sound', () => {
   it('getMp3Stats', () => {
     const common = {
       duration: 7549,

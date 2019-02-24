@@ -1,9 +1,9 @@
 const express = require('express');
 const { Station } = require('../index');
 const station = new Station();
-const port = 3000;
+const port = 3001;
 const server = express();
-const path = require('path').resolve(__dirname, '../src/sound/__tests__/mp3_test/');
+const path = require('path').resolve(__dirname, './music');
 
 const tracks = [
   {

@@ -1,4 +1,4 @@
-const { getMp3Stats, createSoundStream, getId3Tags } = require('./trackMethods');
+const { getMp3Stats, createSoundStream, getId3Tags } = require('./methods/sound');
 
 class Track {
   constructor({ path, name }) {

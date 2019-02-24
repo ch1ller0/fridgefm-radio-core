@@ -2,7 +2,7 @@ const Lame = require('node-lame').Lame;
 const { processFilesInDir } = require('../utils/file');
 const fs = require('fs-extra');
 const path = require('path');
-const { createId3TagsSchema } = require('../sound/trackMethods');
+const { createId3TagsSchema } = require('../sound/methods/sound');
 const { logger } = require('../utils/logger');
 
 const OUTPUT_PATH = './resampled';
