@@ -39,9 +39,15 @@ jobs:
 
 workflows:
   version: 2
-  test-publish:
+  branch-test:
     jobs:
       - test
+  tag-test-publish:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /^v.*/
       - publish:
           requires:
             - test
