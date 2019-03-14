@@ -9,16 +9,24 @@ const { Buffer } = require('buffer');
 
 const getId3Tags = ({ path }) => id3.read(path);
 
-const createId3TagsSchema = ({ fileName }) => {
+const updateId3Tags = ({ path, file }) => {
   try {
-    const [ artist, title = '' ] = fileName.split(' - ');
-
-    return {
-      title: title.split('.')[0],
-      artist,
+    const inArr = file.split('.');
+    if (inArr.length > 2) {
+      throw new Error(`get rid of a dot inside of a file: ${file}`);
+    }
+    const format = inArr[1];
+    const [ artist, title ] = file.split(' - ');
+    const meta = {
+      ...(format === 'mp3' ? getId3Tags({ path }) : {}),
+      title: title.split('.')[0].trim(),
+      artist: artist.trim(),
     };
+
+    return id3.update(meta, path);
+
   } catch(e) {
-    console.error('Error on file: ', fileName);
+    console.error('Error on file: ', file);
     throw e;
   }
 };
@@ -62,6 +70,6 @@ const createSoundStream = ({ path, bitrate }) => {
 module.exports = {
   getMp3Stats,
   createSoundStream,
-  createId3TagsSchema,
   getId3Tags,
+  updateId3Tags,
 };
