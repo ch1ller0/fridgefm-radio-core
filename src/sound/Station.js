@@ -5,13 +5,15 @@ const { calculateScheduled, getHHMMSS } = require('../utils/time');
 const { logger } = require('../utils/logger');
 const { noop } = require('../utils/funcs');
 
+// TODO add icy metaint
 const headers = {
-  'icy-name': 'ch1ller radio',
+  'icy-name': '@kefir100/radio-engine',
   'icy-genre': 'house',
   'icy-url': 'https://',
   'icy-pub':'0',
   'icy-br':'56',
-  'icy-metaint': '0', //32*1024
+  'icy-metaint': '0',
+  'icy-notice1': 'Live radio powered by https://www.npmjs.com/package/@kefir100/radio-engine',
   'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=0',
   'Content-Type': 'audio/mpeg',
 };
