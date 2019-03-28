@@ -2,12 +2,21 @@ const id3 = require('node-id3');
 const getMP3Duration = require('get-mp3-duration');
 const { getDateFromMsecs } = require('../../utils/time');
 const { logger } = require('../../utils/logger');
+const { getHandler } = require('../../utils/handlers');
 const { identity } = require('../../utils/funcs');
 const fs = require('fs');
 const _ = require('highland');
 const { Buffer } = require('buffer');
 
-const getId3Tags = ({ path }) => id3.read(path);
+const getId3Tags = ({ path }) => {
+  try {
+    return id3.read(path);
+  }
+  catch(e) {
+    const result = getHandler('error')(e, { path });
+    return result || {};
+  }
+};
 
 const updateId3Tags = ({ path, file }) => {
   try {
