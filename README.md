@@ -9,7 +9,9 @@ npm i @kefir100/radio-engine --save
 ### Server
 ```javascript
 const { Station } = require('@kefir100/radio-engine');
-const station = new Station();
+const station = new Station({
+  error: (...args) => {} // override default handlers
+});
 
 station.addTrack({ path: '/Music/', file: 'track1.mp3' });
 station.addTrack({ path: '/Music/', file: 'track2.mp3' });
@@ -38,4 +40,4 @@ node examples/server.js
 ```
 
 ## Demo
-Fully working demo is available on ch1ller.com
+Fully working demo is available on http://ch1ller.com

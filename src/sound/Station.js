@@ -2,6 +2,7 @@ const { QueueStream } = require('./Queuestream');
 const { Track } = require('./Track');
 const { shuffleArray } = require('../utils/shuffle');
 const { calculateScheduled, getHHMMSS } = require('../utils/time');
+const { createHandler } = require('../utils/handlers');
 const { logger } = require('../utils/logger');
 const { noop } = require('../utils/funcs');
 
@@ -19,7 +20,7 @@ const headers = {
 };
 
 class Station {
-  constructor() {
+  constructor(handlers) {
     this.playlist = [];
     this.stats = {
       numPlayed: 0,
@@ -35,6 +36,8 @@ class Station {
     this.queuestream.on('end', () => {
       this.start({ shuffle: true });
     });
+
+    handlers && createHandler(handlers);
   }
 
   start({ shuffle = false } = {}) {
