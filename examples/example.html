@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      function getMeta() {
+        fetch('/info')
+          .then(res => res.json())
+          .then(cur => {
+            document.getElementById('artist').innerHTML = `Artist: ${cur.artist}`;
+            document.getElementById('title').innerHTML = `Title: ${cur.title}`;
+          })
+      }
+    </script>
+    <audio controls src='/stream' type='audio/mp3'></audio>
+    <div>
+      <button onclick="getMeta()">Get Current Playing Track Info</button>
+      <p id='artist'></p>
+      <p id='title'></p>
+      <p id='misc'></p>
+    </div>
+  </body>
+</html>

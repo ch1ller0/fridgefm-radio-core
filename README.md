@@ -38,6 +38,10 @@ or just go to [EXAMPLES](./examples/server.js)
 ```
 node examples/server.js
 ```
+OR
+```
+node examples/server.js [path/to/your_mp3tracks]
+```
 
 ## Demo
 Fully working demo is available on http://ch1ller.com
