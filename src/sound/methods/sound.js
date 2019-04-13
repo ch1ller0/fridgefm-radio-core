@@ -4,6 +4,7 @@ const { getDateFromMsecs } = require('../../utils/time');
 const { logger } = require('../../utils/logger');
 const { getHandler } = require('../../utils/handlers');
 const { identity } = require('../../utils/funcs');
+const { isMp3 } = require('../../utils/mp3');
 const fs = require('fs');
 const _ = require('highland');
 const { Buffer } = require('buffer');
@@ -20,14 +21,9 @@ const getId3Tags = ({ path }) => {
 
 const updateId3Tags = ({ path, file }) => {
   try {
-    const inArr = file.split('.');
-    if (inArr.length > 2) {
-      throw new Error(`get rid of a dot inside of a file: ${file}`);
-    }
-    const format = inArr[1];
     const [ artist, title ] = file.split(' - ');
     const meta = {
-      ...(format === 'mp3' ? getId3Tags({ path }) : {}),
+      ...(isMp3(file) ? getId3Tags({ path }) : {}),
       title: title.split('.')[0].trim(),
       artist: artist.trim(),
     };
