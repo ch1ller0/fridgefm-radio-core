@@ -2,3 +2,5 @@
 .circleci
 tslint.json
 tsconfig.json
+jest.config.json
+**/__tests__
