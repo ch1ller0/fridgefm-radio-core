@@ -16,7 +16,7 @@ const cols = {
   t: identity,
 };
 
-const logger = (data: any, color: Color = "t", showTime: boolean = true, ...args: any) => {
+const logger = (data: any, color: Color = "t", showTime: boolean = true, ...args: any): void => {
   const stringData = typeof data === "string";
   const time = showTime ? `${getHHMMSS(Date.now())} ` : "";
   stringData ?

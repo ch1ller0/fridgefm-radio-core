@@ -1,3 +1,3 @@
-export const identity = (x: any) => x;
+export const identity = (x: any): any => x;
   /* tslint:disable:no-empty */
-export const noop = () => {};
+export const noop = (): void => {};
