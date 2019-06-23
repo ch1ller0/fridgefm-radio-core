@@ -15,7 +15,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "yarn lint"
     }
   },
   "repository": {
@@ -23,6 +23,7 @@
     "url": "git+https://github.com/Kefir100/radio-ch1ller.git"
   },
   "scripts": {
+    "build": "tsc",
     "lint": "tslint --fix -c tslint.json 'src/**/*.ts' ",
     "test": "jest ./src"
   },

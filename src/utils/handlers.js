@@ -11,5 +11,5 @@ module.exports = {
   createHandler: (obj) => {
     handler = obj;
   },
-  getHandler: (type) => handler[type] || noop,
+  getHandler: type => handler[type] || noop,
 };

@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { Station } = require('../index');
+const { Station } = require('../lib/index');
+
 const station = new Station();
 const port = 3001;
 const server = express();
@@ -9,7 +10,7 @@ const musicPath = path.resolve(__dirname, process.argv[2] || './music');
 
 // add tracks to station
 fs.readdirSync(musicPath)
-  .forEach(file => {
+  .forEach((file) => {
     station.addTrack({
       path: musicPath,
       file,
@@ -18,7 +19,7 @@ fs.readdirSync(musicPath)
 
 // update currently playing track info
 let currentTrack;
-station.on('nextTrack', track => {
+station.on('nextTrack', (track) => {
   currentTrack = track.getMeta();
 });
 

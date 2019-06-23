@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-      "outDir": "./lib",
-      "allowJs": true,
-      "target": "es6",
-      "noImplicitAny": true,
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "sourceMap": true
+    "outDir": "./lib",
+    "allowJs": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": false
   },
   "include": [
-      "./src/**/*"
+    "./src/**/*"
+  ],
+  "exclude": [
+    "**/__tests__"
   ]
 }
