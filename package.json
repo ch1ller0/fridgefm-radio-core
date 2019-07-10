@@ -1,7 +1,7 @@
 {
   "name": "@kefir100/radio-engine",
   "author": "Grigory Gorshkov",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "internet radio engine made on NodeJS platform",
   "license": "MIT",
   "main": "index.js",
