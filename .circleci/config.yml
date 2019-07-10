@@ -14,10 +14,10 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
-      - run: npm install
+      - run: yarn install
       - run:
           name: Run tests
-          command: npm test
+          command: yarn test
       - save_cache:
           paths:
             - node_modules
@@ -35,7 +35,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
           name: Publish package
-          command: npm publish
+          command: yarn publish
 
 workflows:
   version: 2
