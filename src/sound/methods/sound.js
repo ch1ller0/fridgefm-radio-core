@@ -7,7 +7,6 @@ const { identity } = require('../../utils/funcs');
 const { isMp3 } = require('../../utils/mp3');
 const fs = require('fs');
 const _ = require('highland');
-const { Buffer } = require('buffer');
 
 const getId3Tags = ({ path }) => {
   try {
@@ -58,7 +57,6 @@ const createSoundStream = ({ path, bitrate }) => {
   try {
     const rs = _(fs.createReadStream(path, { highWaterMark: bitrate }));
     const comp = _.compose(
-      _.append(Buffer.alloc(bitrate)),
       _.ratelimit(1,1000),
       process.env.NODE_ENV === 'development' ? _.slice(120, 160) : identity,
       _.toNodeStream({ objectMode: false })
