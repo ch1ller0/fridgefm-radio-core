@@ -5,54 +5,126 @@ defaults: &defaults
   docker:
     - image: circleci/node:10.15
 
+tag-filter: &tag-filter
+  filters:
+    tags:
+      only: /v[0-9]+(\.[0-9]+)*/
+    branches:
+      ignore: /.*/
+
+whitelist: &whitelist
+  paths:
+    - .npmignore
+    - lib/*
+    - node_modules/*
+    - src/*
+    - package.json
+    - README.md
+    - tsconfig.json
+    - tslint.json
+    - jest.config.json
+    - examples
+
 jobs:
-  test:
+  checkout:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-{{ checksum "yarn.lock" }}
           - v1-dependencies-
-      - run: yarn install
       - run:
-          name: Run tests
-          command: yarn test
+          name: Installing dependencies
+          command: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
       - persist_to_workspace:
           root: ~/repo
-          paths: .
+          <<: *whitelist
+
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Running linter
+          command: yarn lint:ci
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Running unit tests
+          command: yarn test
+      - persist_to_workspace:
+          root: ~/repo
+          <<: *whitelist
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Building code
+          command: yarn build
+
+      - persist_to_workspace:
+          root: ~/repo
+          <<: *whitelist
+
   publish:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
       - run:
-          name: Authenticate with registry
+          name: Authenticating via registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
-          name: Publish package
-          command: yarn publish
+          name: Publishing package
+          command: yarn publish --access=public
 
 workflows:
   version: 2
-  branch-test:
+  pr-branch:
     jobs:
-      - test
-  tag-test-publish:
-    jobs:
+      - checkout
       - test:
-          filters:
-            tags:
-              only: /^v.*/
-      - publish:
+          requires:
+            - checkout
+      - lint:
+          requires:
+            - checkout
+      - build:
+          requires:
+            - lint
+            - test
+  tag-release:
+    jobs:
+      - checkout:
+          <<: *tag-filter
+      - test:
+          <<: *tag-filter
+          requires:
+            - checkout
+      - lint:
+          <<: *tag-filter
+          requires:
+            - checkout
+      - build:
+          <<: *tag-filter
           requires:
             - test
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+            - lint
+      - publish:
+          <<: *tag-filter
+          requires:
+            - build

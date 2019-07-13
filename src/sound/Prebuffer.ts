@@ -1,12 +1,14 @@
-const { Buffer } = require('buffer');
+import { Buffer } from 'buffer';
 const PREBUFFER_LENGTH = 12;
 
-class Prebuffer {
+export class Prebuffer {
+  private storage: Buffer[];
+
   constructor() {
     this.storage = [];
   }
 
-  modify(chunk) {
+  public modify(chunk: Buffer) {
     if (this.storage.length > PREBUFFER_LENGTH) {
       this.storage.shift();
     }
@@ -14,11 +16,9 @@ class Prebuffer {
     this.storage.push(chunk);
   }
 
-  getStorage() {
+  public getStorage() {
     const totalPrebufferLength = (this.storage[0] || []).length * PREBUFFER_LENGTH;
 
     return Buffer.concat(this.storage, totalPrebufferLength);
   }
 }
-
-module.exports = Prebuffer;

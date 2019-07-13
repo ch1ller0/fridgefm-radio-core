@@ -1,3 +1,6 @@
 /examples
 .circleci
-.eslintrc
+tslint.json
+tsconfig.json
+jest.config.json
+**/__tests__
