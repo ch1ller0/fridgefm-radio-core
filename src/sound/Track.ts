@@ -2,7 +2,7 @@ import { TrackArgs, TrackStats } from '../types/Track.d';
 import { createSoundStream, getId3Tags, getMp3Stats } from './methods/sound';
 
 export class Track {
-  private fsStats: TrackStats;
+  public fsStats: TrackStats;
 
   constructor({ path, name }: TrackArgs) {
     this.fsStats = getMp3Stats({ path, name });

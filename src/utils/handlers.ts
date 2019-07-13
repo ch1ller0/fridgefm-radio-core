@@ -25,4 +25,5 @@ const getHandler = (type: keyof Handlers): Handler<any> => handler[type] || noop
 export {
   getHandler,
   createHandler,
+  Handlers,
 };

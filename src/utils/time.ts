@@ -19,7 +19,7 @@ export const getHHMMSS = (ms: Msecs) => new Date(ms)
 export const calculateScheduled = ({ playlist }: any, i: number) => {
   const prev = playlist
     .slice(0, i)
-    .reduce((acc: any, { track: { fsStats : { duration } } }: any) => {
+    .reduce((acc: any, { fsStats : { duration } }: any) => {
       acc += duration;
       return acc;
     }, 0);

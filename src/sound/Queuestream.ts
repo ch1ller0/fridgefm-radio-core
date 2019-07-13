@@ -9,9 +9,9 @@ type QueueStreamArgs = {
   maxListeners: number;
 };
 
-class QueueStream extends EventEmitter {
-  private prebuffer: Prebuffer;
+export class QueueStream extends EventEmitter {
   private current: Stream;
+  private prebuffer: Prebuffer;
   private tracks: Track[];
 
   constructor({ maxListeners }: QueueStreamArgs) {
@@ -31,6 +31,7 @@ class QueueStream extends EventEmitter {
     this.tracks = [];
     this.current.pipe(devnull(), { end: false });
     this.getPrebuffer = this.getPrebuffer.bind(this);
+    this.getCurrent = this.getCurrent.bind(this);
   }
 
   public queue(track: Track) {
@@ -55,6 +56,10 @@ class QueueStream extends EventEmitter {
     }
   }
 
+  public getCurrent() {
+    return this.current;
+  }
+
   public getPrebuffer() {
     return this.prebuffer.getStorage();
   }
@@ -66,7 +71,3 @@ class QueueStream extends EventEmitter {
 
   // private resume() {}
 }
-
-module.exports = {
-  QueueStream,
-};
