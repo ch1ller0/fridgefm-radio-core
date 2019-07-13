@@ -13,9 +13,9 @@ const station = new Station({
   error: (...args) => {} // override default handlers
 });
 
-station.addTrack({ path: '/Music/', file: 'track1.mp3' });
-station.addTrack({ path: '/Music/', file: 'track2.mp3' });
-station.addTrack({ path: '/Music/', file: 'track3.mp3' });
+station.addTrack({ path: '/Music/', name: 'track1.mp3' });
+station.addTrack({ path: '/Music/', name: 'track2.mp3' });
+station.addTrack({ path: '/Music/', name: 'track3.mp3' });
 
 server.get('/stream', (req, res) => {
   station.connectListener(req, res);
@@ -42,6 +42,9 @@ OR
 ```
 node examples/server.js [path/to/your_mp3tracks]
 ```
+
+# NOTICE
+Version `1.3.0` lacks backward compatibility. You just have to use addTrack method using `name` field (see the example below) as opposed to `file` (like in previous versions).
 
 ## Demo
 Fully working demo is available on http://ch1ller.com
