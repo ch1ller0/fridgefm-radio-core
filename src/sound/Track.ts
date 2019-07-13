@@ -1,7 +1,7 @@
 import { TrackArgs, TrackStats } from '../types/Track.d';
 import { createSoundStream, getId3Tags, getMp3Stats } from './methods/sound';
 
-class Track {
+export class Track {
   private fsStats: TrackStats;
 
   constructor({ path, name }: TrackArgs) {
@@ -16,7 +16,3 @@ class Track {
     return getId3Tags(this.fsStats);
   }
 }
-
-module.exports = {
-  Track,
-};

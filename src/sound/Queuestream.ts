@@ -1,11 +1,20 @@
-const EventEmitter = require('events');
-const devnull = require('dev-null');
-const { Transform } = require('stream');
-const Prebuffer = require('./Prebuffer');
-const { logger } = require('../utils/logger');
+import * as devnull from 'dev-null';
+import * as EventEmitter from 'events';
+import { Stream, Transform } from 'stream';
+import { logger } from '../utils/logger';
+import { Prebuffer } from './Prebuffer';
+import { Track } from './Track';
+
+type QueueStreamArgs = {
+  maxListeners: number;
+};
 
 class QueueStream extends EventEmitter {
-  constructor({ maxListeners }) {
+  private prebuffer: Prebuffer;
+  private current: Stream;
+  private tracks: Track[];
+
+  constructor({ maxListeners }: QueueStreamArgs) {
     super();
     this.prebuffer = new Prebuffer();
     this.current = new Transform({
@@ -13,28 +22,28 @@ class QueueStream extends EventEmitter {
         // prebuffering for faster client response (side-effect)
         this.prebuffer.modify(chunk);
         // do not modify chunks
-        callback(null, chunk);
+        callback(undefined, chunk);
       },
     });
     this.current.setMaxListeners(maxListeners);
 
-    //set defaults
+    // set defaults
     this.tracks = [];
     this.current.pipe(devnull(), { end: false });
     this.getPrebuffer = this.getPrebuffer.bind(this);
   }
 
-  queue(track) {
+  public queue(track: Track) {
     this.tracks.push(track);
   }
 
-  next() {
+  public next() {
     if (this.tracks.length > 0) {
       const nextTrack = this.tracks.shift();
       this.emit('next', nextTrack);
 
-      const trackStream = nextTrack.getSound();
-      trackStream.once('error', e => {
+      const trackStream = nextTrack && nextTrack.getSound();
+      trackStream.once('error', (e: Error) => {
         logger(e, 'r');
       });
       trackStream.once('end', () => {
@@ -46,16 +55,16 @@ class QueueStream extends EventEmitter {
     }
   }
 
-  // Standard Stream Methods
-  pause() {}
-
-  error() {}
-
-  resume() {}
-
-  getPrebuffer() {
+  public getPrebuffer() {
     return this.prebuffer.getStorage();
   }
+
+  // TODO Standard Stream Methods
+  // private pause() {}
+
+  // private error() {}
+
+  // private resume() {}
 }
 
 module.exports = {

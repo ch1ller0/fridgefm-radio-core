@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 const PREBUFFER_LENGTH = 12;
 
-class Prebuffer {
+export class Prebuffer {
   private storage: Buffer[];
 
   constructor() {
@@ -22,5 +22,3 @@ class Prebuffer {
     return Buffer.concat(this.storage, totalPrebufferLength);
   }
 }
-
-export = Prebuffer;
