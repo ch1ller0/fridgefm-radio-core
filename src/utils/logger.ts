@@ -1,10 +1,10 @@
 /* tslint:disable:no-console*/
 
-import chalk from "chalk";
-import { identity } from "./funcs";
-import { getHHMMSS } from "./time";
+import chalk from 'chalk';
+import { identity } from './funcs';
+import { getHHMMSS } from './time';
 
-type Color = "b" | "bb" | "bg" | "br" | "g" | "r" | "t";
+type Color = 'b' | 'bb' | 'bg' | 'br' | 'g' | 'r' | 't';
 
 const cols = {
   b: chalk.blue,
@@ -16,14 +16,10 @@ const cols = {
   t: identity,
 };
 
-const logger = (data: any, color: Color = "t", showTime: boolean = true, ...args: any): void => {
-  const stringData = typeof data === "string";
-  const time = showTime ? `${getHHMMSS(Date.now())} ` : "";
+export const logger = (data: any, color: Color = 't', showTime: boolean = true, ...args: any): void => {
+  const stringData = typeof data === 'string';
+  const time = showTime ? `${getHHMMSS(Date.now())} ` : '';
   stringData ?
-    console.log(`${cols.b(time)}${cols[color](data)}${args[0] || ""}`) :
+    console.log(`${cols.b(time)}${cols[color](data)}${args[0] || ''}`) :
     console.log(data);
-};
-
-module.exports = {
-  logger,
 };

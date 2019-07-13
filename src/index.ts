@@ -1,4 +1,4 @@
-import { Station } from "./sound/Station";
+import { Station } from './sound/Station';
 
 module.exports = {
   Station,

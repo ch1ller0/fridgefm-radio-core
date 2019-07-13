@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "arrow-parens": [true, "ban-single-arg-parens"],
         "class-name": true,
         "comment-format": [
             true,
@@ -14,6 +15,7 @@
             true,
             "spaces"
         ],
+        "interface-over-type-literal": false,
         "one-line": [
             true,
             "check-open-brace",
@@ -22,7 +24,7 @@
         "no-var-keyword": true,
         "quotemark": [
             true,
-            "double",
+            "single",
             "avoid-escape"
         ],
         "semicolon": [
