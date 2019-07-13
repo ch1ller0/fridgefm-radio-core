@@ -23,6 +23,6 @@ const createHandler = (obj: Handlers): void => {
 const getHandler = (type: keyof Handlers): Handler<any> => handler[type] || noop;
 
 export {
-  createHandler,
   getHandler,
+  createHandler,
 };
