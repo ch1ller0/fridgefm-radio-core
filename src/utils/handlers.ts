@@ -1,9 +1,11 @@
 import { noop } from './funcs';
 import { logger } from './logger';
 
+type Handler<T> = (arg: T) => any;
+
 type Handlers = {
-  error: (e: Error) => void,
-  log: (v: string) => void,
+  error: Handler<Error>,
+  log: Handler<string>,
 };
 
 // TODO refactor
@@ -14,9 +16,13 @@ const defaultHandler: Handlers = {
 
 let handler = defaultHandler;
 
-export default {
-  createHandler: (obj: Handlers) => {
-    handler = obj;
-  },
-  getHandler: (type: keyof Handlers) => handler[type] || noop,
+const createHandler = (obj: Handlers): void => {
+  handler = obj;
+};
+
+const getHandler = (type: keyof Handlers): Handler<any> => handler[type] || noop;
+
+export {
+  createHandler,
+  getHandler,
 };

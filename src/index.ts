@@ -1,5 +1,5 @@
 import { Station } from './sound/Station';
 
-module.exports = {
+export {
   Station,
 };

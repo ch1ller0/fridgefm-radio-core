@@ -6,7 +6,8 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": false
+    "sourceMap": false,
+    "strictNullChecks": true,
   },
   "include": [
     "./src/**/*"
