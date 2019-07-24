@@ -1,9 +1,11 @@
 # Radio engine for NodeJS
 
+![CircleCI](https://img.shields.io/circleci/build/github/Kefir100/radio-ch1ller.svg)
 ![GitHub](https://img.shields.io/github/license/kefir100/radio-ch1ller.svg)
 ![node](https://img.shields.io/node/v/@kefir100/radio-engine.svg)
-![CircleCI](https://img.shields.io/circleci/build/github/Kefir100/radio-ch1ller.svg)
+![Codecov branch](https://img.shields.io/codecov/c/gh/Kefir100/radio-ch1ller.svg)
 ![npm](https://img.shields.io/npm/dw/@kefir100/radio-engine.svg)
+
 
 ## Usage
 
