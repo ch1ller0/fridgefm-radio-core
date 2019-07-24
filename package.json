@@ -27,7 +27,8 @@
     "build": "tsc",
     "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
     "lint:ci": "tslint -c tslint.json 'src/**/*.ts'",
-    "test": "jest --config jest.config.json ./src "
+    "test": "jest --config jest.config.json ./src ",
+    "test:cov": "yarn test --collectCoverage=true"
   },
   "dependencies": {
     "chalk": "^2.4.2",
