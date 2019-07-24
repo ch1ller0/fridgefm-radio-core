@@ -61,10 +61,12 @@ jobs:
           at: ~/repo
       - run:
           name: Running unit tests
-          command: yarn test
+          command: yarn test:cov
       - persist_to_workspace:
           root: ~/repo
           <<: *whitelist
+      - store_artifacts:
+          path: coverage
 
   build:
     <<: *defaults

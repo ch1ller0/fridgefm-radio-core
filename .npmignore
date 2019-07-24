@@ -1,5 +1,6 @@
 /examples
 .circleci
+coverage
 tslint.json
 tsconfig.json
 jest.config.json
