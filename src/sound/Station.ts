@@ -67,15 +67,12 @@ export class Station extends EventEmitter {
   }
 
   public connectListener(req: express.Request, res: express.Response, cb = noop) {
-    const { getPrebuffer, getCurrent } = this.queuestream;
-    getCurrent().on('error', e => {
-      logger(e, 'r');
-    });
+    const { current, getPrebuffer } = this.queuestream;
 
     res.writeHead(200, headers);
 
     res.write(getPrebuffer());
-    getCurrent().pipe(res);
+    current.pipe(res);
     cb();
   }
 

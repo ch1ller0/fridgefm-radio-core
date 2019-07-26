@@ -1,6 +1,6 @@
 import * as devnull from 'dev-null';
 import * as EventEmitter from 'events';
-import { Stream, Transform } from 'stream';
+import { Transform } from 'stream';
 import { logger } from '../utils/logger';
 import { Prebuffer } from './Prebuffer';
 import { Track } from './Track';
@@ -10,7 +10,7 @@ type QueueStreamArgs = {
 };
 
 export class QueueStream extends EventEmitter {
-  private current: Stream;
+  public current: Transform;
   private prebuffer: Prebuffer;
   private tracks: Track[];
 
@@ -30,39 +30,31 @@ export class QueueStream extends EventEmitter {
     // set defaults
     this.tracks = [];
     this.current.pipe(devnull(), { end: false });
-    this.getPrebuffer = this.getPrebuffer.bind(this);
-    this.getCurrent = this.getCurrent.bind(this);
   }
 
   public queue(track: Track) {
     this.tracks.push(track);
   }
 
-  public next() {
-    if (this.tracks.length > 0) {
-      const nextTrack = this.tracks.shift();
+  public next = () => {
+    const nextTrack = this.tracks.shift();
+
+    if (nextTrack) {
       this.emit('next', nextTrack);
 
-      const trackStream = nextTrack && nextTrack.getSound();
+      const trackStream = nextTrack.getSound();
       trackStream.once('error', (e: Error) => {
         logger(e, 'r');
-      });
-      trackStream.once('end', () => {
         this.next();
       });
+      trackStream.once('end', this.next);
       trackStream.pipe(this.current, { end: false });
     } else {
       this.emit('end');
     }
   }
 
-  public getCurrent() {
-    return this.current;
-  }
-
-  public getPrebuffer() {
-    return this.prebuffer.getStorage();
-  }
+  public getPrebuffer = () => this.prebuffer.getStorage();
 
   // TODO Standard Stream Methods
   // private pause() {}

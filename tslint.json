@@ -3,7 +3,7 @@
     "extends": [
         "tslint:latest"
     ],
-    "jsRules": {},
+    "jsRules": true,
     "rules": {
         "arrow-parens": [true, "ban-single-arg-parens"],
         "class-name": true,
@@ -13,7 +13,8 @@
         ],
         "indent": [
             true,
-            "spaces"
+            "spaces",
+            2
         ],
         "interface-over-type-literal": false,
         "one-line": [
