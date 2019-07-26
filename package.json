@@ -25,8 +25,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
-    "lint:ci": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint": "tslint --fix -c tslint.json 'src/**/*.{js,ts}'",
+    "lint:ci": "tslint -c tslint.json 'src/**/*.{js,ts}'",
     "test": "jest --config jest.config.json ./src ",
     "test:cov": "yarn test --collectCoverage=true"
   },

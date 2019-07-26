@@ -1,9 +1,8 @@
-// @ts-ignore
-
 import * as fs from 'fs';
 import * as getMP3Duration from 'get-mp3-duration';
 import * as _ from 'highland';
 import * as id3 from 'node-id3';
+import { Readable } from 'stream';
 import { TrackStats } from '../../types/Track.d';
 import { identity } from '../../utils/funcs';
 import { getHandler } from '../../utils/handlers';
@@ -61,12 +60,12 @@ const getMp3Stats = ({ path, name }: ShallowStats) => {
   };
 };
 
-const createSoundStream = ({ path, bitrate }: TrackStats) => {
+const createSoundStream = ({ path, bitrate }: TrackStats): Readable => {
   try {
     const rs = _(fs.createReadStream(path, { highWaterMark: bitrate }));
-    const comp = _.compose(
-      _.ratelimit(1, 1000),
+    const comp = _.seq(
       process.env.NODE_ENV === 'development' ? _.slice(120, 160) : identity,
+      _.ratelimit(1, 1000),
       _.toNodeStream({ objectMode: false }),
     );
 
