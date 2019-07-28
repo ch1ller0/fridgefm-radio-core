@@ -10,8 +10,11 @@
   },
   "keywords": [
     "radio",
-    "radio engine",
-    "mp3"
+    "music",
+    "mp3",
+    "highland",
+    "stream",
+    "nodejs"
   ],
   "husky": {
     "hooks": {
@@ -55,7 +58,7 @@
   "bugs": {
     "url": "https://github.com/Kefir100/radio-ch1ller/issues"
   },
-  "homepage": "https://github.com/Kefir100/radio-ch1ller#readme",
+  "homepage": "http://ch1ller.com",
   "directories": {
     "example": "examples"
   },

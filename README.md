@@ -1,13 +1,15 @@
 # Radio engine for NodeJS
-
-![CircleCI](https://img.shields.io/circleci/build/github/Kefir100/radio-ch1ller.svg)
+[![build](https://img.shields.io/circleci/build/github/Kefir100/radio-ch1ller.svg)](https://circleci.com/gh/Kefir100/radio-ch1ller)
+[![coverage](https://img.shields.io/codecov/c/gh/Kefir100/radio-ch1ller.svg)](https://codecov.io/gh/Kefir100/radio-ch1ller)
+[![npm](https://img.shields.io/npm/dw/@kefir100/radio-engine.svg)](https://www.npmjs.com/package/@kefir100/radio-engine)
 ![GitHub](https://img.shields.io/github/license/kefir100/radio-ch1ller.svg)
 ![node](https://img.shields.io/node/v/@kefir100/radio-engine.svg)
-![Codecov branch](https://img.shields.io/codecov/c/gh/Kefir100/radio-ch1ller.svg)
-![npm](https://img.shields.io/npm/dw/@kefir100/radio-engine.svg)
-
 
 ## Usage
+
+> Simple lightweight package to start your own `live` radio station 📻 Just drop your `mp3` files and broadcast them to the world 🌎Heavily inspired by [Shoutcast](https://www.shoutcast.com) and [Icecast](http://icecast.org).
+
+## Setup
 
 ### Installation
 ```
