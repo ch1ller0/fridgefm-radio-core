@@ -22,9 +22,13 @@ const station = new Station({
   error: (...args) => {} // override default handlers
 });
 
+// Deprecated way
 station.addTrack({ path: '/Music/', name: 'track1.mp3' });
 station.addTrack({ path: '/Music/', name: 'track2.mp3' });
 station.addTrack({ path: '/Music/', name: 'track3.mp3' });
+
+// Fresh way - add all tracks from Music directory
+station.addFolder('/Music/');
 
 server.get('/stream', (req, res) => {
   station.connectListener(req, res);

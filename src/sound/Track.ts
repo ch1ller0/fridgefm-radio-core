@@ -1,11 +1,11 @@
-import { TrackArgs, TrackStats } from '../types/Track.d';
-import { createSoundStream, getId3Tags, getMp3Stats } from './methods/sound';
+import { TrackStats } from '../types/Track.d';
+import { createSoundStream, getMeta, getStats } from './methods/sound';
 
 export class Track {
   public fsStats: TrackStats;
 
-  constructor({ path, name }: TrackArgs) {
-    this.fsStats = getMp3Stats({ path, name });
+  constructor(fullPath: string) {
+    this.fsStats = getStats(fullPath);
   }
 
   public getSound() {
@@ -13,6 +13,6 @@ export class Track {
   }
 
   public getMeta() {
-    return getId3Tags(this.fsStats);
+    return getMeta(this.fsStats);
   }
 }

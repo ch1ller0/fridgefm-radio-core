@@ -1,10 +1,10 @@
 import * as EventEmitter from 'events';
 import * as express from 'express';
-import { TrackArgs } from '../types/Track';
+import * as fs from 'fs';
 import { noop } from '../utils/funcs';
 import { createHandler, Handlers } from '../utils/handlers';
 import { logger } from '../utils/logger';
-import { isMp3 } from '../utils/mp3';
+import { isFormatSupported } from '../utils/mp3';
 import { shuffleArray } from '../utils/shuffle';
 import { calculateScheduled, getHHMMSS } from '../utils/time';
 import { QueueStream } from './Queuestream';
@@ -76,17 +76,19 @@ export class Station extends EventEmitter {
     cb();
   }
 
-  public addTrack({ path, name }: TrackArgs) {
-    if (!isMp3(name)) {
+  public addFolder(folder: string) {
+    fs.readdirSync(folder)
+      .forEach((name: string) => {
+        this.addTrack({ path: folder, name });
+      });
+  }
+
+  public addTrack({ path, name }: { path: string, name: string }) {
+    const fullPath = `${path}/${name}`;
+    if (!isFormatSupported(fullPath)) {
       return;
     }
 
-    const fullPath = `${path}/${name}`;
-    const track = new Track({
-      name,
-      path: fullPath,
-    });
-
-    this.playlist.push(track);
+    this.playlist.push(new Track(fullPath));
   }
 }

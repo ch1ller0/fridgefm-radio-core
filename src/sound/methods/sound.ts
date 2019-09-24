@@ -3,66 +3,52 @@ import * as getMP3Duration from 'get-mp3-duration';
 import * as _ from 'highland';
 import * as id3 from 'node-id3';
 import { Readable } from 'stream';
-import { TrackStats } from '../../types/Track.d';
+import { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.d';
 import { identity } from '../../utils/funcs';
-import { getHandler } from '../../utils/handlers';
-import { logger } from '../../utils/logger';
-import { isMp3 } from '../../utils/mp3';
 import { getDateFromMsecs } from '../../utils/time';
 
-type ShallowStats = {
-  path: string,
-  name?: string,
+const extractLast = (str: string, symb: string) => {
+  const temp = str.split(symb);
+  const last = temp.pop() || '';
+  const arr = temp.join(symb);
+  return [arr, last];
 };
 
-const getId3Tags = ({ path }: ShallowStats) => {
+const getMeta = ({ fullPath, name }: TrackStats): ShallowTrackMeta => {
   try {
-    return id3.read(path);
+    const { artist, title, ...rest } = id3.read(fullPath);
+    if (!artist || !title) {
+      throw new Error('id3 tags dont have enough data');
+    }
+    return { artist, title, ...rest, origin: 'id3' };
   }
   catch (e) {
-    getHandler('error')(e);
-    return {};
+    const [artist, title] = name.split(' - ');
+    return { artist, title, origin: 'fs' };
   }
 };
 
-const updateId3Tags = ({ path, name = '' }: ShallowStats) => {
-  try {
-    const [ artist, title ] = name.split(' - ');
-    const meta = {
-      ...(isMp3(name) ? getId3Tags({ path }) : {}),
-      artist: artist.trim(),
-      title: title.split('.')[0].trim(),
-    };
-
-    return id3.update(meta, path);
-
-  } catch (e) {
-    logger(`Error on file: ${path + name}`);
-    throw e;
-  }
-};
-
-const getMp3Stats = ({ path, name }: ShallowStats) => {
-  const duration = getMP3Duration(fs.readFileSync(path));
-  const size = fs.statSync(path).size;
-  if (!path || !name || !duration || !size) {
-    throw new Error(`insufficient parameters for getting mp3 stats ${path || name || duration || size}`);
-  }
-  const bitrate = Math.ceil(size / (duration / 1000));
+const getStats = (fullPath: TrackPath) => {
+  const [directory, fullName] = extractLast(fullPath, '/');
+  const duration = getMP3Duration(fs.readFileSync(fullPath));
+  const { size } = fs.statSync(fullPath);
+  const [name, format] = extractLast(fullName, '.');
 
   return {
-    bitrate, // kbps
-    duration, // millisec
+    bitrate: Math.ceil(size / (duration / 1000)),
+    directory,
+    duration,
+    format,
+    fullPath,
     name,
-    path,
-    size, // bytes
-    stringified: `${name} [${Math.floor(size / 1024) / 1000}MB/${getDateFromMsecs(duration)}]`,
+    size,
+    stringified: `${name}.${format} [${Math.floor(size / 1024) / 1000}MB/${getDateFromMsecs(duration)}]`,
   };
 };
 
-const createSoundStream = ({ path, bitrate }: TrackStats): Readable => {
+const createSoundStream = ({ fullPath, bitrate }: TrackStats): Readable => {
   try {
-    const rs = _(fs.createReadStream(path, { highWaterMark: bitrate }));
+    const rs = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
     const comp = _.seq(
       process.env.NODE_ENV === 'development' ? _.slice(120, 160) : identity,
       _.ratelimit(1, 1000),
@@ -71,7 +57,6 @@ const createSoundStream = ({ path, bitrate }: TrackStats): Readable => {
 
     return comp(rs);
   } catch (e) {
-    logger(e, 'r');
     // skip track if it is not accessible
     return _(new Array(0));
   }
@@ -79,7 +64,6 @@ const createSoundStream = ({ path, bitrate }: TrackStats): Readable => {
 
 export {
   createSoundStream,
-  getId3Tags,
-  getMp3Stats,
-  updateId3Tags,
+  getMeta,
+  getStats,
 };

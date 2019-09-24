@@ -45,7 +45,6 @@ export class QueueStream extends EventEmitter {
       const trackStream = nextTrack.getSound();
       trackStream.once('error', (e: Error) => {
         logger(e, 'r');
-        this.next();
       });
       trackStream.once('end', this.next);
       trackStream.pipe(this.current, { end: false });
