@@ -1,3 +1,5 @@
+import { Readable } from 'stream';
+
 export type TrackPath = string;
 
 export type TrackStats = {
@@ -16,3 +18,9 @@ export type ShallowTrackMeta = {
   title: string,
   origin: 'id3' | 'fs',
 };
+
+export interface TrackI {
+  fsStats: TrackStats;
+  getSound: () => Readable;
+  getMeta: () => ShallowTrackMeta;
+}

@@ -16,7 +16,7 @@ const cols = {
   t: identity,
 };
 
-export const logger = (data: any, color: Color = 't', showTime: boolean = true, ...args: any): void => {
+export const logger = (data: any, color: Color = 't', showTime = true, ...args: any): void => {
   const stringData = typeof data === 'string';
   const time = showTime ? `${getHHMMSS(Date.now())} ` : '';
   stringData ?

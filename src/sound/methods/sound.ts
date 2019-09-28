@@ -4,15 +4,8 @@ import * as _ from 'highland';
 import * as id3 from 'node-id3';
 import { Readable } from 'stream';
 import { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.d';
-import { identity } from '../../utils/funcs';
+import { extractLast, identity } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
-
-const extractLast = (str: string, symb: string) => {
-  const temp = str.split(symb);
-  const last = temp.pop() || '';
-  const arr = temp.join(symb);
-  return [arr, last];
-};
 
 const getMeta = ({ fullPath, name }: TrackStats): ShallowTrackMeta => {
   try {

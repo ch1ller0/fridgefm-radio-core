@@ -1,20 +1,17 @@
 import * as devnull from 'dev-null';
 import * as EventEmitter from 'events';
-import { Transform } from 'stream';
+import { Transform, Writable } from 'stream';
+import { TrackI } from '../types/Track.d';
 import { logger } from '../utils/logger';
+import { createPlaylist } from './methods/playlist';
 import { Prebuffer } from './Prebuffer';
-import { Track } from './Track';
-
-type QueueStreamArgs = {
-  maxListeners: number;
-};
 
 export class QueueStream extends EventEmitter {
-  public current: Transform;
+  private current: Transform;
   private prebuffer: Prebuffer;
-  private tracks: Track[];
+  private playlist: TrackI[];
 
-  constructor({ maxListeners }: QueueStreamArgs) {
+  constructor() {
     super();
     this.prebuffer = new Prebuffer();
     this.current = new Transform({
@@ -25,19 +22,18 @@ export class QueueStream extends EventEmitter {
         callback(undefined, chunk);
       },
     });
-    this.current.setMaxListeners(maxListeners);
+    this.currentPipe(devnull(), { end: false });
 
     // set defaults
-    this.tracks = [];
-    this.current.pipe(devnull(), { end: false });
+    this.playlist = [];
   }
 
-  public queue(track: Track) {
-    this.tracks.push(track);
-  }
+  public getPrebuffer = () => this.prebuffer.getStorage();
+
+  public currentPipe = (wrstr: Writable, opts = {}) => this.current.pipe(wrstr, opts);
 
   public next = () => {
-    const nextTrack = this.tracks.shift();
+    const nextTrack = this.playlist.shift();
 
     if (nextTrack) {
       this.emit('next', nextTrack);
@@ -45,6 +41,7 @@ export class QueueStream extends EventEmitter {
       const trackStream = nextTrack.getSound();
       trackStream.once('error', (e: Error) => {
         logger(e, 'r');
+        this.emit('error');
       });
       trackStream.once('end', this.next);
       trackStream.pipe(this.current, { end: false });
@@ -53,7 +50,18 @@ export class QueueStream extends EventEmitter {
     }
   }
 
-  public getPrebuffer = () => this.prebuffer.getStorage();
+  public addFolder(folder: string) {
+    this.playlist = createPlaylist(folder);
+  }
+
+  public start() {
+    this.emit('start', this.playlist);
+    this.next();
+  }
+
+  // public rearrange() {
+
+  // }
 
   // TODO Standard Stream Methods
   // private pause() {}

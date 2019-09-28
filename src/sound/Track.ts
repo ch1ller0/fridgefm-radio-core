@@ -1,7 +1,7 @@
-import { TrackStats } from '../types/Track.d';
+import { TrackI, TrackStats } from '../types/Track.d';
 import { createSoundStream, getMeta, getStats } from './methods/sound';
 
-export class Track {
+export default class implements TrackI {
   public fsStats: TrackStats;
 
   constructor(fullPath: string) {

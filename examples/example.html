@@ -10,10 +10,17 @@
             document.getElementById('title').innerHTML = `Title: ${cur.title}`;
           })
       }
+      function nextTrack() {
+        fetch('/controls/next')
+          .then(() => {
+            document.getElementById('nextTrack').innerHTML = 'ok';
+          })
+      }
     </script>
     <audio controls src='/stream' type='audio/mp3'></audio>
     <div>
       <button onclick="getMeta()">Get Current Playing Track Info</button>
+      <button onclick="nextTrack()">Next <span id="nextTrack"></span></button>
       <p id='artist'></p>
       <p id='title'></p>
       <p id='misc'></p>

@@ -16,9 +16,7 @@ station.on('nextTrack', track => {
 });
 
 // start station
-station.start({
-  shuffle: true,
-});
+station.start();
 
 // stream route
 server.get('/stream', (req, res) => {

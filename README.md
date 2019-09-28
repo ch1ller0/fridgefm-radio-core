@@ -22,12 +22,7 @@ const station = new Station({
   error: (...args) => {} // override default handlers
 });
 
-// Deprecated way
-station.addTrack({ path: '/Music/', name: 'track1.mp3' });
-station.addTrack({ path: '/Music/', name: 'track2.mp3' });
-station.addTrack({ path: '/Music/', name: 'track3.mp3' });
-
-// Fresh way - add all tracks from Music directory
+// add all tracks from Music directory
 station.addFolder('/Music/');
 
 server.get('/stream', (req, res) => {
@@ -55,9 +50,6 @@ OR
 ```
 node examples/server.js [path/to/your_mp3tracks]
 ```
-
-# NOTICE
-Version `1.3.0` lacks backward compatibility. You just have to use addTrack method using `name` field (see the example below) as opposed to `file` (like in previous versions).
 
 ## Demo
 Fully working demo is available on http://ch1ller.com
