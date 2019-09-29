@@ -1,6 +1,5 @@
 import * as EventEmitter from 'events';
 import * as express from 'express';
-import { TrackI } from '../types/Track.d';
 import { noop } from '../utils/funcs';
 import { logger } from '../utils/logger';
 import { QueueStream } from './Queuestream';
@@ -19,44 +18,53 @@ const headers = {
 };
 
 export class Station extends EventEmitter {
-  private queuestream: QueueStream;
+  // tslint:disable-next-line variable-name
+  private _queuestream: QueueStream;
 
   constructor() {
     super();
-    this.queuestream = new QueueStream();
-    this.queuestream.on('end', () => {
-      this.queuestream.start();
-      this.emit('restart');
-    });
-
+    this._queuestream = new QueueStream();
     // logging stuff
-    this.queuestream.on('next', nextTrack => {
+    this._queuestream.on('next', nextTrack => {
       const { fsStats: { stringified } } = nextTrack;
       logger(`Playing: ${stringified}`, 'g');
       this.emit('nextTrack', nextTrack);
     });
-    this.queuestream.on('start', playlist => {
-      playlist.forEach((track: TrackI) => {
-        logger(`Scheduled: ${track.fsStats.stringified}`);
-      });
+    this._queuestream.on('error', e => {
+      // capture the error
     });
   }
 
   public start() {
-    this.queuestream.start();
-  }
-
-  public connectListener(req: express.Request, res: express.Response, cb = noop) {
-    const { currentPipe, getPrebuffer } = this.queuestream;
-
-    res.writeHead(200, headers);
-
-    res.write(getPrebuffer());
-    currentPipe(res);
-    cb();
+    this._queuestream.start();
   }
 
   public addFolder(folder: string) {
-    this.queuestream.addFolder(folder);
+    this._queuestream.addFolder(folder);
+  }
+
+  public next() {
+    this._queuestream.next();
+  }
+
+  public getPlaylist() {
+    return this._queuestream.playlist.getList();
+  }
+
+  public shufflePlaylist() {
+    this._queuestream.playlist.shuffle();
+  }
+
+  public rearrangePlaylist(from: number, to: number) {
+    return this._queuestream.playlist.rearrange(from, to);
+  }
+
+  public connectListener(req: express.Request, res: express.Response, cb = noop) {
+    const { currentPipe, getPrebuffer } = this._queuestream;
+
+    res.writeHead(200, headers);
+    res.write(getPrebuffer());
+    currentPipe(res);
+    cb();
   }
 }

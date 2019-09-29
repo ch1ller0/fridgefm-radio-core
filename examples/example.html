@@ -1,29 +1,98 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script src="http://SortableJS.github.io/Sortable/Sortable.js"></script>
+    <style>
+        .showcase {
+          margin: 10px;
+        }
+        .showcase .result {
+          background: ''
+        }
+        .showcase button {
+          border: 1px solid black;
+          border-radius: 6px;
+          background: aliceblue;
+          padding: 10px;
+        }
+        #getPlaylist {
+          margin-top: 10px;
+        }
+        #getPlaylist li {
+          list-style: none;
+          border: 1px solid black;
+          border-radius: 6px;
+          background: aliceblue;
+          padding: 6px 10px;
+          margin-bottom: -1px;
+          cursor: pointer;
+        }
+        #getPlaylist li:hover {
+          background: gray;
+        }
+      </style>
+  </head>
   <body>
-    <script>
-      function getMeta() {
-        fetch('/info')
-          .then(res => res.json())
-          .then(cur => {
-            document.getElementById('artist').innerHTML = `Artist: ${cur.artist}`;
-            document.getElementById('title').innerHTML = `Title: ${cur.title}`;
-          })
-      }
-      function nextTrack() {
-        fetch('/controls/next')
-          .then(() => {
-            document.getElementById('nextTrack').innerHTML = 'ok';
-          })
-      }
-    </script>
     <audio controls src='/stream' type='audio/mp3'></audio>
     <div>
-      <button onclick="getMeta()">Get Current Playing Track Info</button>
-      <button onclick="nextTrack()">Next <span id="nextTrack"></span></button>
-      <p id='artist'></p>
-      <p id='title'></p>
-      <p id='misc'></p>
+      <div class='showcase'>
+        <button onclick="info()">Get Current Playing Track Meta</button>
+        <div class='result'>
+            <p id='artist'></p>
+            <p id='title'></p>
+        </div>
+      </div>
+      <h2>Station controls should be private</h2>
+      <div class='showcase'>
+        <button onclick="controlsGetPlaylist()">Show playlist</button>
+        <button onclick="controlsShufflePlaylist()">Shuffle playlist</button>
+        <button onclick="controlsNext()">Next</button>
+        <div class="list-group" id='getPlaylist'></div>
+      </div>
     </div>
   </body>
+  <script>
+    function request(route) {
+      return fetch(route)
+        .then(res => res.json())
+        .then(x => {
+          console.log(x);
+          return x;
+        })
+    }
+    function info() {
+      request('/info')
+        .then(cur => {
+          document.getElementById('artist').innerHTML = `Artist: ${cur.artist}`;
+          document.getElementById('title').innerHTML = `Title: ${cur.title}`;
+        })
+    }
+    function controlsGetPlaylist() {
+      document.getElementById('getPlaylist').innerHTML = ''
+      request('/controls/getPlaylist')
+        .then((plist) => {
+          const parent = document.getElementById('getPlaylist');
+          parent.innerHTML = '';
+          plist.forEach((el, i) => {
+            const ch = document.createElement('li')
+            if (el.isPlaying) {
+              ch.style.background = 'lightgreen';
+              ch.className = 'list-group-item';
+            }
+            ch.innerHTML = `${i}: ${el.fsStats.stringified}`;
+            parent.appendChild(ch);
+          })
+        })
+    }
+    function controlsShufflePlaylist() {
+      request('/controls/shufflePlaylist').then(controlsGetPlaylist)
+    }
+    function controlsNext() {
+      request('/controls/next').then(controlsGetPlaylist)
+    }
+    function controlsRearrange({ oldIndex, newIndex }) {
+      request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`).then(controlsGetPlaylist)
+    }
+    Sortable.create(document.getElementById('getPlaylist'), { onEnd: controlsRearrange });
+  </script>
 </html>

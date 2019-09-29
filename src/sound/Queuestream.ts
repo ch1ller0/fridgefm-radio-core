@@ -1,31 +1,28 @@
 import * as devnull from 'dev-null';
 import * as EventEmitter from 'events';
-import { Transform, Writable } from 'stream';
-import { TrackI } from '../types/Track.d';
+import { Readable, Transform, Writable } from 'stream';
 import { logger } from '../utils/logger';
-import { createPlaylist } from './methods/playlist';
+import { Playlist } from './Playlist';
 import { Prebuffer } from './Prebuffer';
 
 export class QueueStream extends EventEmitter {
-  private current: Transform;
-  private prebuffer: Prebuffer;
-  private playlist: TrackI[];
+  public playlist = new Playlist();
+  // this stream is always live
+  private current = new Transform({
+    transform: (chunk, encoding, callback) => {
+      this.prebuffer.modify(chunk);
+      callback(undefined, chunk);
+    },
+  });
+  // this stream switches on a each track
+  private trackStream: Readable;
+  // prebuffering for faster client response (side-effect)
+  private prebuffer = new Prebuffer();
+  private folders: string[] = [];
 
   constructor() {
     super();
-    this.prebuffer = new Prebuffer();
-    this.current = new Transform({
-      transform: (chunk, encoding, callback) => {
-        // prebuffering for faster client response (side-effect)
-        this.prebuffer.modify(chunk);
-        // do not modify chunks
-        callback(undefined, chunk);
-      },
-    });
     this.currentPipe(devnull(), { end: false });
-
-    // set defaults
-    this.playlist = [];
   }
 
   public getPrebuffer = () => this.prebuffer.getStorage();
@@ -33,29 +30,47 @@ export class QueueStream extends EventEmitter {
   public currentPipe = (wrstr: Writable, opts = {}) => this.current.pipe(wrstr, opts);
 
   public next = () => {
-    const nextTrack = this.playlist.shift();
+    const nextTrack = this.playlist.getNext();
 
     if (nextTrack) {
-      this.emit('next', nextTrack);
+      // destroy previous track stream
+      if (this.trackStream) {
+        this.trackStream.destroy();
+      }
 
-      const trackStream = nextTrack.getSound();
-      trackStream.once('error', (e: Error) => {
-        logger(e, 'r');
-        this.emit('error');
+      this.emit('next', nextTrack);
+      const newStream = nextTrack.getSound();
+      newStream.once('error', (e: Error) => {
+        logger('Queuestream:error', 'r');
+        logger(e, 'r', false);
+        this.emit('error', e);
       });
-      trackStream.once('end', this.next);
-      trackStream.pipe(this.current, { end: false });
+      newStream.once('end', this.next);
+      newStream.pipe(this.current, { end: false });
+      this.trackStream = newStream;
     } else {
-      this.emit('end');
+      this.restart();
     }
   }
 
   public addFolder(folder: string) {
-    this.playlist = createPlaylist(folder);
+    this.folders = [...this.folders || [], folder];
+    this.playlist.createPlaylist(folder);
   }
 
   public start() {
+    logger('Queuestream:start', 'bb');
     this.emit('start', this.playlist);
+    this.next();
+  }
+
+  private restart = () => {
+    logger('Queuestream:restart', 'bb');
+    this.emit('restart');
+    this.playlist = new Playlist();
+    this.folders.forEach(folder => {
+      this.playlist.createPlaylist(folder);
+    });
     this.next();
   }
 

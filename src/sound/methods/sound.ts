@@ -39,13 +39,14 @@ const getStats = (fullPath: TrackPath) => {
   };
 };
 
-const createSoundStream = ({ fullPath, bitrate }: TrackStats): Readable => {
+const createSoundStream = ({ fullPath, bitrate, duration }: TrackStats): Readable => {
+  const shouldTrim = process.env.NODE_ENV === 'development' && duration > 120000;
+
   try {
     const rs = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
     const comp = _.seq(
-      process.env.NODE_ENV === 'development' ? _.slice(120, 160) : identity,
+      shouldTrim ? _.slice(120, 150) : identity,
       _.ratelimit(1, 1000),
-      _.toNodeStream({ objectMode: false }),
     );
 
     return comp(rs);

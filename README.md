@@ -18,20 +18,15 @@ npm i @kefir100/radio-engine --save
 ### Server
 ```javascript
 const { Station } = require('@kefir100/radio-engine');
-const station = new Station({
-  error: (...args) => {} // override default handlers
-});
+const station = new Station();
 
-// add all tracks from Music directory
-station.addFolder('/Music/');
+station.addFolder('User/Music');
 
 server.get('/stream', (req, res) => {
   station.connectListener(req, res);
 });
 
-station.start({
-  shuffle: true,
-});
+station.start();
 ```
 ### Client
 ```html
@@ -42,13 +37,60 @@ station.start({
 />
 ```
 
-or just go to [EXAMPLES](./examples/server.js)
+## Station methods
+### Public methods that should be exposed to users
+`connectListener` connects real users to your station  
+response argument is required
+```javascript
+station.connectListener(request, response, callback);
+```
+### Private methods that should be used only by admins
+`addFolder` adds track within a folder to the playlist
+```javascript
+station.addFolder('User/Music');
+```
+`start` starts broadcasting
+```javascript
+station.start();
+```
+`next` instantly switches track to the next one
+```javascript
+station.next();
+```
+`getPlaylist` just returns you the entire playlist
+```javascript
+station.getPlaylist();
+```
+`shufflePlaylist` shuffles playlist  
+You may want to pass your own sorting function, defaults to random shuffle
+```javascript
+station.shufflePlaylist(sortingFunction);
+```
+`rearrangePlaylist` just returns you the entire playlist  
+```javascript
+// the example moves the first track to the 5th position in playlist
+station.rearrangePlaylist(0, 4);
+```
+
+## Station events
+`nextTrack` event fires when track changes  
+useful for getting to know when exactly the track changed and what track that is
+```javascript
+station.on('nextTrack', (track) => { console.log(track) });
+```
+
+## or just go to [EXAMPLES](./examples/server.js)
 ```
 node examples/server.js
 ```
 OR
 ```
 node examples/server.js [path/to/your_mp3tracks]
+```
+
+### NOTICE
+```
+if NODE_ENV equals 'development' the tracks will be trimmed from 120s to 150s. This is due to ability to switch audio playback faster and therefore test it. 
 ```
 
 ## Demo

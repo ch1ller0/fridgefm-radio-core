@@ -20,6 +20,8 @@ export type ShallowTrackMeta = {
 };
 
 export interface TrackI {
+  isPlaying: boolean;
+  playCount: number;
   fsStats: TrackStats;
   getSound: () => Readable;
   getMeta: () => ShallowTrackMeta;
