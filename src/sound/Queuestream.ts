@@ -73,15 +73,4 @@ export class QueueStream extends EventEmitter {
     });
     this.next();
   }
-
-  // public rearrange() {
-
-  // }
-
-  // TODO Standard Stream Methods
-  // private pause() {}
-
-  // private error() {}
-
-  // private resume() {}
 }
