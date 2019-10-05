@@ -1,14 +1,8 @@
 import * as EventEmitter from 'events';
 import * as express from 'express';
-import { TrackArgs } from '../types/Track';
 import { noop } from '../utils/funcs';
-import { createHandler, Handlers } from '../utils/handlers';
 import { logger } from '../utils/logger';
-import { isMp3 } from '../utils/mp3';
-import { shuffleArray } from '../utils/shuffle';
-import { calculateScheduled, getHHMMSS } from '../utils/time';
 import { QueueStream } from './Queuestream';
-import { Track } from './Track';
 
 // TODO add icy metaint
 const headers = {
@@ -24,69 +18,53 @@ const headers = {
 };
 
 export class Station extends EventEmitter {
-  private playlist: Track[];
-  private queuestream: QueueStream;
+  // tslint:disable-next-line variable-name
+  private _queuestream: QueueStream;
 
-  constructor(handlers: Handlers) {
+  constructor() {
     super();
-    this.playlist = [];
-
-    this.queuestream = new QueueStream({ maxListeners: 100 });
-    this.queuestream.on('next', nextTrack => {
+    this._queuestream = new QueueStream();
+    // logging stuff
+    this._queuestream.on('next', nextTrack => {
       const { fsStats: { stringified } } = nextTrack;
       logger(`Playing: ${stringified}`, 'g');
       this.emit('nextTrack', nextTrack);
     });
-    this.queuestream.on('end', () => {
-      this.start({ shuffle: true });
-      this.emit('restart');
+    this._queuestream.on('error', e => {
+      // capture the error
     });
-
-    if (handlers) {
-      createHandler(handlers);
-    }
   }
 
-  public start({ shuffle = false } = {}) {
-    if (!this.playlist.length) {
-      return;
-    }
+  public start() {
+    this._queuestream.start();
+  }
 
-    if (shuffle) {
-      this.playlist = shuffleArray(this.playlist);
-    }
+  public addFolder(folder: string) {
+    this._queuestream.addFolder(folder);
+  }
 
-    logger('Playlist  schedule : trackname [size/duration]', 'r', false);
-    this.playlist.forEach((track, i) => {
-      const scheduled = getHHMMSS(calculateScheduled({ playlist: this.playlist }, i));
-      logger(` ${scheduled} : ${track.fsStats.stringified}`);
+  public next() {
+    this._queuestream.next();
+  }
 
-      this.queuestream.queue(track);
-    });
-    this.queuestream.next();
+  public getPlaylist() {
+    return this._queuestream.playlist.getList();
+  }
+
+  public shufflePlaylist() {
+    this._queuestream.playlist.shuffle();
+  }
+
+  public rearrangePlaylist(from: number, to: number) {
+    return this._queuestream.playlist.rearrange(from, to);
   }
 
   public connectListener(req: express.Request, res: express.Response, cb = noop) {
-    const { current, getPrebuffer } = this.queuestream;
+    const { currentPipe, getPrebuffer } = this._queuestream;
 
     res.writeHead(200, headers);
-
     res.write(getPrebuffer());
-    current.pipe(res);
+    currentPipe(res);
     cb();
-  }
-
-  public addTrack({ path, name }: TrackArgs) {
-    if (!isMp3(name)) {
-      return;
-    }
-
-    const fullPath = `${path}/${name}`;
-    const track = new Track({
-      name,
-      path: fullPath,
-    });
-
-    this.playlist.push(track);
   }
 }

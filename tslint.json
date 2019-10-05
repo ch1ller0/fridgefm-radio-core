@@ -11,6 +11,7 @@
             true,
             "check-space"
         ],
+        "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
         "indent": [
             true,
             "spaces",
@@ -63,7 +64,9 @@
         "no-trailing-whitespace": true,
         "no-null-keyword": true,
         "prefer-const": true,
-        "jsdoc-format": true
+        "jsdoc-format": true,
+        "interface-name": [true, "never-prefix"],
+        "no-inferrable-types": true
     },
     "rulesDirectory": []
 }

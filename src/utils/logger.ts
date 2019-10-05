@@ -1,5 +1,5 @@
 /* tslint:disable:no-console*/
-
+const { NODE_ENV } = process.env;
 import chalk from 'chalk';
 import { identity } from './funcs';
 import { getHHMMSS } from './time';
@@ -16,7 +16,10 @@ const cols = {
   t: identity,
 };
 
-export const logger = (data: any, color: Color = 't', showTime: boolean = true, ...args: any): void => {
+export const logger = (data: any, color: Color = 't', showTime = true, ...args: any): void => {
+  if (NODE_ENV !== 'development') {
+    return;
+  }
   const stringData = typeof data === 'string';
   const time = showTime ? `${getHHMMSS(Date.now())} ` : '';
   stringData ?
