@@ -51,8 +51,8 @@ export class Station extends EventEmitter {
     return this._queuestream.playlist.getList();
   }
 
-  public shufflePlaylist() {
-    this._queuestream.playlist.shuffle();
+  public shufflePlaylist(arg: any) {
+    this._queuestream.playlist.shuffle(arg);
   }
 
   public rearrangePlaylist(from: number, to: number) {
