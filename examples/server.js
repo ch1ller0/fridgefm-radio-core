@@ -8,12 +8,19 @@ const musicPath = path.resolve(__dirname, process.argv[2] || './music');
 const station = new Station();
 // add folder to station
 station.addFolder(musicPath);
-station.shufflePlaylist();
 
 // update currently playing track info
 let currentTrack;
 station.on('nextTrack', track => {
   currentTrack = track.getMeta();
+});
+
+station.on('start', () => {
+  station.shufflePlaylist();
+});
+
+station.on('restart', () => {
+  station.shufflePlaylist();
 });
 
 // main stream route
