@@ -61,7 +61,7 @@ station.next();
 ```javascript
 station.getPlaylist();
 ```
-`shufflePlaylist` shuffles playlist  
+`shufflePlaylist` shuffles playlist once   
 You may want to pass your own sorting function, defaults to random shuffle
 ```javascript
 station.shufflePlaylist(sortingFunction);
@@ -73,10 +73,24 @@ station.rearrangePlaylist(0, 4);
 ```
 
 ## Station events
-`nextTrack` event fires when track changes  
+#### `nextTrack`
+event fires when track changes  
 useful for getting to know when exactly the track changed and what track that is
 ```javascript
 station.on('nextTrack', (track) => { console.log(track) });
+```
+
+#### `start`
+event fires on station start  
+```javascript
+station.on('start', () => { console.log('Station started') });
+```
+
+#### `restart`
+event fires on station restart (when playlist is drained and new one is created)  
+it might be a nice time to shuffle your playlist for example
+```javascript
+station.on('restart', () => { station.shufflePlaylist() });
 ```
 
 ## or just go to [EXAMPLES](./examples/server.js)

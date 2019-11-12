@@ -17,6 +17,9 @@ const headers = {
   'icy-url': 'https://',
 };
 
+// events that should be hoisted up to the station from queuestream
+const EXPOSED_EVENTS = ['start', 'restart'];
+
 export class Station extends EventEmitter {
   // tslint:disable-next-line variable-name
   private _queuestream: QueueStream;
@@ -29,6 +32,9 @@ export class Station extends EventEmitter {
       const { fsStats: { stringified } } = nextTrack;
       logger(`Playing: ${stringified}`, 'g');
       this.emit('nextTrack', nextTrack);
+    });
+    EXPOSED_EVENTS.forEach(e => {
+      this._queuestream.on(e, () => this.emit(e));
     });
     this._queuestream.on('error', e => {
       // capture the error
@@ -51,6 +57,7 @@ export class Station extends EventEmitter {
     return this._queuestream.playlist.getList();
   }
 
+  // shuffle playlist once
   public shufflePlaylist(arg: any) {
     this._queuestream.playlist.shuffle(arg);
   }

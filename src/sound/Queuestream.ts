@@ -38,7 +38,6 @@ export class QueueStream extends EventEmitter {
         this.trackStream.destroy();
       }
 
-      this.emit('next', nextTrack);
       const newStream = nextTrack.getSound();
       newStream.once('error', (e: Error) => {
         logger('Queuestream:error', 'r');
@@ -48,6 +47,7 @@ export class QueueStream extends EventEmitter {
       newStream.once('end', this.next);
       newStream.pipe(this.current, { end: false });
       this.trackStream = newStream;
+      this.emit('next', nextTrack);
     } else {
       this.restart();
     }
@@ -66,11 +66,11 @@ export class QueueStream extends EventEmitter {
 
   private restart = () => {
     logger('Queuestream:restart', 'bb');
-    this.emit('restart');
     this.playlist = new Playlist();
     this.folders.forEach(folder => {
       this.playlist.createPlaylist(folder);
     });
+    this.emit('restart');
     this.next();
   }
 }
