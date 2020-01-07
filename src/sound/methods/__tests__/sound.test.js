@@ -1,4 +1,4 @@
-const { getStats, getMeta, createSoundStream } = require('../sound');
+const { getStats, getMeta, getMetaAsync, createSoundStream } = require('../sound');
 const pathToMusic = `${process.cwd()}/examples/music`;
 const devnull = require('dev-null');
 const id3 = require('node-id3');
@@ -74,6 +74,40 @@ describe('methods/sound', () => {
       TestFile.create();
 
       expect(getMeta(getStats(TestFile.path))).toEqual({ artist: 'test', title: 'test', origin: 'fs' });
+
+      TestFile.clear();
+    });
+  });
+
+  describe('getMetaAsync', () => {
+    it('returns ok if id3 meta has both artist and title', async () => {
+      const COMMON_META = {
+        artist: 'Artist1',
+        encodingTechnology: 'LAME 64bits version 3.100 (http://lame.sf.net)',
+        length: '7485',
+        // tslint:disable-next-line
+        raw: {'TIT2': 'Track1', 'TLEN': '7485', 'TPE1': 'Artist1', 'TSSE': 'LAME 64bits version 3.100 (http://lame.sf.net)'},
+      };
+
+      const createTestMeta = title => ({
+        title,
+        ...COMMON_META,
+        raw: {...COMMON_META.raw, TIT2: title},
+      });
+
+      const res1 = await getMetaAsync(tracks[0]);
+      const res2 = await getMetaAsync(tracks[1]);
+
+      expect(res1).toEqual({ ...createTestMeta('Track1'), origin: 'id3' });
+      expect(res2).toEqual({ ...createTestMeta('Track2'), origin: 'id3' });
+    });
+
+    it('returns meta based on filename if id3 meta is not enough', async () => {
+      TestFile.create();
+
+      const res = await getMeta(getStats(TestFile.path));
+
+      expect(res).toEqual({ artist: 'test', title: 'test', origin: 'fs' });
 
       TestFile.clear();
     });
