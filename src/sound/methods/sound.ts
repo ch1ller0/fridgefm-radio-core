@@ -21,6 +21,18 @@ const getMeta = ({ fullPath, name }: TrackStats): ShallowTrackMeta => {
   }
 };
 
+const getMetaAsync = async ({ fullPath, name }: TrackStats): Promise<ShallowTrackMeta> => {
+  return new Promise(res => {
+    return id3.read(fullPath, (err: Error, { artist, title, ...rest }: ShallowTrackMeta) => {
+      if (!artist || !title || err) {
+        const calculated = name.split(' - ');
+        res({ artist: calculated[0], title: calculated[1], origin: 'fs' });
+      }
+      res({ artist, title, ...rest, origin: 'id3' });
+    });
+  });
+};
+
 const getStats = (fullPath: TrackPath) => {
   const [directory, fullName] = extractLast(fullPath, '/');
   const duration = getMP3Duration(fs.readFileSync(fullPath));
@@ -59,5 +71,6 @@ const createSoundStream = ({ fullPath, bitrate, duration }: TrackStats): Readabl
 export {
   createSoundStream,
   getMeta,
+  getMetaAsync,
   getStats,
 };

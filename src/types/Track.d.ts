@@ -25,4 +25,5 @@ export interface TrackI {
   fsStats: TrackStats;
   getSound: () => Readable;
   getMeta: () => ShallowTrackMeta;
+  getMetaAsync: () => Promise<ShallowTrackMeta>;
 }
