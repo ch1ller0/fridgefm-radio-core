@@ -24,6 +24,6 @@ export interface TrackI {
   playCount: number;
   fsStats: TrackStats;
   getSound: () => Readable;
-  getMeta: () => ShallowTrackMeta;
+  getMeta: () => never;
   getMetaAsync: () => Promise<ShallowTrackMeta>;
 }

@@ -7,20 +7,6 @@ import { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.d';
 import { extractLast, identity } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
 
-const getMeta = ({ fullPath, name }: TrackStats): ShallowTrackMeta => {
-  try {
-    const { artist, title, ...rest } = id3.read(fullPath);
-    if (!artist || !title) {
-      throw new Error('id3 tags dont have enough data');
-    }
-    return { artist, title, ...rest, origin: 'id3' };
-  }
-  catch (e) {
-    const [artist, title] = name.split(' - ');
-    return { artist, title, origin: 'fs' };
-  }
-};
-
 const getMetaAsync = async ({ fullPath, name }: TrackStats): Promise<ShallowTrackMeta> => {
   return new Promise(res => {
     return id3.read(fullPath, (err: Error, { artist, title, ...rest }: ShallowTrackMeta) => {
@@ -70,7 +56,6 @@ const createSoundStream = ({ fullPath, bitrate, duration }: TrackStats): Readabl
 
 export {
   createSoundStream,
-  getMeta,
   getMetaAsync,
   getStats,
 };

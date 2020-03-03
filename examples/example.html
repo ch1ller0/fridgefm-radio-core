@@ -30,6 +30,11 @@
         #getPlaylist li:hover {
           background: gray;
         }
+        img#cover {
+          width: 200px;
+          height: 200px;
+          border-radius: 20px;
+        }
       </style>
   </head>
   <body>
@@ -40,6 +45,7 @@
         <div class='result'>
             <p id='artist'></p>
             <p id='title'></p>
+            <img id='cover' src=''></p>
         </div>
       </div>
       <h2>Station controls should be private</h2>
@@ -60,11 +66,21 @@
           return x;
         })
     }
+    const getCoverUrl = (image = {}) => {
+      const { imageBuffer } = image;
+      if (!imageBuffer) return;
+      const { imageBuffer: { data: uintarr } = {} } = image;
+      const blob = new Blob([new Uint8Array(uintarr)]);
+      const urlCreator = window.URL || window.webkitURL;
+
+      return urlCreator.createObjectURL(blob);
+    }
     function info() {
       request('/info')
         .then(cur => {
           document.getElementById('artist').innerHTML = `Artist: ${cur.artist}`;
           document.getElementById('title').innerHTML = `Title: ${cur.title}`;
+          document.getElementById('cover').src = getCoverUrl(cur.image)
         })
     }
     function controlsGetPlaylist() {
