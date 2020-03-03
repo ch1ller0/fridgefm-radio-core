@@ -1,5 +1,6 @@
 import { TrackI, TrackStats } from '../types/Track.d';
-import { createSoundStream, getMeta, getStats } from './methods/sound';
+import { deprecateError } from '../utils/deprecate';
+import { createSoundStream, getMetaAsync, getStats } from './methods/sound';
 
 export default class Track implements TrackI {
   public isPlaying = false;
@@ -10,11 +11,15 @@ export default class Track implements TrackI {
     this.fsStats = getStats(fullPath);
   }
 
+  public getMetaAsync() {
+    return getMetaAsync(this.fsStats);
+  }
+
   public getSound() {
     return createSoundStream(this.fsStats);
   }
 
   public getMeta() {
-    return getMeta(this.fsStats);
+    return deprecateError('getMeta', 'getMetaAsync', 'https://github.com/Kefir100/radio-ch1ller/issues/6');
   }
 }

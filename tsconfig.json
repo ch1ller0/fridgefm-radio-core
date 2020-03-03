@@ -7,7 +7,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": false,
-    "strictNullChecks": true,
+    "strictNullChecks": true
   },
   "include": [
     "./src/**/*"

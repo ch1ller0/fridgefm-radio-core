@@ -11,8 +11,9 @@ station.addFolder(musicPath);
 
 // update currently playing track info
 let currentTrack;
-station.on('nextTrack', track => {
-  currentTrack = track.getMeta();
+station.on('nextTrack', async track => {
+  const result = await track.getMetaAsync();
+  currentTrack = result;
 });
 
 station.on('start', () => {

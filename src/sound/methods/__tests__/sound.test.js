@@ -1,4 +1,4 @@
-const { getStats, getMeta, createSoundStream } = require('../sound');
+const { getStats, getMetaAsync, createSoundStream } = require('../sound');
 const pathToMusic = `${process.cwd()}/examples/music`;
 const devnull = require('dev-null');
 const id3 = require('node-id3');
@@ -50,8 +50,8 @@ describe('methods/sound', () => {
     });
   });
 
-  describe('getMeta', () => {
-    it('returns ok if id3 meta has both artist and title', () => {
+  describe('getMetaAsync', () => {
+    it('returns ok if id3 meta has both artist and title', async () => {
       const COMMON_META = {
         artist: 'Artist1',
         encodingTechnology: 'LAME 64bits version 3.100 (http://lame.sf.net)',
@@ -66,14 +66,19 @@ describe('methods/sound', () => {
         raw: {...COMMON_META.raw, TIT2: title},
       });
 
-      expect(getMeta(tracks[0])).toEqual({ ...createTestMeta('Track1'), origin: 'id3' });
-      expect(getMeta(tracks[1])).toEqual({ ...createTestMeta('Track2'), origin: 'id3' });
+      const res1 = await getMetaAsync(tracks[0]);
+      const res2 = await getMetaAsync(tracks[1]);
+
+      expect(res1).toEqual({ ...createTestMeta('Track1'), origin: 'id3' });
+      expect(res2).toEqual({ ...createTestMeta('Track2'), origin: 'id3' });
     });
 
-    it('returns meta based on filename if id3 meta is not enough', () => {
+    it('returns meta based on filename if id3 meta is not enough', async () => {
       TestFile.create();
 
-      expect(getMeta(getStats(TestFile.path))).toEqual({ artist: 'test', title: 'test', origin: 'fs' });
+      const res = await getMetaAsync(getStats(TestFile.path));
+
+      expect(res).toEqual({ artist: 'test', title: 'test', origin: 'fs' });
 
       TestFile.clear();
     });
