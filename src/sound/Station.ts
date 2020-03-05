@@ -21,22 +21,21 @@ const headers = {
 const EXPOSED_EVENTS = ['start', 'restart'];
 
 export class Station extends EventEmitter {
-  // tslint:disable-next-line variable-name
   private _queuestream: QueueStream;
 
   constructor() {
     super();
     this._queuestream = new QueueStream();
     // logging stuff
-    this._queuestream.on('next', nextTrack => {
+    this._queuestream.on('next', (nextTrack) => {
       const { fsStats: { stringified } } = nextTrack;
       logger(`Playing: ${stringified}`, 'g');
       this.emit('nextTrack', nextTrack);
     });
-    EXPOSED_EVENTS.forEach(e => {
+    EXPOSED_EVENTS.forEach((e) => {
       this._queuestream.on(e, () => this.emit(e));
     });
-    this._queuestream.on('error', e => {
+    this._queuestream.on('error', () => {
       // capture the error
     });
   }

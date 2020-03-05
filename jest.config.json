@@ -5,7 +5,13 @@
   "transform": {
     "^.+\\.ts$": "ts-jest"
   },
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   "collectCoverageFrom": [
     "src/**/*.ts"
-  ]
+  ],
+  "globals": {
+    "ts-jest": {
+      "tsConfig": false
+    }
+  }
 }

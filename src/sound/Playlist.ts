@@ -13,7 +13,7 @@ export class Playlist {
   }
 
   public getNext() {
-    const [currentTrack, currentIndex] = findWithIndex(this.tracks, t => t.isPlaying);
+    const [currentTrack, currentIndex] = findWithIndex(this.tracks, (t) => t.isPlaying);
     if (currentTrack) {
       currentTrack.isPlaying = false;
     }

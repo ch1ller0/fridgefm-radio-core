@@ -7,16 +7,20 @@ import { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.d';
 import { extractLast, identity } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
 
-const getMetaAsync = async ({ fullPath, name }: TrackStats): Promise<ShallowTrackMeta> => {
-  return new Promise(res => {
-    return id3.read(fullPath, (err: Error, { artist, title, ...rest }: ShallowTrackMeta) => {
+const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
+  const { fullPath, name } = stats;
+
+  return new Promise(
+    (res) => id3.read(fullPath, (err: Error, { artist, title, ...rest }: ShallowTrackMeta) => {
       if (!artist || !title || err) {
         const calculated = name.split(' - ');
         res({ artist: calculated[0], title: calculated[1], origin: 'fs' });
       }
-      res({ artist, title, ...rest, origin: 'id3' });
-    });
-  });
+      res({
+        artist, title, ...rest, origin: 'id3',
+      });
+    }),
+  );
 };
 
 const getStats = (fullPath: TrackPath) => {

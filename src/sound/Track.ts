@@ -2,9 +2,11 @@ import { TrackI, TrackStats } from '../types/Track.d';
 import { deprecateError } from '../utils/deprecate';
 import { createSoundStream, getMetaAsync, getStats } from './methods/sound';
 
-export default class Track implements TrackI {
+export class Track implements TrackI {
   public isPlaying = false;
+
   public playCount = 0;
+
   public readonly fsStats: TrackStats;
 
   constructor(fullPath: string) {

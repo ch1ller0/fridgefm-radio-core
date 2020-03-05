@@ -1,4 +1,7 @@
-const { noop, identity, extractLast, shuffleArray, findWithIndex } = require('../funcs');
+const {
+  noop, identity, extractLast, shuffleArray, findWithIndex,
+} = require('../funcs');
+
 const arr = [1, 2, 3, 4];
 
 describe('utils/funcs', () => {
@@ -28,7 +31,7 @@ describe('utils/funcs', () => {
   });
 
   it('findWithIndex', () => {
-    expect(findWithIndex(arr, v => v === 1)).toEqual([1, 0]);
-    expect(findWithIndex(arr, v => v > 3)).toEqual([4, 3]);
+    expect(findWithIndex(arr, (v) => v === 1)).toEqual([1, 0]);
+    expect(findWithIndex(arr, (v) => v > 3)).toEqual([4, 3]);
   });
 });

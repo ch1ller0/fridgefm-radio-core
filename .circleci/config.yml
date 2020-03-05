@@ -18,13 +18,13 @@ tag-filter: &tag-filter
 whitelist: &whitelist
   paths:
     - .npmignore
+    - .eslintrc.js
     - lib/*
     - node_modules/*
     - src/*
     - package.json
     - README.md
     - tsconfig.json
-    - tslint.json
     - jest.config.json
     - examples
 

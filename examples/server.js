@@ -65,7 +65,6 @@ server.get('*', (req, res) => {
 });
 
 server.listen(port, () => {
-  // tslint:disable-next-line
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);
   station.start();
 });

@@ -7,6 +7,7 @@ import { Prebuffer } from './Prebuffer';
 
 export class QueueStream extends EventEmitter {
   public playlist = new Playlist();
+
   // this stream is always live
   private current = new Transform({
     transform: (chunk, encoding, callback) => {
@@ -14,10 +15,13 @@ export class QueueStream extends EventEmitter {
       callback(undefined, chunk);
     },
   });
+
   // this stream switches on a each track
   private trackStream: Readable;
+
   // prebuffering for faster client response (side-effect)
   private prebuffer = new Prebuffer();
+
   private folders: string[] = [];
 
   constructor() {
@@ -51,7 +55,7 @@ export class QueueStream extends EventEmitter {
     } else {
       this.restart();
     }
-  }
+  };
 
   public addFolder(folder: string) {
     this.folders = [...this.folders || [], folder];
@@ -67,10 +71,10 @@ export class QueueStream extends EventEmitter {
   private restart = () => {
     logger('Queuestream:restart', 'bb');
     this.playlist = new Playlist();
-    this.folders.forEach(folder => {
+    this.folders.forEach((folder) => {
       this.playlist.createPlaylist(folder);
     });
     this.emit('restart');
     this.next();
-  }
+  };
 }
