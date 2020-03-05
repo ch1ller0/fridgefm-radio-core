@@ -1,5 +1,4 @@
 export const identity = <T>(x: T): T => x;
-  /* tslint:disable:no-empty */
 export const noop = (): void => {};
 
 export const extractLast = (str: string, symb: string) => {
@@ -9,14 +8,18 @@ export const extractLast = (str: string, symb: string) => {
   return [arr, last];
 };
 
-export const shuffleArray = <T>(arr: any[]): T[] => arr
-  .map(a => [Math.random(), a])
+export const shuffleArray = <T extends unknown>(arr: T[]): T[] => arr
+  .map((a) => {
+    const tuple: [number, typeof a] = [Math.random(), a];
+    return tuple;
+  })
   .sort((a, b) => a[0] - b[0])
-  .map(a => a[1]);
+  .map((a) => a[1]);
 
-export const findWithIndex = (arr: any[], cb: (s: any) => [any, number]) => {
+export const findWithIndex = <T>(arr: T[], cb: (s: T, i: number) => boolean) => {
   const index = arr.findIndex(cb);
   const element = arr[index];
+  const res: [T, number] = [element, index];
 
-  return [element, index];
+  return res;
 };

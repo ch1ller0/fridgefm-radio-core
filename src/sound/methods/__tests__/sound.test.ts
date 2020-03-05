@@ -1,8 +1,9 @@
-const { getStats, getMetaAsync, createSoundStream } = require('../sound');
-const pathToMusic = `${process.cwd()}/examples/music`;
 const devnull = require('dev-null');
 const id3 = require('node-id3');
 const fs = require('fs');
+const { getStats, getMetaAsync, createSoundStream } = require('../sound');
+
+const pathToMusic = `${process.cwd()}/examples/music`;
 
 const tracks = [
   {
@@ -56,14 +57,15 @@ describe('methods/sound', () => {
         artist: 'Artist1',
         encodingTechnology: 'LAME 64bits version 3.100 (http://lame.sf.net)',
         length: '7485',
-        // tslint:disable-next-line
-        raw: {'TIT2': 'Track1', 'TLEN': '7485', 'TPE1': 'Artist1', 'TSSE': 'LAME 64bits version 3.100 (http://lame.sf.net)'},
+        raw: {
+          TIT2: 'Track1', TLEN: '7485', TPE1: 'Artist1', TSSE: 'LAME 64bits version 3.100 (http://lame.sf.net)',
+        },
       };
 
-      const createTestMeta = title => ({
+      const createTestMeta = (title: string) => ({
         title,
         ...COMMON_META,
-        raw: {...COMMON_META.raw, TIT2: title},
+        raw: { ...COMMON_META.raw, TIT2: title },
       });
 
       const res1 = await getMetaAsync(tracks[0]);
@@ -89,7 +91,7 @@ describe('methods/sound', () => {
       jest.useFakeTimers();
 
       const stream = createSoundStream({ fullPath: tracks[0].fullPath, bitrate: 16036 });
-      const prom = new Promise((res, rej) => stream.on('error', e => rej(e)));
+      const prom = new Promise((res, rej) => stream.on('error', (e) => rej(e)));
       const err = new Error('test_error');
       stream.pipe(devnull());
 
@@ -108,8 +110,7 @@ describe('methods/sound', () => {
       const fullPath = `${process.cwd()}/non-existent.mp3`;
       const stream = createSoundStream({ fullPath, bitrate: 16036 });
       stream.pipe(devnull());
-      const prom = new Promise((res, rej) => stream.on('error', e => rej(e)));
-      // tslint:disable-next-line
+      const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
       await expect(prom).rejects.toThrow(`ENOENT: no such file or directory, open '${fullPath}'`);
     });
   });

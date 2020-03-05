@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+
 const PREBUFFER_LENGTH = 12;
 
 export class Prebuffer {
