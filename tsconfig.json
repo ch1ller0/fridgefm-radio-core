@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
-    "allowJs": true,
     "target": "es6",
-    "noImplicitAny": true,
-    "module": "commonjs",
+    "strict": true,
     "moduleResolution": "node",
+    "module": "commonjs",
     "sourceMap": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "declaration": true,
+    "listEmittedFiles": true
   },
   "include": [
     "./src/**/*"

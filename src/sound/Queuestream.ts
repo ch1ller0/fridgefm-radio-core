@@ -3,7 +3,7 @@ import * as EventEmitter from 'events';
 import { Readable, Transform, Writable } from 'stream';
 import { logger } from '../utils/logger';
 import { Playlist } from './Playlist';
-import { Prebuffer } from './Prebuffer';
+import { Prebuffer } from './features/Prebuffer';
 
 export class QueueStream extends EventEmitter {
   public playlist = new Playlist();
@@ -27,6 +27,7 @@ export class QueueStream extends EventEmitter {
   constructor() {
     super();
     this.currentPipe(devnull(), { end: false });
+    this.trackStream = new Readable();
   }
 
   public getPrebuffer = () => this.prebuffer.getStorage();

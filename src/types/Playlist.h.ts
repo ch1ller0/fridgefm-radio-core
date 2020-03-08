@@ -1,4 +1,4 @@
-import type { TrackI } from './Track.d';
+import type { TrackI } from './Track.h';
 
 export type SortAlg = (a: TrackI, b: TrackI) => number;
 

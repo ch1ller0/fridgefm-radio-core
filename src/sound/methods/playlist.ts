@@ -2,7 +2,7 @@ import * as klaw from 'klaw-sync';
 import { extractLast } from '../../utils/funcs';
 import { isFormatSupported } from '../../utils/mp3';
 import { Track } from '../Track';
-import type { TrackList } from '../../types/Playlist.d';
+import type { TrackList } from '../../types/Playlist.h';
 
 type KlawObj = { path: string };
 

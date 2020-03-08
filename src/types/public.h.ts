@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import type { TrackI } from './Track.d';
-import type { SortAlg } from './Playlist.d';
+import type { TrackI } from './Track.h';
+import type { SortAlg } from './Playlist.h';
 
 export interface StationI {
   // new @TODO di container

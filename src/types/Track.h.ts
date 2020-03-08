@@ -1,4 +1,5 @@
-import { Readable } from 'stream';
+import type { Readable } from 'stream';
+import type { Tags } from 'node-id3';
 
 export type TrackPath = string;
 
@@ -13,11 +14,9 @@ export type TrackStats = {
   stringified: string,
 };
 
-export type ShallowTrackMeta = {
-  artist: string,
-  title: string,
+export interface ShallowTrackMeta extends Tags {
   origin: 'id3' | 'fs',
-};
+}
 
 export interface TrackI {
   isPlaying: boolean;

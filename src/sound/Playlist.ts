@@ -1,8 +1,8 @@
-import { TrackI } from '../types/Track.d';
 import { findWithIndex, shuffleArray } from '../utils/funcs';
 import { logger } from '../utils/logger';
 import { createPlaylist, rearrangePlaylist } from './methods/playlist';
-import type { PlaylistI, SortAlg } from '../types/Playlist.d';
+import type { PlaylistI, SortAlg } from '../types/Playlist.h';
+import type { TrackI } from '../types/Track.h';
 
 export class Playlist implements PlaylistI {
   private tracks: TrackI[] = [];

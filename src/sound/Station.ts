@@ -3,10 +3,10 @@ import type { Response, Request } from 'express';
 import { noop } from '../utils/funcs';
 import { logger } from '../utils/logger';
 import { QueueStream } from './Queuestream';
-import type { StationI } from '../types/public.d';
-import type { SortAlg } from '../types/Playlist.d';
+import type { StationI } from '../types/public.h';
+import type { SortAlg } from '../types/Playlist.h';
 
-// TODO add icy metaint
+// TODO add icy metaint https://github.com/Kefir100/radio-ch1ller/issues/16
 const headers = {
   'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=0',
   'Content-Type': 'audio/mpeg',
