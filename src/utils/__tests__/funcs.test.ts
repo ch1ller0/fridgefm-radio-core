@@ -33,5 +33,6 @@ describe('utils/funcs', () => {
   it('findWithIndex', () => {
     expect(findWithIndex(arr, (v) => v === 1)).toEqual([1, 0]);
     expect(findWithIndex(arr, (v) => v > 3)).toEqual([4, 3]);
+    expect(findWithIndex(arr, (v) => v > 5)).toEqual([undefined, -1]);
   });
 });
