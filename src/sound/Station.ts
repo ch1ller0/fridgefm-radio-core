@@ -4,7 +4,7 @@ import { noop } from '../utils/funcs';
 import { QueueStream } from './Queuestream';
 import { responseHeaders } from './defaults/responseHeaders';
 import type { StationI } from '../types/public.h';
-import type { SortAlg, PlaylistI } from '../types/Playlist.h';
+import type { SortAlg, TrackList } from '../types/Playlist.h';
 import type { TrackI } from '../types/Track.h';
 
 // events that should be hoisted up to the station from queuestream
@@ -24,23 +24,25 @@ export class Station implements StationI {
   }
 
   public start() {
-    this._queuestream.start();
+    if (this.getPlaylist().length) {
+      this._queuestream.start();
+    }
   }
 
   public addFolder(folder: string) {
-    this._queuestream.addFolder(folder);
+    return this._queuestream.addFolder(folder);
   }
 
   public next() {
-    this._queuestream.next();
+    return this._queuestream.next();
   }
 
   public getPlaylist() {
     return this._queuestream.playlist.getList();
   }
 
-  public shufflePlaylist(arg: SortAlg) {
-    this._queuestream.playlist.shuffle(arg);
+  public shufflePlaylist(arg?: SortAlg) {
+    return this._queuestream.playlist.shuffle(arg);
   }
 
   public rearrangePlaylist(from: number, to: number) {
@@ -56,13 +58,13 @@ export class Station implements StationI {
     cb();
   }
 
-  public on(event: 'start', listener: (pl: PlaylistI) => void): void
+  public on(event: 'start', listener: (pl: TrackList) => void): void
 
   public on(event: 'restart', listener: () => void): void
 
   public on(event: 'nextTrack', listener: (nextTrack: TrackI) => void): void;
 
-  public on(event: 'error', listener: (err: Error) => never): void;
+  public on(event: 'error', listener: (err: Error) => void): void;
 
   public on(event: string, listener: (...args: any[]) => void) {
     this._eventBus.on(event, listener);

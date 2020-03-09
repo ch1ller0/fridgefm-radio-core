@@ -67,7 +67,7 @@ export class QueueStream {
 
   public start() {
     logger('Queuestream:start', 'bb');
-    this.eventBus.emit('start', this.playlist);
+    this.eventBus.emit('start', this.playlist.getList());
     this.next();
   }
 
@@ -81,7 +81,7 @@ export class QueueStream {
     this.folders.forEach((folder) => {
       this.playlist.createPlaylist(folder);
     });
-    this.eventBus.emit('restart', this.playlist);
+    this.eventBus.emit('restart', this.playlist.getList());
     this.next();
   };
 }
