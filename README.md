@@ -95,12 +95,16 @@ station.on('restart', () => { station.shufflePlaylist() });
 
 ## or just go to [EXAMPLES](./examples/server.js)
 ```
+yarn build
 node examples/server.js
 ```
 OR
 ```
+yarn build
 node examples/server.js [path/to/your_mp3tracks]
+# in this case it would take a little more time, just wait
 ```
+
 
 ### NOTICE
 ```

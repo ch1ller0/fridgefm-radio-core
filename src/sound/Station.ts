@@ -1,10 +1,12 @@
 import * as EventEmitter from 'events';
-import * as express from 'express';
+import type { Response, Request } from 'express';
 import { noop } from '../utils/funcs';
 import { logger } from '../utils/logger';
 import { QueueStream } from './Queuestream';
+import type { StationI } from '../types/public.h';
+import type { SortAlg } from '../types/Playlist.h';
 
-// TODO add icy metaint
+// TODO add icy metaint https://github.com/Kefir100/radio-ch1ller/issues/16
 const headers = {
   'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=0',
   'Content-Type': 'audio/mpeg',
@@ -20,7 +22,7 @@ const headers = {
 // events that should be hoisted up to the station from queuestream
 const EXPOSED_EVENTS = ['start', 'restart'];
 
-export class Station extends EventEmitter {
+export class Station extends EventEmitter implements StationI {
   private _queuestream: QueueStream;
 
   constructor() {
@@ -56,8 +58,7 @@ export class Station extends EventEmitter {
     return this._queuestream.playlist.getList();
   }
 
-  // shuffle playlist once
-  public shufflePlaylist(arg: any) {
+  public shufflePlaylist(arg: SortAlg) {
     this._queuestream.playlist.shuffle(arg);
   }
 
@@ -65,7 +66,7 @@ export class Station extends EventEmitter {
     return this._queuestream.playlist.rearrange(from, to);
   }
 
-  public connectListener(req: express.Request, res: express.Response, cb = noop) {
+  public connectListener(req: Request, res: Response, cb = noop) {
     const { currentPipe, getPrebuffer } = this._queuestream;
 
     res.writeHead(200, headers);

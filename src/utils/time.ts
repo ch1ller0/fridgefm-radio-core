@@ -15,11 +15,3 @@ export const getHHMMSS = (ms: Msecs) => new Date(ms)
   .map((t) => parseInt(t, 10))
   .map(zeroDangle)
   .join(':');
-
-export const calculateScheduled = ({ playlist }: any, i: number) => {
-  const prev = playlist
-    .slice(0, i)
-    .reduce((acc: any, { fsStats: { duration } }: any) => acc + duration, 0);
-
-  return Date.now() + prev;
-};

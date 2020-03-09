@@ -1,14 +1,12 @@
 import * as klaw from 'klaw-sync';
-import { TrackI } from '../../types/Track.d';
 import { extractLast } from '../../utils/funcs';
 import { isFormatSupported } from '../../utils/mp3';
 import { Track } from '../Track';
-
-type List = TrackI[];
+import type { TrackList } from '../../types/Playlist.h';
 
 type KlawObj = { path: string };
 
-export const createPlaylist = (folder: string): List => klaw(folder, { nodir: true })
+export const createPlaylist = (folder: string): TrackList => klaw(folder, { nodir: true })
   .filter(({ path }: KlawObj) => {
     const f = extractLast(path, '/');
 
@@ -18,7 +16,7 @@ export const createPlaylist = (folder: string): List => klaw(folder, { nodir: tr
 
 type RearrangeOpts = { to: number, from: number };
 
-export const rearrangePlaylist = (arr: List, { to, from }: RearrangeOpts): List => {
+export const rearrangePlaylist = (arr: TrackList, { to, from }: RearrangeOpts): TrackList => {
   const movedElement = arr.splice(from, 1)[0];
   arr.splice(to, 0, movedElement);
 

@@ -19,6 +19,13 @@ export const shuffleArray = <T extends unknown>(arr: T[]): T[] => arr
 export const findWithIndex = <T>(arr: T[], cb: (s: T, i: number) => boolean) => {
   const index = arr.findIndex(cb);
   const element = arr[index];
+
+  if (!element) {
+    const notFound: [undefined, number] = [undefined, index];
+
+    return notFound;
+  }
+
   const res: [T, number] = [element, index];
 
   return res;

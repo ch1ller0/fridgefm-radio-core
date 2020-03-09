@@ -3,15 +3,17 @@ import * as getMP3Duration from 'get-mp3-duration';
 import * as _ from 'highland';
 import * as id3 from 'node-id3';
 import { Readable } from 'stream';
-import { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.d';
 import { extractLast, identity } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
+import type { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.h';
 
 const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
   const { fullPath, name } = stats;
 
   return new Promise(
-    (res) => id3.read(fullPath, (err: Error, { artist, title, ...rest }: ShallowTrackMeta) => {
+    (res) => id3.read(fullPath, (err, meta) => {
+      const { artist, title, ...rest } = meta || {};
+
       if (!artist || !title || err) {
         const calculated = name.split(' - ');
         res({ artist: calculated[0], title: calculated[1], origin: 'fs' });
