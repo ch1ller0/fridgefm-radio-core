@@ -5,7 +5,7 @@ import { logger } from '../utils/logger';
 import { Playlist } from './Playlist';
 import { Prebuffer } from './features/Prebuffer';
 
-export class QueueStream extends EventEmitter {
+export class QueueStream {
   public playlist = new Playlist();
 
   // this stream is always live
@@ -16,6 +16,8 @@ export class QueueStream extends EventEmitter {
     },
   });
 
+  private eventBus = new EventEmitter();
+
   // this stream switches on a each track
   private trackStream: Readable;
 
@@ -25,7 +27,6 @@ export class QueueStream extends EventEmitter {
   private folders: string[] = [];
 
   constructor() {
-    super();
     this.currentPipe(devnull(), { end: false });
     this.trackStream = new Readable();
   }
@@ -47,12 +48,13 @@ export class QueueStream extends EventEmitter {
       newStream.once('error', (e: Error) => {
         logger('Queuestream:error', 'r');
         logger(e, 'r', false);
-        this.emit('error', e);
+        this.eventBus.emit('error', e);
       });
       newStream.once('end', this.next);
       newStream.pipe(this.current, { end: false });
       this.trackStream = newStream;
-      this.emit('next', nextTrack);
+      this.eventBus.emit('nextTrack', nextTrack);
+      logger(`Queuestream:nextTrack "${nextTrack.fsStats.stringified}"`, 'g');
     } else {
       this.restart();
     }
@@ -65,8 +67,12 @@ export class QueueStream extends EventEmitter {
 
   public start() {
     logger('Queuestream:start', 'bb');
-    this.emit('start', this.playlist);
+    this.eventBus.emit('start', this.playlist);
     this.next();
+  }
+
+  public on(event: string, listener: (...args: any[]) => void) {
+    return this.eventBus.on(event, listener);
   }
 
   private restart = () => {
@@ -75,7 +81,7 @@ export class QueueStream extends EventEmitter {
     this.folders.forEach((folder) => {
       this.playlist.createPlaylist(folder);
     });
-    this.emit('restart');
+    this.eventBus.emit('restart', this.playlist);
     this.next();
   };
 }
