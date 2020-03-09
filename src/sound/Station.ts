@@ -1,44 +1,25 @@
 import * as EventEmitter from 'events';
 import type { Response, Request } from 'express';
 import { noop } from '../utils/funcs';
-import { logger } from '../utils/logger';
 import { QueueStream } from './Queuestream';
+import { responseHeaders } from './defaults/responseHeaders';
 import type { StationI } from '../types/public.h';
-import type { SortAlg } from '../types/Playlist.h';
-
-// TODO add icy metaint https://github.com/Kefir100/radio-ch1ller/issues/16
-const headers = {
-  'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=0',
-  'Content-Type': 'audio/mpeg',
-  'icy-br': '56',
-  'icy-genre': 'house',
-  'icy-metaint': '0',
-  'icy-name': '@kefir100/radio-engine',
-  'icy-notice1': 'Live radio powered by https://www.npmjs.com/package/@kefir100/radio-engine',
-  'icy-pub': '0',
-  'icy-url': 'https://',
-};
+import type { SortAlg, PlaylistI } from '../types/Playlist.h';
+import type { TrackI } from '../types/Track.h';
 
 // events that should be hoisted up to the station from queuestream
-const EXPOSED_EVENTS = ['start', 'restart'];
+const EXPOSED_EVENTS = ['start', 'restart', 'error', 'nextTrack'];
 
-export class Station extends EventEmitter implements StationI {
+export class Station implements StationI {
   private _queuestream: QueueStream;
 
+  private _eventBus: EventEmitter;
+
   constructor() {
-    super();
+    this._eventBus = new EventEmitter();
     this._queuestream = new QueueStream();
-    // logging stuff
-    this._queuestream.on('next', (nextTrack) => {
-      const { fsStats: { stringified } } = nextTrack;
-      logger(`Playing: ${stringified}`, 'g');
-      this.emit('nextTrack', nextTrack);
-    });
-    EXPOSED_EVENTS.forEach((e) => {
-      this._queuestream.on(e, () => this.emit(e));
-    });
-    this._queuestream.on('error', () => {
-      // capture the error
+    EXPOSED_EVENTS.forEach((event) => {
+      this._queuestream.on(event, (...args) => this._eventBus.emit(event, ...args));
     });
   }
 
@@ -69,9 +50,21 @@ export class Station extends EventEmitter implements StationI {
   public connectListener(req: Request, res: Response, cb = noop) {
     const { currentPipe, getPrebuffer } = this._queuestream;
 
-    res.writeHead(200, headers);
+    res.writeHead(200, responseHeaders);
     res.write(getPrebuffer());
     currentPipe(res);
     cb();
+  }
+
+  public on(event: 'start', listener: (pl: PlaylistI) => void): void
+
+  public on(event: 'restart', listener: () => void): void
+
+  public on(event: 'nextTrack', listener: (nextTrack: TrackI) => void): void;
+
+  public on(event: 'error', listener: (err: Error) => never): void;
+
+  public on(event: string, listener: (...args: any[]) => void) {
+    this._eventBus.on(event, listener);
   }
 }

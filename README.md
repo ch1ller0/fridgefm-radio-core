@@ -93,6 +93,12 @@ it might be a nice time to shuffle your playlist for example
 station.on('restart', () => { station.shufflePlaylist() });
 ```
 
+#### `error`
+event fires when there is some error
+```javascript
+station.on('error', (e) => { handleError(e) });
+```
+
 ## or just go to [EXAMPLES](./examples/server.js)
 ```
 yarn build
