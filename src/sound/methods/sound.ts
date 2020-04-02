@@ -1,10 +1,10 @@
 import * as fs from 'fs';
-import * as getMP3Duration from 'get-mp3-duration';
 import * as _ from 'highland';
 import * as id3 from 'node-id3';
 import { Readable } from 'stream';
-import { extractLast, identity } from '../../utils/funcs';
+import { extractLast } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
+import * as Mp3 from '../../utils/mp3';
 import type { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.h';
 
 const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
@@ -26,30 +26,31 @@ const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
 };
 
 const getStats = (fullPath: TrackPath) => {
+  const file = fs.readFileSync(fullPath);
   const [directory, fullName] = extractLast(fullPath, '/');
-  const duration = getMP3Duration(fs.readFileSync(fullPath));
+  const duration = Mp3.getDuration(file);
+  const tagsSize = Mp3.getTagsSize(file);
   const { size } = fs.statSync(fullPath);
   const [name, format] = extractLast(fullName, '.');
 
   return {
-    bitrate: Math.ceil(size / (duration / 1000)),
+    size,
+    tagsSize,
     directory,
     duration,
     format,
     fullPath,
     name,
-    size,
+    bitrate: Math.ceil((size - tagsSize) / (duration / 1000)),
     stringified: `${name}.${format} [${Math.floor(size / 1024) / 1000}MB/${getDateFromMsecs(duration)}]`,
   };
 };
 
-const createSoundStream = ({ fullPath, bitrate, duration }: TrackStats): Readable => {
-  const shouldTrim = process.env.NODE_ENV === 'development' && duration > 120000;
-
+const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): Readable => {
   try {
     const rs = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
     const comp = _.seq(
-      shouldTrim ? _.slice(120, 150) : identity,
+      _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
       _.ratelimit(1, 1000),
     );
 

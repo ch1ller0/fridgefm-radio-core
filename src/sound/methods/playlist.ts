@@ -1,6 +1,6 @@
 import * as klaw from 'klaw-sync';
 import { extractLast } from '../../utils/funcs';
-import { isFormatSupported } from '../../utils/mp3';
+import * as Mp3 from '../../utils/mp3';
 import { Track } from '../Track';
 import type { TrackList } from '../../types/Playlist.h';
 
@@ -10,7 +10,7 @@ export const createPlaylist = (folder: string): TrackList => klaw(folder, { nodi
   .filter(({ path }: KlawObj) => {
     const f = extractLast(path, '/');
 
-    return isFormatSupported(f[1]);
+    return Mp3.isSupported(f[1]);
   })
   .map(({ path }: KlawObj) => new Track(path));
 

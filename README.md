@@ -111,11 +111,5 @@ node examples/server.js [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
 ```
 
-
-### NOTICE
-```
-if NODE_ENV equals 'development' the tracks will be trimmed from 120s to 150s. This is due to ability to switch audio playback faster and therefore test it. 
-```
-
 ## Demo
 Fully working demo is available on http://ch1ller.com
