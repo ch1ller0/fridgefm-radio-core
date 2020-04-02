@@ -29,11 +29,12 @@ const TestFile = {
 describe('methods/sound', () => {
   it('getStats', () => {
     const common = {
-      bitrate: 16036,
+      bitrate: 16018,
       directory: pathToMusic,
       duration: 7549,
       format: 'mp3',
       size: 121051,
+      tagsSize: 134,
     };
 
     expect(getStats(tracks[0].fullPath)).toEqual({

@@ -11,6 +11,7 @@ export type TrackStats = {
   fullPath: string,
   name: string,
   size: number, // bytes
+  tagsSize: number, // bytes
   stringified: string,
 };
 
