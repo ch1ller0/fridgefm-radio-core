@@ -3390,9 +3390,9 @@ nice-try@^1.0.4:
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
 node-id3@^0.1.9:
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.1.14.tgz#aee2535fdd9b9559f2dd6dd8c1935075cdce9603"
-  integrity sha512-hogW4Glg+ng65EieDDfJ4HRnidHTVwn1PbPPzJAKyYL1tmbniNXd+8Wt4jISnvpetthuZslThoXOUDcUWqvwKg==
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.1.16.tgz#3ed0f2fb5d50d6a640c08af076055dea295777fa"
+  integrity sha512-neWBJZxwrWnnebqy0b6gOGpnOPu1l1ASlusVCJUlrgr55ksftcz3lPbP/h4KaFXN+WQX7hh+kmNwkj5DMAa7KA==
   dependencies:
     iconv-lite "^0.4.15"
 
