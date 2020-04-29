@@ -1,4 +1,4 @@
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import type { Response, Request } from 'express';
 import { noop } from '../utils/funcs';
 import { QueueStream } from './Queuestream';

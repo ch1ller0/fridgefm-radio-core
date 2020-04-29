@@ -1,5 +1,5 @@
 import * as devnull from 'dev-null';
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import { Readable, Transform, Writable } from 'stream';
 import { logger } from '../utils/logger';
 import { Playlist } from './Playlist';

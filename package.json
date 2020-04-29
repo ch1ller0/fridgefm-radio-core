@@ -35,42 +35,41 @@
     "test:cov": "yarn test --collectCoverage=true"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
+    "chalk": "^4.0.0",
     "dev-null": "^0.1.1",
     "express": "^4.17.1",
     "get-mp3-duration": "^1.0.0",
     "highland": "^2.13.4",
     "klaw-sync": "^6.0.0",
     "lodash": "^4.17.15",
-    "node-id3": "^0.1.9"
+    "node-id3": "^0.1.16"
   },
   "devDependencies": {
-    "@types/express": "^4.17.0",
-    "@types/jest": "^24.0.15",
-    "@types/lodash": "^4.14.149",
-    "@types/node": "^12.6.8",
-    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@types/express": "^4.17.6",
+    "@types/jest": "^25.2.1",
+    "@types/lodash": "^4.14.150",
+    "@types/node": "^13.13.4",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb-typescript": "^7.0.0",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jest": "^23.8.1",
-    "husky": "^1.3.1",
-    "jest": "^24.8.0",
-    "lint-staged": ">=8",
-    "ts-jest": "^24.0.2",
+    "eslint-config-airbnb-typescript": "^7.2.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "husky": "^4.2.5",
+    "jest": "^25.5.1",
+    "lint-staged": ">=10.2.0",
+    "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"
   },
   "bugs": {
     "url": "https://github.com/Kefir100/radio-ch1ller/issues"
   },
-  "homepage": "http://ch1ller.com",
+  "homepage": "http://fridgefm.com",
   "directories": {
     "example": "examples"
   },
   "lint-staged": {
     "./src/**/*.{js,ts}": [
-      "yarn lint",
-      "git add"
+      "yarn lint"
     ]
   }
 }

@@ -112,4 +112,4 @@ node examples/server.js [path/to/your_mp3tracks]
 ```
 
 ## Demo
-Fully working demo is available on http://ch1ller.com
+Fully working demo is available on http://fridgefm.com

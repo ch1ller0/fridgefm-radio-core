@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import { identity } from './funcs';
 import { getHHMMSS } from './time';
 
