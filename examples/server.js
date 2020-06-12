@@ -11,7 +11,8 @@ station.addFolder(musicPath);
 
 // update currently playing track info
 let currentTrack;
-station.on('nextTrack', async track => {
+station.on('nextTrack', async (track, stats) => {
+  console.log(`nextTrack handler took ${stats.time}ms`)
   const result = await track.getMetaAsync();
   currentTrack = result;
 });
@@ -20,7 +21,8 @@ station.on('start', () => {
   station.shufflePlaylist();
 });
 
-station.on('restart', () => {
+station.on('restart', (_, stats) => {
+  console.log(`restart handler took ${stats.time}ms`)
   station.shufflePlaylist();
 });
 

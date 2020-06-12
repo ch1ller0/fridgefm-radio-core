@@ -36,6 +36,7 @@ export class QueueStream {
   public currentPipe = (wrstr: Writable, opts = {}) => this.current.pipe(wrstr, opts);
 
   public next = () => {
+    const startTime = Date.now();
     const nextTrack = this.playlist.getNext();
 
     if (nextTrack) {
@@ -53,8 +54,8 @@ export class QueueStream {
       newStream.once('end', this.next);
       newStream.pipe(this.current, { end: false });
       this.trackStream = newStream;
-      this.eventBus.emit('nextTrack', nextTrack);
       logger(`Queuestream:nextTrack "${nextTrack.fsStats.stringified}"`, 'g');
+      this.eventBus.emit('nextTrack', nextTrack, { time: Date.now() - startTime });
     } else {
       this.restart();
     }
@@ -76,12 +77,13 @@ export class QueueStream {
   }
 
   private restart = () => {
+    const startTime = Date.now();
     logger('Queuestream:restart', 'bb');
     this.playlist = new Playlist();
     this.folders.forEach((folder) => {
       this.playlist.createPlaylist(folder);
     });
-    this.eventBus.emit('restart', this.playlist.getList());
+    this.eventBus.emit('restart', this.playlist.getList(), { time: Date.now() - startTime });
     this.next();
   };
 }
