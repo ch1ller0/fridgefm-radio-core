@@ -158,16 +158,26 @@ describe('public/Station', () => {
 
     // event "start"
     station.start();
+    // start event fired
     expect(checker.start.mock.calls[0][0]).toEqual(station.getPlaylist());
+    // nextTrack event fired
     expect(checker.nextTrack.mock.calls[0][0]).toEqual(station.getPlaylist()[0]);
 
     // event "nextTrack"
     station.next();
+    // nextTrack returns a track
     expect(checker.nextTrack.mock.calls[1][0]).toEqual(station.getPlaylist()[1]);
+    // also sends time which the handler took
+    const nextTrStats = checker.nextTrack.mock.calls[1][1];
+    expect(typeof nextTrStats.time).toEqual('number');
 
     // event "restart"
     station.next();
+    // returns playlist
     expect(checker.restart.mock.calls[0][0]).toEqual(station.getPlaylist());
+    // also sends time which the handler took
+    const nextStats = checker.nextTrack.mock.calls[1][1];
+    expect(typeof nextStats.time).toEqual('number');
 
     // @TODO find some way to test error event
   });

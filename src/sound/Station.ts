@@ -3,7 +3,7 @@ import type { Response, Request } from 'express';
 import { noop } from '../utils/funcs';
 import { QueueStream } from './Queuestream';
 import { responseHeaders } from './defaults/responseHeaders';
-import type { StationI } from '../types/public.h';
+import type { StationI, HandlerStats } from '../types/public.h';
 import type { SortAlg, TrackList } from '../types/Playlist.h';
 import type { TrackI } from '../types/Track.h';
 
@@ -60,11 +60,11 @@ export class Station implements StationI {
 
   public on(event: 'start', listener: (pl: TrackList) => void): void
 
-  public on(event: 'restart', listener: () => void): void
+  public on(event: 'restart', listener: (pl: TrackList, stats: HandlerStats) => void): void
 
-  public on(event: 'nextTrack', listener: (nextTrack: TrackI) => void): void;
+  public on(event: 'nextTrack', listener: (nextTrack: TrackI, stats: HandlerStats) => void): void
 
-  public on(event: 'error', listener: (err: Error) => void): void;
+  public on(event: 'error', listener: (err: Error) => void): void
 
   public on(event: string, listener: (...args: any[]) => void) {
     this._eventBus.on(event, listener);
