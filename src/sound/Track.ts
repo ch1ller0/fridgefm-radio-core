@@ -1,4 +1,3 @@
-import { deprecateError } from '../utils/deprecate';
 import { createSoundStream, getMetaAsync, getStats } from './methods/sound';
 import type { TrackI, TrackStats } from '../types/Track.h';
 
@@ -19,9 +18,5 @@ export class Track implements TrackI {
 
   public getSound() {
     return createSoundStream(this.fsStats);
-  }
-
-  public getMeta() {
-    return deprecateError('getMeta', 'getMetaAsync', 'https://github.com/Kefir100/radio-ch1ller/issues/6');
   }
 }

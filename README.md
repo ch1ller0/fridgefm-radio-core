@@ -1,8 +1,8 @@
 # Radio engine for NodeJS
-[![build](https://img.shields.io/circleci/build/github/Kefir100/radio-ch1ller.svg)](https://circleci.com/gh/Kefir100/radio-ch1ller)
-[![coverage](https://img.shields.io/codecov/c/gh/Kefir100/radio-ch1ller.svg)](https://codecov.io/gh/Kefir100/radio-ch1ller)
+[![build](https://img.shields.io/circleci/build/github/Kefir100/fridgefm-radio-core.svg)](https://circleci.com/gh/Kefir100/fridgefm-radio-core)
+[![coverage](https://img.shields.io/codecov/c/gh/Kefir100/fridgefm-radio-core.svg)](https://codecov.io/gh/Kefir100/fridgefm-radio-core)
 [![npm](https://img.shields.io/npm/dw/@kefir100/radio-engine.svg)](https://www.npmjs.com/package/@kefir100/radio-engine)
-![GitHub](https://img.shields.io/github/license/kefir100/radio-ch1ller.svg)
+![GitHub](https://img.shields.io/github/license/kefir100/fridgefm-radio-core.svg)
 ![node](https://img.shields.io/node/v/@kefir100/radio-engine.svg)
 
 ## Usage
@@ -13,11 +13,11 @@
 
 ### Installation
 ```
-npm i @kefir100/radio-engine --save
+npm i @fridgefm/radio-engine --save
 ```
 ### Server
 ```javascript
-const { Station } = require('@kefir100/radio-engine');
+const { Station } = require('@fridgefm/radio-engine');
 const station = new Station();
 
 station.addFolder('User/Music');
@@ -99,7 +99,7 @@ event fires when there is some error
 station.on('error', (e) => { handleError(e) });
 ```
 
-## or just go to [EXAMPLES](./examples/server.js)
+## or just go to [examples](./examples/server.js)
 ```
 yarn build
 node examples/server.js

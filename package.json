@@ -1,7 +1,7 @@
 {
-  "name": "@kefir100/radio-engine",
+  "name": "@fridgefm/radio-core",
   "author": "Grigory Gorshkov",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "internet radio engine made on NodeJS platform",
   "license": "MIT",
   "main": "./lib/index.js",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kefir100/radio-ch1ller.git"
+    "url": "git+https://github.com/Kefir100/fridgefm-radio-core.git"
   },
   "scripts": {
     "build": "tsc",
@@ -35,33 +35,33 @@
     "test:cov": "yarn test --collectCoverage=true"
   },
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "dev-null": "^0.1.1",
     "express": "^4.17.1",
     "get-mp3-duration": "^1.0.0",
     "highland": "^2.13.4",
     "klaw-sync": "^6.0.0",
     "lodash": "^4.17.15",
-    "node-id3": "^0.1.16"
+    "node-id3": "^0.1.18"
   },
   "devDependencies": {
-    "@types/express": "^4.17.6",
-    "@types/jest": "^25.2.1",
-    "@types/lodash": "^4.14.150",
-    "@types/node": "^13.13.4",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-typescript": "^7.2.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jest": "^23.8.2",
-    "husky": "^4.2.5",
-    "jest": "^25.5.1",
-    "lint-staged": ">=10.2.0",
-    "ts-jest": "^25.4.0",
-    "typescript": "^3.8.3"
+    "@types/express": "^4.17.8",
+    "@types/jest": "^26.0.13",
+    "@types/lodash": "^4.14.161",
+    "@types/node": "^14.6.4",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-typescript": "^10.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.0.0",
+    "husky": "^4.3.0",
+    "jest": "^26.4.2",
+    "lint-staged": ">=10.3.0",
+    "ts-jest": "^26.3.0",
+    "typescript": "^4.0.2"
   },
   "bugs": {
-    "url": "https://github.com/Kefir100/radio-ch1ller/issues"
+    "url": "https://github.com/Kefir100/fridgefm-radio-core/issues"
   },
   "homepage": "http://fridgefm.com",
   "directories": {
