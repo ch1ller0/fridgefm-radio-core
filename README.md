@@ -99,7 +99,7 @@ event fires when there is some error
 station.on('error', (e) => { handleError(e) });
 ```
 
-## or just go to [EXAMPLES](./examples/server.js)
+## or just go to [examples](./examples/server.js)
 ```
 yarn build
 node examples/server.js
