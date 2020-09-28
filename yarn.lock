@@ -3611,9 +3611,9 @@ nice-try@^1.0.4:
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
 node-id3@^0.1.18:
-  version "0.1.18"
-  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.1.18.tgz#a0457f662b0efef654100865da774588227cf8ef"
-  integrity sha512-XWjPWER49KeWCvCBLsAlUFylLL1Dq8/l4c2AMENk/91HD/4Y5SMRHXhFo6RjfQvHoR+6olPJqg7JO6+Uw9ipag==
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.1.19.tgz#71000cb829dadc761000a481015e53f3cc9daada"
+  integrity sha512-0arAjXYwMwxVpktrAGnDdy8XLTXLYbWPqyGXcf3DQy1/tI0M7N4IM0JmOVeLLROMw4M0DgunQPeIMCov5JknFQ==
   dependencies:
     iconv-lite "0.5.1"
 
