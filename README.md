@@ -1,9 +1,9 @@
 # Radio engine for NodeJS
 [![build](https://img.shields.io/circleci/build/github/Kefir100/fridgefm-radio-core.svg)](https://circleci.com/gh/Kefir100/fridgefm-radio-core)
 [![coverage](https://img.shields.io/codecov/c/gh/Kefir100/fridgefm-radio-core.svg)](https://codecov.io/gh/Kefir100/fridgefm-radio-core)
-[![npm](https://img.shields.io/npm/dw/@kefir100/radio-engine.svg)](https://www.npmjs.com/package/@kefir100/radio-engine)
+[![npm](https://img.shields.io/npm/dw/@fridgefm/radio-core.svg)](https://www.npmjs.com/package/@fridgefm/radio-core)
 ![GitHub](https://img.shields.io/github/license/kefir100/fridgefm-radio-core.svg)
-![node](https://img.shields.io/node/v/@kefir100/radio-engine.svg)
+![node](https://img.shields.io/node/v/@fridgefm/radio-core.svg)
 
 ## Usage
 
@@ -13,11 +13,11 @@
 
 ### Installation
 ```
-npm i @fridgefm/radio-engine --save
+npm i @fridgefm/radio-core --save
 ```
 ### Server
 ```javascript
-const { Station } = require('@fridgefm/radio-engine');
+const { Station } = require('@fridgefm/radio-core');
 const station = new Station();
 
 station.addFolder('User/Music');
