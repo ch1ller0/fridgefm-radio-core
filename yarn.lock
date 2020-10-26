@@ -2447,12 +2447,12 @@ iconv-lite@0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-iconv-lite@0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.5.1.tgz#b2425d3c7b18f7219f2ca663d103bddb91718d64"
-  integrity sha512-ONHr16SQvKZNSqjQT9gy5z24Jw+uqfO02/ngBSBoqChZ+W8qXX7GPRa1RoUnzGADw8K63R1BXUMzarCVQBpY8Q==
+iconv-lite@0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.2.tgz#ce13d1875b0c3a674bd6a04b7f76b01b1b6ded01"
+  integrity sha512-2y91h5OpQlolefMPmUlivelittSWy0rP+oYVpn6A7GwVHNE8AWzoYOBNmlwks3LobaJxgHCYZAnyNo2GgpNRNQ==
   dependencies:
-    safer-buffer ">= 2.1.2 < 3"
+    safer-buffer ">= 2.1.2 < 3.0.0"
 
 ignore@^4.0.6:
   version "4.0.6"
@@ -3610,12 +3610,12 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-node-id3@^0.1.18:
-  version "0.1.18"
-  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.1.18.tgz#a0457f662b0efef654100865da774588227cf8ef"
-  integrity sha512-XWjPWER49KeWCvCBLsAlUFylLL1Dq8/l4c2AMENk/91HD/4Y5SMRHXhFo6RjfQvHoR+6olPJqg7JO6+Uw9ipag==
+node-id3@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.2.0.tgz#e36535ce9405148fdc88487e3571fa5dbbf7a55d"
+  integrity sha512-MgpbYjA8l6hOSXGIxyRSe+uSpE0FXzYG3q+xJNagvcsxbjyqt2qDU8/xJgKTjQg2TDIgT7yfFbPdlqJcPhGVag==
   dependencies:
-    iconv-lite "0.5.1"
+    iconv-lite "0.6.2"
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -4296,7 +4296,7 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
-"safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
+"safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==

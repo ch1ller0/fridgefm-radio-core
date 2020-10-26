@@ -42,7 +42,7 @@
     "highland": "^2.13.4",
     "klaw-sync": "^6.0.0",
     "lodash": "^4.17.15",
-    "node-id3": "^0.1.18"
+    "node-id3": "^0.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.8",
