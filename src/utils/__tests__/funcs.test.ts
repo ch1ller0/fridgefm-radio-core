@@ -1,19 +1,8 @@
-import {
-  noop, identity, extractLast, shuffleArray, findWithIndex,
-} from '../funcs';
+import { extractLast, shuffleArray, findWithIndex } from '../funcs';
 
 const arr = [1, 2, 3, 4];
 
 describe('utils/funcs', () => {
-  it('noop', () => {
-    expect(noop()).toEqual(undefined);
-  });
-
-  it('identity', () => {
-    expect(identity(1)).toEqual(1);
-    expect(identity({})).toEqual({});
-  });
-
   it('extractLast', () => {
     expect(extractLast('a.b.c.d', '.')).toEqual(['a.b.c', 'd']);
     expect(extractLast('atbtctd', 't')).toEqual(['atbtc', 'd']);

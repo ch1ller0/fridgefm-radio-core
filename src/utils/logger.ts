@@ -1,5 +1,5 @@
 import * as chalk from 'chalk';
-import { identity } from './funcs';
+import { identity } from 'lodash';
 import { getHHMMSS } from './time';
 
 const { NODE_ENV } = process.env;
