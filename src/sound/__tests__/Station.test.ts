@@ -10,6 +10,7 @@ describe('public/Station', () => {
 
       expect(station.getPlaylist().length).toEqual(0);
       station.addFolder(pathToMusic);
+
       expect(station.getPlaylist().length).toEqual(2);
       station.addFolder(pathToMusic);
       expect(station.getPlaylist().length).toEqual(4);

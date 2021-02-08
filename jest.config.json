@@ -11,7 +11,8 @@
   ],
   "globals": {
     "ts-jest": {
-      "tsConfig": false
+      "tsConfig": false,
+      "diagnostics": false
     }
   }
 }

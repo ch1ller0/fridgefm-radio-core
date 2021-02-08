@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import type { Response, Request } from 'express';
-import { noop } from '../utils/funcs';
+import { noop } from 'lodash';
 import { QueueStream } from './Queuestream';
 import { responseHeaders } from './defaults/responseHeaders';
 import type { StationI, HandlerStats } from '../types/public.h';
