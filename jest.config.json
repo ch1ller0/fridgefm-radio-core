@@ -12,8 +12,7 @@
   "globals": {
     "ts-jest": {
       "tsConfig": false,
-      "diagnostics": false,
-      "warnOnly": true
+      "diagnostics": false
     }
   }
 }
