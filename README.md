@@ -61,16 +61,6 @@ station.next();
 ```javascript
 station.getPlaylist();
 ```
-`shufflePlaylist` shuffles playlist once   
-You may want to pass your own sorting function, defaults to random shuffle
-```javascript
-station.shufflePlaylist(sortingFunction);
-```
-`rearrangePlaylist` just returns you the entire playlist  
-```javascript
-// the example moves the first track to the 5th position in playlist
-station.rearrangePlaylist(0, 4);
-```
 
 ## Station events
 #### `nextTrack`

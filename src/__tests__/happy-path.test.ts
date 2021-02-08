@@ -1,9 +1,8 @@
-import { times, range } from 'lodash';
-import { Station } from '../../index';
+import { Station, PUBLIC_EVENTS } from '../index';
 
 const pathToMusic = `${process.cwd()}/examples/music`;
 
-describe('public/Station', () => {
+describe('public/happy-paths', () => {
   describe('playlist methods', () => {
     it('addFolder works as expected', () => {
       const station = new Station();
@@ -13,71 +12,7 @@ describe('public/Station', () => {
 
       expect(station.getPlaylist().length).toEqual(2);
       station.addFolder(pathToMusic);
-      expect(station.getPlaylist().length).toEqual(4);
-    });
-
-    it('shufflePlaylist with built-in random algorythm', () => {
-      const station = new Station();
-
-      // if random sort equals previous result, test will fail
-      // minimize random factor by scheduling more tracks
-      times(100, () => { // results in 200 tracks in playlist
-        station.addFolder(pathToMusic);
-      });
-
-      const firstPlaylist = station.getPlaylist();
-      station.shufflePlaylist();
-      const secondPlaylist = station.getPlaylist();
-
-      expect(firstPlaylist).not.toEqual(secondPlaylist);
-      expect(firstPlaylist.length).toEqual(secondPlaylist.length);
-    });
-
-    const getTracksSeq = (pl) => pl.map((t) => t.fsStats.name);
-
-    it('shufflePlaylist with custom algorythm', () => {
-      const station = new Station();
-
-      times(5, () => {
-        station.addFolder(pathToMusic);
-      });
-
-      // custom sorting algorithm
-      station.shufflePlaylist((a, b) => {
-        const getLastChar = (t) => t[t.length - 1];
-
-        return getLastChar(a.fsStats.name) - getLastChar(b.fsStats.name);
-      });
-
-      const result = getTracksSeq(station.getPlaylist());
-
-      expect(range(0, 5).map(() => 'Artist1 - Track1')).toEqual(result.slice(0, 5));
-      expect(range(5, 10).map(() => 'Artist1 - Track2')).toEqual(result.slice(5, 10));
-    });
-
-    it('rearrangePlaylist works right', () => {
-      const station = new Station();
-
-      times(2, () => {
-        station.addFolder(pathToMusic);
-      });
-
-      expect(getTracksSeq(station.getPlaylist())).toEqual([
-        'Artist1 - Track1',
-        'Artist1 - Track2',
-        'Artist1 - Track1',
-        'Artist1 - Track2',
-      ]);
-
-      // swap first and second track position
-      station.rearrangePlaylist(0, 1);
-
-      expect(getTracksSeq(station.getPlaylist())).toEqual([
-        'Artist1 - Track2',
-        'Artist1 - Track1',
-        'Artist1 - Track1',
-        'Artist1 - Track2',
-      ]);
+      expect(station.getPlaylist().length).toEqual(2);
     });
   });
 
@@ -148,19 +83,23 @@ describe('public/Station', () => {
       nextTrack: jest.fn(),
       restart: jest.fn(),
       error: jest.fn(),
+      info: jest.fn(),
     };
 
-    station.on('start', (...args) => checker.start(...args));
-    station.on('nextTrack', (...args) => checker.nextTrack(...args));
-    station.on('restart', (...args) => checker.restart(...args));
-    station.on('error', (...args) => checker.error(...args));
+    station.on(PUBLIC_EVENTS.START, (...args) => checker.start(...args));
+    station.on(PUBLIC_EVENTS.NEXT_TRACK, (...args) => checker.nextTrack(...args));
+    station.on(PUBLIC_EVENTS.RESTART, (...args) => checker.restart(...args));
+    station.on(PUBLIC_EVENTS.ERROR, (...args) => checker.error(...args));
+    station.on(PUBLIC_EVENTS.INFO, (...args) => checker.error(...args));
 
     station.addFolder(pathToMusic);
 
     // event "start"
     station.start();
+
+    expect(checker.start).toHaveBeenCalledTimes(1);
     // start event fired
-    expect(checker.start.mock.calls[0][0]).toEqual(station.getPlaylist());
+    expect(checker.start).toHaveBeenCalledWith(station.getPlaylist());
     // nextTrack event fired
     expect(checker.nextTrack.mock.calls[0][0]).toEqual(station.getPlaylist()[0]);
 
@@ -168,27 +107,25 @@ describe('public/Station', () => {
     station.next();
     // nextTrack returns a track
     expect(checker.nextTrack.mock.calls[1][0]).toEqual(station.getPlaylist()[1]);
-    // also sends time which the handler took
-    const nextTrStats = checker.nextTrack.mock.calls[1][1];
-    expect(typeof nextTrStats.time).toEqual('number');
 
     // event "restart"
     station.next();
+
     // returns playlist
-    expect(checker.restart.mock.calls[0][0]).toEqual(station.getPlaylist());
-    // also sends time which the handler took
-    const nextStats = checker.nextTrack.mock.calls[1][1];
-    expect(typeof nextStats.time).toEqual('number');
+    expect(checker.restart.mock.calls[0][0].map((v) => v.fsStats))
+      .toEqual(station.getPlaylist().map((v) => v.fsStats));
 
     // @TODO find some way to test error event
   });
+});
 
-  describe('unhappy paths', () => {
-    it('wrong folder', () => {
-      const station = new Station();
-      expect(() => {
-        station.addFolder('biba'); // non-existing
-      }).toThrow();
-    });
+describe('public/Station/unhappy-paths', () => {
+  it('wrong folder', () => {
+    const station = new Station();
+    expect(() => {
+      station.addFolder('biba'); // non-existing
+    }).toThrow();
   });
+
+  it.todo('track was deleted while playback - revalidates folders and');
 });

@@ -1,4 +1,3 @@
-
 // TODO add icy metaint https://github.com/Kefir100/fridgefm-radio-core/issues/16
 export const responseHeaders = {
   'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=0',

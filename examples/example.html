@@ -68,7 +68,7 @@
     }
     const getCoverUrl = (image = {}) => {
       const { imageBuffer } = image;
-      if (!imageBuffer) return;
+      if (!imageBuffer) return 'https://t3.ftcdn.net/jpg/01/09/40/34/240_F_109403479_3BJH2QY7zrMV5OUGPePPmxPYZf0zY4lR.jpg';
       const { imageBuffer: { data: uintarr } = {} } = image;
       const blob = new Blob([new Uint8Array(uintarr)]);
       const urlCreator = window.URL || window.webkitURL;
@@ -104,7 +104,7 @@
       request('/controls/shufflePlaylist').then(controlsGetPlaylist)
     }
     function controlsNext() {
-      request('/controls/next').then(controlsGetPlaylist)
+      request('/controls/next').then(controlsGetPlaylist).then(info)
     }
     function controlsRearrange({ oldIndex, newIndex }) {
       request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`).then(controlsGetPlaylist)

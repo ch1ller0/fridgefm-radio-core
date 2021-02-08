@@ -1,7 +1,9 @@
 import * as devnull from 'dev-null';
+
 import * as id3 from 'node-id3';
 import * as fs from 'fs';
-import { getStats, getMetaAsync, createSoundStream } from '../sound';
+
+import { getStats, getMetaAsync, createSoundStream } from '../methods';
 
 const pathToMusic = `${process.cwd()}/examples/music`;
 
@@ -91,7 +93,7 @@ describe('methods/sound', () => {
     it('throws error on buggy stream', async () => {
       jest.useFakeTimers();
 
-      const stream = createSoundStream({ fullPath: tracks[0].fullPath, bitrate: 16036 });
+      const [, stream] = createSoundStream({ fullPath: tracks[0].fullPath, bitrate: 16036 });
       const prom = new Promise((res, rej) => stream.on('error', (e) => rej(e)));
       const err = new Error('test_error');
       stream.pipe(devnull());
@@ -107,12 +109,20 @@ describe('methods/sound', () => {
       await expect(prom).rejects.toEqual(err);
     });
 
-    it('throws error on non-existent file', async () => {
+    it('returns empty stream on non-existent file', async () => {
       const fullPath = `${process.cwd()}/non-existent.mp3`;
-      const stream = createSoundStream({ fullPath, bitrate: 16036 });
+      const [err, stream] = createSoundStream({ fullPath, bitrate: 16036 });
       stream.pipe(devnull());
-      const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
-      await expect(prom).rejects.toThrow(`ENOENT: no such file or directory, open '${fullPath}'`);
+      // const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
+      await expect(err.message).toEqual(`ENOENT: no such file or directory, stat '${fullPath}'`);
+    });
+
+    it('returns empty stream on not-a-file path', async () => {
+      const fullPath = `${process.cwd()}/`;
+      const [err, stream] = createSoundStream({ fullPath, bitrate: 16036 });
+      stream.pipe(devnull());
+      // const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
+      await expect(err.message).toEqual(`Not a file: '${fullPath}'`);
     });
   });
 });

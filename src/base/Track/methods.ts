@@ -6,7 +6,7 @@ import { Readable } from 'stream';
 import { extractLast } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
 import * as Mp3 from '../../utils/mp3';
-import type { ShallowTrackMeta, TrackPath, TrackStats } from '../../types/Track.h';
+import type { ShallowTrackMeta, TrackPath, TrackStats } from './Track.types';
 
 const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
   const { fullPath, name } = stats;
@@ -47,18 +47,27 @@ const getStats = (fullPath: TrackPath) => {
   };
 };
 
-const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): Readable => {
+const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats):
+[Error | null, Readable] => {
   try {
-    const rs = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
+    if (!fs.statSync(fullPath).isFile()) {
+      throw new Error(`Not a file: '${fullPath}'`);
+    }
+
+    const stream = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
+
     const comp = _.seq(
+      // @ts-ignore
       _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
+      // @ts-ignore
       _.ratelimit(1, 1000),
     );
 
-    return comp(rs);
+    return [null, comp(stream)];
   } catch (e) {
     // skip track if it is not accessible
-    return _(new Array(0));
+    // @ts-ignore
+    return [e, _(new Array(0))];
   }
 };
 
