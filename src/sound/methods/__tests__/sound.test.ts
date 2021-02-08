@@ -1,7 +1,7 @@
-const devnull = require('dev-null');
-const id3 = require('node-id3');
-const fs = require('fs');
-const { getStats, getMetaAsync, createSoundStream } = require('../sound');
+import * as devnull from 'dev-null';
+import * as id3 from 'node-id3';
+import * as fs from 'fs';
+import { getStats, getMetaAsync, createSoundStream } from '../sound';
 
 const pathToMusic = `${process.cwd()}/examples/music`;
 

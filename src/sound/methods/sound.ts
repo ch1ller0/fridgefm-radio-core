@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as _ from 'highland';
 import * as id3 from 'node-id3';
+import type { Tags } from 'node-id3';
 import { Readable } from 'stream';
 import { extractLast } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
@@ -11,7 +12,7 @@ const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
   const { fullPath, name } = stats;
 
   return new Promise(
-    (res) => id3.read(fullPath, (err, meta) => {
+    (res) => id3.read(fullPath, (err: NodeJS.ErrnoException, meta: Tags) => {
       const { artist, title, ...rest } = meta || {};
 
       if (!artist || !title || err) {
