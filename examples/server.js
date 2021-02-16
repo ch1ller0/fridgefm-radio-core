@@ -6,7 +6,10 @@ const server = express();
 const musicPath = path.resolve(__dirname, process.argv[2] || './music');
 
 const station = new Station({
-  verbose: true // for verbose logging to console
+  verbose: true, // for verbose logging to console
+  responseHeaders: {
+    'icy-genre': 'jazz'
+  }
 });
 // add folder to station
 station.addFolder(musicPath);

@@ -1,34 +1,8 @@
 import * as devnull from 'dev-null';
-
-import * as id3 from 'node-id3';
-import * as fs from 'fs';
-
 import { getStats, getMetaAsync, createSoundStream } from '../methods';
+import { pathToMusic, tracks, TestFile } from '../../../__tests__/test-utils.mock';
 
-const pathToMusic = `${process.cwd()}/examples/music`;
-
-const tracks = [
-  {
-    fullPath: `${pathToMusic}/Artist1 - Track1.mp3`,
-  },
-  {
-    fullPath: `${pathToMusic}/Artist1 - Track2.mp3`,
-  },
-];
-
-// helper for creating mp3 files with custom meta
-const TestFile = {
-  path: `${pathToMusic}/test - test.mp3`,
-  create(meta = {}) {
-    fs.copyFileSync(tracks[0].fullPath, this.path);
-    id3.write(meta, this.path);
-  },
-  clear() {
-    fs.unlinkSync(this.path);
-  },
-};
-
-describe('methods/sound', () => {
+describe('base/Track/methods', () => {
   it('getStats', () => {
     const common = {
       bitrate: 16018,
@@ -79,13 +53,13 @@ describe('methods/sound', () => {
     });
 
     it('returns meta based on filename if id3 meta is not enough', async () => {
-      TestFile.create();
-
-      const res = await getMetaAsync(getStats(TestFile.path));
+      const t1 = new TestFile('test - test');
+      t1.addMeta({});
+      const res = await getMetaAsync(getStats(t1.fullPath));
 
       expect(res).toEqual({ artist: 'test', title: 'test', origin: 'fs' });
 
-      TestFile.clear();
+      t1.remove();
     });
   });
 

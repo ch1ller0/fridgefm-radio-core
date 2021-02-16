@@ -1,12 +1,11 @@
 import { noop } from 'lodash';
 import type { Response, Request } from 'express';
 import { QueueStream } from './Queuestream';
-import { responseHeaders } from '../config/responseHeaders';
 import { Playlist } from './Playlist/Playlist';
 import { EventBus } from '../features/EventBus/EventBus';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
 import { captureTime } from '../utils/time';
-import { defaultConfig } from '../config/index';
+import { mergeConfig, Config } from '../config/index';
 
 import type { StationI } from '../types/public.h';
 import type { Emitter } from '../features/EventBus/events';
@@ -15,26 +14,24 @@ import type { PlaylistI, ReorderCb } from './Playlist/Playlist.types';
 interface StationDeps {
   queuestream: QueueStream,
   eventBus: EventBus,
-  playlist: PlaylistI
+  playlist: PlaylistI,
+  config: Config
 }
 
 export class Station implements StationI {
   private _deps: StationDeps;
 
-  constructor(config = defaultConfig) {
+  constructor(extConfig?: Partial<Config>) {
+    const config = mergeConfig(extConfig || {});
     const eventBus = new EventBus({ config });
-    const playlist = new Playlist({
-      eventBus,
-    });
-    const queuestream = new QueueStream({
-      playlist,
-      eventBus,
-    });
+    const playlist = new Playlist({ eventBus });
+    const queuestream = new QueueStream({ playlist, eventBus });
 
     this._deps = {
       playlist,
       eventBus,
       queuestream,
+      config,
     };
   }
 
@@ -64,7 +61,7 @@ export class Station implements StationI {
   public connectListener(req: Request, res: Response, cb = noop) {
     const { currentPipe, getPrebuffer } = this._deps.queuestream;
 
-    res.writeHead(200, responseHeaders);
+    res.writeHead(200, this._deps.config.responseHeaders);
     res.write(getPrebuffer());
     currentPipe(res);
     cb();

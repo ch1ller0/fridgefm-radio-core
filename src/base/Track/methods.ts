@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as _ from 'highland';
 import * as id3 from 'node-id3';
 import type { Tags } from 'node-id3';
