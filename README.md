@@ -1,8 +1,8 @@
 # Radio engine for NodeJS
-[![build](https://img.shields.io/circleci/build/github/Kefir100/fridgefm-radio-core.svg)](https://circleci.com/gh/Kefir100/fridgefm-radio-core)
-[![coverage](https://img.shields.io/codecov/c/gh/Kefir100/fridgefm-radio-core.svg)](https://codecov.io/gh/Kefir100/fridgefm-radio-core)
+[![build](https://img.shields.io/circleci/build/github/ch1ller0/fridgefm-radio-core.svg)](https://circleci.com/gh/ch1ller0/fridgefm-radio-core)
+[![coverage](https://img.shields.io/codecov/c/gh/ch1ller0/fridgefm-radio-core.svg)](https://codecov.io/gh/ch1ller0/fridgefm-radio-core)
 [![npm](https://img.shields.io/npm/dw/@fridgefm/radio-core.svg)](https://www.npmjs.com/package/@fridgefm/radio-core)
-![GitHub](https://img.shields.io/github/license/kefir100/fridgefm-radio-core.svg)
+![GitHub](https://img.shields.io/github/license/ch1ller0/fridgefm-radio-core.svg)
 ![node](https://img.shields.io/node/v/@fridgefm/radio-core.svg)
 
 ## Usage
@@ -37,6 +37,17 @@ station.start();
 />
 ```
 
+## Station constructor
+Creating a station is as simple as 
+```javascript
+const myAwesomeStation = new Station({
+  verbose: false, // if true - enables verbose logging (great for debugging),
+  responseHeaders: { // in case you want custom response headers for your endpoint
+    'icy-genre': 'jazz'
+  }
+})
+```
+
 ## Station methods
 ### Public methods that should be exposed to users
 `connectListener` connects real users to your station  
@@ -63,30 +74,37 @@ station.getPlaylist();
 ```
 
 ## Station events
-#### `nextTrack`
+Station emits several events - they are available via 
+```javascript
+const { PUBLIC_EVENTS } = require('@fridgefm/radio-core')
+```
+#### `NEXT_TRACK`
 event fires when track changes  
 useful for getting to know when exactly the track changed and what track that is
 ```javascript
-station.on('nextTrack', (track) => { console.log(track) });
+station.on(PUBLIC_EVENTS.NEXT_TRACK, (track) => {
+  const result = await track.getMetaAsync();
+  console.log(result)
+})
 ```
 
-#### `start`
-event fires on station start  
+#### `START`
+Event fires on station start  
 ```javascript
-station.on('start', () => { console.log('Station started') });
+station.on(PUBLIC_EVENTS.START, () => { console.log('Station started') });
 ```
 
-#### `restart`
-event fires on station restart (when playlist is drained and new one is created)  
+#### `RESTART`
+Event fires on station restart (when playlist is drained and new one is created)  
 it might be a nice time to shuffle your playlist for example
 ```javascript
-station.on('restart', () => { station.shufflePlaylist() });
+station.on(PUBLIC_EVENTS.RESTART, () => { /* do something*/ });
 ```
 
-#### `error`
-event fires when there is some error
+#### `ERROR`
+Event fires when there is some error. You `should` add this handler - otherwise any error will be treated as unhandled (causing `process.exit` depending on Node version)
 ```javascript
-station.on('error', (e) => { handleError(e) });
+station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 ```
 
 ## or just go to [examples](./examples/server.js)
@@ -102,4 +120,4 @@ node examples/server.js [path/to/your_mp3tracks]
 ```
 
 ## Demo
-Fully working demo is available on http://fridgefm.com
+Fully working demo is available on https://fridgefm.com

@@ -9,7 +9,7 @@ const station = new Station({
   verbose: true, // for verbose logging to console
   responseHeaders: {
     'icy-genre': 'jazz'
-  }
+  },
 });
 // add folder to station
 station.addFolder(musicPath);

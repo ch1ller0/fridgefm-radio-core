@@ -7,18 +7,18 @@ import { PUBLIC_EVENTS } from '../features/EventBus/events';
 import { captureTime } from '../utils/time';
 import { mergeConfig, Config } from '../config/index';
 
-import type { StationI } from '../types/public.h';
-import type { Emitter } from '../features/EventBus/events';
-import type { PlaylistI, ReorderCb } from './Playlist/Playlist.types';
+import type { TStation } from '../types/public.h';
+import type { TEmitter } from '../features/EventBus/events';
+import type { TPlaylist, ReorderCb } from './Playlist/Playlist.types';
 
 interface StationDeps {
   queuestream: QueueStream,
   eventBus: EventBus,
-  playlist: PlaylistI,
+  playlist: TPlaylist,
   config: Config
 }
 
-export class Station implements StationI {
+export class Station implements TStation {
   private _deps: StationDeps;
 
   constructor(extConfig?: Partial<Config>) {
@@ -58,7 +58,7 @@ export class Station implements StationI {
     return this._deps.playlist.getList();
   }
 
-  public connectListener(req: Request, res: Response, cb = noop) {
+  public connectListener(_: Request, res: Response, cb = noop) {
     const { currentPipe, getPrebuffer } = this._deps.queuestream;
 
     res.writeHead(200, this._deps.config.responseHeaders);
@@ -71,5 +71,5 @@ export class Station implements StationI {
     return this._deps.playlist.reorder(cb);
   }
 
-  public on: Emitter['on'] = (...args) => this._deps.eventBus.on(...args);
+  public on: TEmitter['on'] = (...args) => this._deps.eventBus.on(...args);
 }

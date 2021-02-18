@@ -3,10 +3,10 @@ import { logger } from '../../utils/logger';
 import { PUBLIC_EVENTS } from './events';
 import { defaultConfig } from '../../config/index';
 
-import type { Emitter, InfoEvent, ErrorEvent } from './events';
+import type { TEmitter, InfoEvent, ErrorEvent } from './events';
 
 export class EventBus {
-  private _emitter = new EventEmitter() as Emitter;
+  private _emitter = new EventEmitter() as TEmitter;
 
   constructor({ config } = { config: defaultConfig }) {
     this._infoEmitOn();
@@ -37,7 +37,7 @@ export class EventBus {
     }));
   }
 
-  on: Emitter['on'] = (eventName, handler) => this._emitter.on(eventName, handler);
+  on: TEmitter['on'] = (eventName, handler) => this._emitter.on(eventName, handler);
 
-  emit: Emitter['emit'] = (eventName, ...args) => this._emitter.emit(eventName, ...args);
+  emit: TEmitter['emit'] = (eventName, ...args) => this._emitter.emit(eventName, ...args);
 }

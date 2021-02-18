@@ -4,10 +4,10 @@ import { captureTime } from '../utils/time';
 import { Prebuffer } from '../features/Prebuffer';
 import { EventBus } from '../features/EventBus/EventBus';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
-import type { PlaylistI } from './Playlist/Playlist.types';
+import type { TPlaylist } from './Playlist/Playlist.types';
 
 type Deps = {
-  playlist: PlaylistI,
+  playlist: TPlaylist,
   eventBus: EventBus
 };
 

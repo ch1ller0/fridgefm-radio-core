@@ -1,7 +1,7 @@
 import { createSoundStream, getMetaAsync, getStats } from './methods';
-import type { TrackI, TrackStats } from './Track.types';
+import type { TTrack, TrackStats } from './Track.types';
 
-export class Track implements TrackI {
+export class Track implements TTrack {
   public playCount = 0;
 
   public readonly fsStats: TrackStats;

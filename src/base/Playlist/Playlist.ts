@@ -4,7 +4,7 @@ import { captureTime } from '../../utils/time';
 import { PUBLIC_EVENTS } from '../../features/EventBus/events';
 
 import type {
-  PlaylistI,
+  TPlaylist,
   TrackMap,
   TrackList,
   ReorderCb,
@@ -13,11 +13,11 @@ import type {
 } from './Playlist.types';
 import type { EventBus } from '../../features/EventBus/EventBus';
 import type { InfoEvent } from '../../features/EventBus/events';
-import type { TrackI } from '../Track/Track.types';
+import type { TTrack } from '../Track/Track.types';
 
 type Deps = { eventBus: EventBus };
 
-export class Playlist implements PlaylistI {
+export class Playlist implements TPlaylist {
   private _currentIndex = -1;
 
   private _list: PathList = [];
@@ -93,7 +93,7 @@ export class Playlist implements PlaylistI {
 
   public getList(): TrackList {
     return this._list.map((v, i) => {
-      const tra = this._tracksMap.get(v) as TrackI;
+      const tra = this._tracksMap.get(v) as TTrack;
 
       return {
         ...tra,

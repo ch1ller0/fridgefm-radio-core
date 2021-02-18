@@ -1,6 +1,6 @@
 import type TypedEmitter from 'typed-emitter';
 import type { TrackList } from '../../base/Playlist/Playlist.types';
-import type { TrackI } from '../../base/Track/Track.types';
+import type { TTrack } from '../../base/Track/Track.types';
 
 export const PUBLIC_EVENTS = {
   ERROR: 'error',
@@ -26,7 +26,7 @@ export interface PublicEvents {
   [PUBLIC_EVENTS.INFO]: (i: InfoEvent) => void,
   [PUBLIC_EVENTS.START]: (list: TrackList, timings: number) => void,
   [PUBLIC_EVENTS.RESTART]: (list: TrackList, timings: number) => void,
-  [PUBLIC_EVENTS.NEXT_TRACK]: (tr: TrackI, timings: number) => void,
+  [PUBLIC_EVENTS.NEXT_TRACK]: (tr: TTrack, timings: number) => void,
 }
 
-export type Emitter = TypedEmitter<PublicEvents>;
+export type TEmitter = TypedEmitter<PublicEvents>;

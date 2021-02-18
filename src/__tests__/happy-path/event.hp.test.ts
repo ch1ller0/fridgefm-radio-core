@@ -9,7 +9,7 @@ const createChecker = () => ({
 });
 
 describe('public/HappyPath/events', () => {
-  it('all events', () => {
+  it('station events - fires', () => {
     const checker = createChecker();
     const station = new Station();
 
@@ -39,7 +39,6 @@ describe('public/HappyPath/events', () => {
     station.next();
 
     // returns playlist
-    // @ts-ignore
     expect(checker.restart.mock.calls[0][0].map((v) => v.fsStats))
       .toEqual(station.getPlaylist().map((v) => v.fsStats));
 

@@ -3,7 +3,7 @@ import { pathToMusic } from '../test-utils.mock';
 
 describe('public/HappyPath/Station', () => {
   describe('playlist methods', () => {
-    it('addFolder works as expected', () => {
+    it('adding folders - deduplicates same tracks', () => {
       const station = new Station();
 
       expect(station.getPlaylist().length).toEqual(0);
@@ -13,27 +13,32 @@ describe('public/HappyPath/Station', () => {
       station.addFolder(pathToMusic);
       expect(station.getPlaylist().length).toEqual(2);
     });
+
+    it.todo('reorder folders - customly changes tracks order');
+    it.todo('getting playlist - returns the playlist');
   });
 
   describe('control methods', () => {
     const station = new Station();
     const getPlaying = (pl) => pl.filter((track) => track.isPlaying);
 
-    it('start method wont start if playlist empty', () => {
-      station.start();
-      expect(getPlaying(station.getPlaylist())).toEqual([]);
+    describe('start method', () => {
+      it('playlist empty - start method wont execute', () => {
+        station.start();
+        expect(getPlaying(station.getPlaylist())).toEqual([]);
 
-      station.addFolder(pathToMusic);
-      // still empty because station has not started
-      expect(getPlaying(station.getPlaylist())).toEqual([]);
+        station.addFolder(pathToMusic);
+        // still empty because station has not started
+        expect(getPlaying(station.getPlaylist())).toEqual([]);
+      });
+
+      it('playlist not empty - start method executes', () => {
+        station.start();
+        expect(getPlaying(station.getPlaylist()).length).toEqual(1);
+      });
     });
 
-    it('start if playlist not empty', () => {
-      station.start();
-      expect(getPlaying(station.getPlaylist()).length).toEqual(1);
-    });
-
-    it('next method switches to next track', () => {
+    it('next method - switches to next track', () => {
       const playing1 = getPlaying(station.getPlaylist());
 
       station.next();
@@ -44,7 +49,7 @@ describe('public/HappyPath/Station', () => {
     });
   });
 
-  it('connectListener method', () => {
+  it('listner connects - response methods are called', () => {
     const resMock = {
       writeHead: jest.fn(),
       write: jest.fn(),

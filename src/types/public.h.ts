@@ -1,13 +1,13 @@
 import type { Request, Response } from 'express';
 import type { TrackList, ReorderCb } from '../base/Playlist/Playlist.types';
-import type { Emitter } from '../features/EventBus/events';
+import type { TEmitter } from '../features/EventBus/events';
 
-export interface StationI {
+export interface TStation {
   start(): void;
   addFolder(folder: string): void;
   next(): void;
   reorderPlaylist(cb: ReorderCb): TrackList
-  getPlaylist(cb: ReorderCb): TrackList;
-  connectListener(req: Request, res: Response, cb: () => void): void;
-  on: Emitter['on']
+  getPlaylist(): TrackList;
+  connectListener(req: Request | undefined, res: Response, cb: () => void): void;
+  on: TEmitter['on']
 }

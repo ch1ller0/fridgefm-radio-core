@@ -1,10 +1,10 @@
-import type { TrackI, TrackPath } from '../Track/Track.types';
+import type { TTrack, TrackPath } from '../Track/Track.types';
 
 export type PlaylistElement = {
   isPlaying: boolean
-} & TrackI;
+} & TTrack;
 
-export type SortAlg = (a: TrackI, b: TrackI) => number;
+export type SortAlg = (a: TTrack, b: TTrack) => number;
 
 export type ReorderCb = (current: PlaylistElement[]) => PlaylistElement[];
 
@@ -12,11 +12,11 @@ export type TrackList = PlaylistElement[];
 
 export type PathList = readonly string[];
 
-export type TrackMap = Map<TrackPath, TrackI>;
+export type TrackMap = Map<TrackPath, TTrack>;
 
-export interface PlaylistI {
+export interface TPlaylist {
   addFolder(folder: string): TrackList
   reorder(cb: ReorderCb): TrackList
   getList(): TrackList;
-  getNext(): TrackI;
+  getNext(): TTrack;
 }

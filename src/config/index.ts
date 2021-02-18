@@ -1,7 +1,13 @@
 import { responseHeaders } from './responseHeaders';
 
 export const defaultConfig = {
+  /**
+   * Pass your custom response headers from the station endpoint
+   */
   responseHeaders: responseHeaders(),
+  /**
+   * If set to true enables verbose info logging
+   */
   verbose: false,
 };
 
