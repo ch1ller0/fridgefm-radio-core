@@ -1,32 +1,8 @@
 import * as devnull from 'dev-null';
-import * as id3 from 'node-id3';
-import * as fs from 'fs';
-import { getStats, getMetaAsync, createSoundStream } from '../sound';
+import { getStats, getMetaAsync, createSoundStream } from '../methods';
+import { pathToMusic, tracks, TestFile } from '../../../__tests__/test-utils.mock';
 
-const pathToMusic = `${process.cwd()}/examples/music`;
-
-const tracks = [
-  {
-    fullPath: `${pathToMusic}/Artist1 - Track1.mp3`,
-  },
-  {
-    fullPath: `${pathToMusic}/Artist1 - Track2.mp3`,
-  },
-];
-
-// helper for creating mp3 files with custom meta
-const TestFile = {
-  path: `${pathToMusic}/test - test.mp3`,
-  create(meta = {}) {
-    fs.copyFileSync(tracks[0].fullPath, this.path);
-    id3.write(meta, this.path);
-  },
-  clear() {
-    fs.unlinkSync(this.path);
-  },
-};
-
-describe('methods/sound', () => {
+describe('base/Track/methods', () => {
   it('getStats', () => {
     const common = {
       bitrate: 16018,
@@ -77,13 +53,13 @@ describe('methods/sound', () => {
     });
 
     it('returns meta based on filename if id3 meta is not enough', async () => {
-      TestFile.create();
-
-      const res = await getMetaAsync(getStats(TestFile.path));
+      const t1 = new TestFile('test - test');
+      t1.addMeta({});
+      const res = await getMetaAsync(getStats(t1.fullPath));
 
       expect(res).toEqual({ artist: 'test', title: 'test', origin: 'fs' });
 
-      TestFile.clear();
+      t1.remove();
     });
   });
 
@@ -91,7 +67,7 @@ describe('methods/sound', () => {
     it('throws error on buggy stream', async () => {
       jest.useFakeTimers();
 
-      const stream = createSoundStream({ fullPath: tracks[0].fullPath, bitrate: 16036 });
+      const [, stream] = createSoundStream({ fullPath: tracks[0].fullPath, bitrate: 16036 });
       const prom = new Promise((res, rej) => stream.on('error', (e) => rej(e)));
       const err = new Error('test_error');
       stream.pipe(devnull());
@@ -107,12 +83,20 @@ describe('methods/sound', () => {
       await expect(prom).rejects.toEqual(err);
     });
 
-    it('throws error on non-existent file', async () => {
+    it('returns empty stream on non-existent file', async () => {
       const fullPath = `${process.cwd()}/non-existent.mp3`;
-      const stream = createSoundStream({ fullPath, bitrate: 16036 });
+      const [err, stream] = createSoundStream({ fullPath, bitrate: 16036 });
       stream.pipe(devnull());
-      const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
-      await expect(prom).rejects.toThrow(`ENOENT: no such file or directory, open '${fullPath}'`);
+      // const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
+      await expect(err.message).toEqual(`ENOENT: no such file or directory, stat '${fullPath}'`);
+    });
+
+    it('returns empty stream on not-a-file path', async () => {
+      const fullPath = `${process.cwd()}/`;
+      const [err, stream] = createSoundStream({ fullPath, bitrate: 16036 });
+      stream.pipe(devnull());
+      // const prom = new Promise((res, rej) => stream.on('error', (e: Error) => rej(e)));
+      await expect(err.message).toEqual(`Not a file: '${fullPath}'`);
     });
   });
 });

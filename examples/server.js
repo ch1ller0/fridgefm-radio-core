@@ -1,30 +1,37 @@
 const express = require('express');
 const path = require('path');
-const { Station } = require('../lib/index');
+const { Station, SHUFFLE_METHODS, PUBLIC_EVENTS } = require('../lib/index');
 const port = 3001;
 const server = express();
 const musicPath = path.resolve(__dirname, process.argv[2] || './music');
 
-const station = new Station();
+const station = new Station({
+  verbose: true, // for verbose logging to console
+  responseHeaders: {
+    'icy-genre': 'jazz'
+  },
+});
 // add folder to station
 station.addFolder(musicPath);
 
 // update currently playing track info
 let currentTrack;
-station.on('nextTrack', async (track, stats) => {
-  console.log(`nextTrack handler took ${stats.time}ms`)
+station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
   currentTrack = result;
 });
 
-station.on('start', () => {
-  station.shufflePlaylist();
+station.on(PUBLIC_EVENTS.START, () => {
+  // double the playlist on start
+  station.reorderPlaylist(a => a.concat(a))
 });
 
-station.on('restart', (_, stats) => {
-  console.log(`restart handler took ${stats.time}ms`)
-  station.shufflePlaylist();
+station.on(PUBLIC_EVENTS.RESTART, () => {
+  station.reorderPlaylist(a => a.concat(a))
 });
+
+// add this handler - otherwise any error will exit the process as unhandled
+station.on(PUBLIC_EVENTS.ERROR, console.error)
 
 // main stream route
 server.get('/stream', (req, res) => {
@@ -44,21 +51,21 @@ server.get('/controls/next', (req, res) => {
 
 // shuffle playlist
 server.get('/controls/shufflePlaylist', (req, res) => {
-  station.shufflePlaylist();
+  station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
   res.json('Playlist shuffled');
+});
+
+// rearrange tracks in a playlist
+server.get('/controls/rearrangePlaylist', (req, res) => {
+  const { newIndex, oldIndex } = req.query;
+  station.reorderPlaylist(SHUFFLE_METHODS.rearrange({ from: oldIndex, to: newIndex }))
+  res.json(`Succesfully moved element from "${oldIndex}" to "${newIndex}"`);
 });
 
 // just get the entire playlist
 server.get('/controls/getPlaylist', (req, res) => {
   const plist = station.getPlaylist();
   res.json(plist);
-});
-
-// rearrange tracks in a playlist
-server.get('/controls/rearrangePlaylist', (req, res) => {
-  const { newIndex, oldIndex } = req.query;
-  const { from, to } = station.rearrangePlaylist(oldIndex, newIndex);
-  res.json(`Succesfully moved element from "${from}" to "${to}"`);
 });
 
 // route for serving static

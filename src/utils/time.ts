@@ -15,3 +15,9 @@ export const getHHMMSS = (ms: Msecs) => new Date(ms)
   .map((t) => parseInt(t, 10))
   .map(zeroDangle)
   .join(':');
+
+export const captureTime = () => {
+  const startTime = Date.now();
+
+  return () => Date.now() - startTime;
+};

@@ -5,3 +5,5 @@ node_modules
 lib
 coverage
 yarn-error.log
+.clinic
+examples/music/.test

@@ -8,10 +8,11 @@
     "sourceMap": false,
     "strictNullChecks": true,
     "declaration": true,
-    "listEmittedFiles": true
+    "listEmittedFiles": true,
+    "experimentalDecorators": true
   },
   "include": [
     "./src/**/*"
   ],
-  "exclude": ["node_modules", "**/__tests__/"]
+  "exclude": ["node_modules", "**/__tests__/**/*.test.ts"]
 }

@@ -19,10 +19,9 @@ export interface ShallowTrackMeta extends Tags {
   origin: 'id3' | 'fs',
 }
 
-export interface TrackI {
-  isPlaying: boolean;
-  playCount: number;
+export interface TTrack {
+  playCount: number
   fsStats: TrackStats;
-  getSound: () => Readable;
+  getSound: () => [Error | null, Readable];
   getMetaAsync: () => Promise<ShallowTrackMeta>;
 }

@@ -1,4 +1,4 @@
-import { extractLast, shuffleArray, findWithIndex } from '../funcs';
+import { extractLast, shuffleArray } from '../funcs';
 
 const arr = [1, 2, 3, 4];
 
@@ -14,11 +14,5 @@ describe('utils/funcs', () => {
   it('shuffleArray', () => {
     expect(shuffleArray(arr)).toHaveLength(arr.length);
     expect(shuffleArray(arr).sort((a, b) => a - b)).toEqual(arr);
-  });
-
-  it('findWithIndex', () => {
-    expect(findWithIndex(arr, (v) => v === 1)).toEqual([1, 0]);
-    expect(findWithIndex(arr, (v) => v > 3)).toEqual([4, 3]);
-    expect(findWithIndex(arr, (v) => v > 5)).toEqual([undefined, -1]);
   });
 });
