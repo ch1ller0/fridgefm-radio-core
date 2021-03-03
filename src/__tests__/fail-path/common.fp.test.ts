@@ -10,5 +10,6 @@ describe('public/FailPaths/common', () => {
 
   it.todo('track was deleted while playback - revalidates folders');
   it.todo('track has some problems while reading - skip it');
+  it.todo('playlist was scrambled so that the frist playing track is non existing - revalidates folders');
   it.todo('track has some problems on stream - skip it');
 });
