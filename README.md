@@ -49,13 +49,11 @@ const myAwesomeStation = new Station({
 ```
 
 ## Station methods
-### Public methods that should be exposed to users
-`connectListener` connects real users to your station  
+`connectListener` connects real users to your station, this is the only method that should be exposed to listeners  
 response argument is required
 ```javascript
 station.connectListener(request, response, callback);
 ```
-### Private methods that should be used only by admins
 `addFolder` adds track within a folder to the playlist
 ```javascript
 station.addFolder('User/Music');
@@ -72,6 +70,28 @@ station.next();
 ```javascript
 station.getPlaylist();
 ```
+`reorderPlaylist` lets you manipulate the entire playlist via passed callback
+```javascript
+const myShuffleMethod = (list) => list
+  // doubles the list (making it twice as long)
+  .concat(list)
+  // filters out the specific track
+  .filter(track => track.fsStats.name !== 'Artist - Track'); 
+
+station.reorderPlaylist(myShuffleMethod);
+```
+There are also some built-in shuffle methods
+```javascript
+const { SHUFFLE_METHODS } = require('@fridgefm/radio-core')
+
+// This one randomly shuffles the playlist (keeping the length the same)
+station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
+
+// This one moves the track on the 1st position and moves it to the 2nd position 
+station.reorderPlaylist(SHUFFLE_METHODS.rearrange({ from: 1, to: 2 }));
+
+```
+`on` lets you make a subscription to station events (see below)
 
 ## Station events
 Station emits several events - they are available via 
@@ -107,16 +127,24 @@ Event fires when there is some error. You `should` add this handler - otherwise 
 station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 ```
 
-## or just go to [examples](./examples/server.js)
+> or just go to [examples](./examples/server.js)
+## Development
 ```
 yarn build
 node examples/server.js
 ```
-OR
+or
 ```
 yarn build
 node examples/server.js [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
+```
+There is also a watch mode - you need two tabs in a terminal
+```
+yarn watch
+```
+```
+node examples/server.js [path/to/your_mp3tracks]
 ```
 
 ## Demo
