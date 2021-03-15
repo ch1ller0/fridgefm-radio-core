@@ -634,9 +634,9 @@
     "@types/node" "*"
 
 "@types/highland@^2.12.11":
-  version "2.12.11"
-  resolved "https://registry.yarnpkg.com/@types/highland/-/highland-2.12.11.tgz#7d9f8c75698d1325b381ca6dc9e03b6ee66b69a1"
-  integrity sha512-h9BuAes/8T+DMSN+DPg6f8/bsAveX2H/Fu/r8HeYzmrqXIkBvm75b/UBlvbjUcrWKKTcatJOnxgl5Rr7IZeE9g==
+  version "2.12.12"
+  resolved "https://registry.yarnpkg.com/@types/highland/-/highland-2.12.12.tgz#a2b8bd8b40c812adec3dbd54e5e3800415df57b9"
+  integrity sha512-IoZe7muoAl1Dy0/5bH6maqTQamBZm6yyaf0CJAmcxjoiCFBdUkOdL1WDd8Q6azlmkZCd3rg8C7UMGynsbvSTQA==
   dependencies:
     "@types/node" "*"
 
