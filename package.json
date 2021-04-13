@@ -1,7 +1,7 @@
 {
   "name": "@fridgefm/radio-core",
   "author": "Grigory Gorshkov",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "internet radio engine made on NodeJS platform",
   "license": "MIT",
   "main": "./lib/index.js",
