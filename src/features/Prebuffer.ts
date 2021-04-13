@@ -17,7 +17,7 @@ export class Prebuffer {
 
   public modify(chunks: Buffer[]) {
     chunks.forEach((ch) => {
-      if (this._storage.length > this._prebufferLength) {
+      if (this._storage.length >= this._prebufferLength) {
         this._storage.shift();
       }
 
