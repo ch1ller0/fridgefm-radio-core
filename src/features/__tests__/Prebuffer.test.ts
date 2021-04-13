@@ -23,10 +23,10 @@ describe('features/Prebuffer', () => {
 
     // overflow - the length stays the same
     instance.modify(createChunks('1234'));
-    expect(instance.getStorage().join('')).toEqual('4567890123');
+    expect(instance.getStorage().join('')).toEqual('5678901234');
 
     instance.modify(createChunks('1234'));
-    expect(instance.getStorage().join('')).toEqual('8901234123');
+    expect(instance.getStorage().join('')).toEqual('9012341234');
   });
 
   it('uses default if length not set', () => {
