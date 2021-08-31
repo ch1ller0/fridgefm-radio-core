@@ -17,16 +17,17 @@ tag-filter: &tag-filter
 
 whitelist: &whitelist
   paths:
-    - .npmignore
-    - .eslintrc.js
+    - examples/*
     - lib/*
     - node_modules/*
     - src/*
+    - .eslintrc.json
+    - .npmignore
+    - jest.config.json
+    - LICENSE
     - package.json
     - README.md
-    - tsconfig.json
-    - jest.config.json
-    - examples
+    - tsconfig.*
 
 jobs:
   checkout:
@@ -36,7 +37,6 @@ jobs:
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "yarn.lock" }}
-          - v1-dependencies-
       - run:
           name: Installing dependencies
           command: yarn install
