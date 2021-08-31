@@ -11,9 +11,9 @@
   ],
   "globals": {
     "ts-jest": {
-      "tsConfig": false,
+      "tsconfig": "tsconfig.dev.json",
       "diagnostics": false
     }
   },
-  "verbose": true
+  "verbose": false
 }

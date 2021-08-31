@@ -1,7 +1,7 @@
 {
   "name": "@fridgefm/radio-core",
   "author": "Grigory Gorshkov",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "internet radio engine made on NodeJS platform",
   "license": "MIT",
   "main": "./lib/index.js",
@@ -30,8 +30,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "lint": "eslint --fix ./src/**/*.*",
-    "lint:ci": "eslint ./src/**/*.*",
+    "lint": "eslint --fix ./src/**/*",
+    "lint:ci": "eslint ./src/**/*",
     "test": "jest --config jest.config.json",
     "test:cov": "yarn test --collectCoverage=true"
   },
