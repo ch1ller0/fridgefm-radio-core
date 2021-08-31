@@ -3,14 +3,7 @@ import { createTrackMap } from './methods';
 import { captureTime } from '../../utils/time';
 import { PUBLIC_EVENTS } from '../../features/EventBus/events';
 
-import type {
-  TPlaylist,
-  TrackMap,
-  TrackList,
-  ReorderCb,
-  PathList,
-  PlaylistElement,
-} from './Playlist.types';
+import type { TPlaylist, TrackMap, TrackList, ReorderCb, PathList, PlaylistElement } from './Playlist.types';
 import type { EventBus } from '../../features/EventBus/EventBus';
 import type { InfoEvent } from '../../features/EventBus/events';
 import type { TTrack } from '../Track/Track.types';
@@ -52,7 +45,8 @@ export class Playlist implements TPlaylist {
   }
 
   public getNext(): PlaylistElement {
-    if (this._list.length - 1 === this._currentIndex) { // the playlist drained
+    if (this._list.length - 1 === this._currentIndex) {
+      // the playlist drained
       const ct = captureTime();
       this.revalidate();
       this._currentIndex = 0;

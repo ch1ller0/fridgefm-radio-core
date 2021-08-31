@@ -11,9 +11,10 @@ export const defaultConfig = {
   verbose: false,
 };
 
-export const mergeConfig = (cfg: Partial<Config>) => ({
-  ...cfg,
-  responseHeaders: responseHeaders(cfg.responseHeaders),
-}) as Config;
+export const mergeConfig = (cfg: Partial<Config>) =>
+  ({
+    ...cfg,
+    responseHeaders: responseHeaders(cfg.responseHeaders),
+  } as Config);
 
 export type Config = typeof defaultConfig;

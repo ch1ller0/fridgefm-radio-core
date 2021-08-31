@@ -12,13 +12,10 @@ const getPaths = (fullPath: string): readonly string[] => {
     case stats.isFile(): {
       return [fullPath];
     }
-    default: return [];
+    default:
+      return [];
   }
 };
 
-export const createList = (folders: string[]) => folders
-  .reduce((acc, cur) => [
-    ...acc,
-    ...getPaths(cur)
-      .filter(Mp3.isSupported),
-  ], [] as string[]);
+export const createList = (folders: string[]) =>
+  folders.reduce((acc, cur) => [...acc, ...getPaths(cur).filter(Mp3.isSupported)], [] as string[]);

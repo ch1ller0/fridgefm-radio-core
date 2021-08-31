@@ -2,7 +2,7 @@ import { Buffer } from 'buffer';
 
 const PREBUFFER_LENGTH_DEFAULT = 12;
 
-type PrebufferArgs = { prebufferLength? : number };
+type PrebufferArgs = { prebufferLength?: number };
 
 export class Prebuffer {
   private _storage: Buffer[];

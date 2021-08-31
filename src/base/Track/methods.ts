@@ -11,8 +11,8 @@ import type { ShallowTrackMeta, TrackPath, TrackStats } from './Track.types';
 const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
   const { fullPath, name } = stats;
 
-  return new Promise(
-    (res) => id3.read(fullPath, (err: NodeJS.ErrnoException, meta: Tags) => {
+  return new Promise((res) =>
+    id3.read(fullPath, (err: NodeJS.ErrnoException, meta: Tags) => {
       const { artist, title, ...rest } = meta || {};
 
       if (!artist || !title || err) {
@@ -20,9 +20,12 @@ const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
         res({ artist: calculated[0], title: calculated[1], origin: 'fs' });
       }
       res({
-        artist, title, ...rest, origin: 'id3',
+        artist,
+        title,
+        ...rest,
+        origin: 'id3',
       });
-    }),
+    })
   );
 };
 
@@ -47,8 +50,7 @@ const getStats = (fullPath: TrackPath) => {
   };
 };
 
-const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats):
-[Error | null, Readable] => {
+const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): [Error | null, Readable] => {
   try {
     if (!fs.statSync(fullPath).isFile()) {
       throw new Error(`Not a file: '${fullPath}'`);
@@ -60,7 +62,7 @@ const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats):
       // @ts-ignore
       _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
       // @ts-ignore
-      _.ratelimit(1, 1000),
+      _.ratelimit(1, 1000)
     );
 
     return [null, comp(stream)];
@@ -71,8 +73,4 @@ const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats):
   }
 };
 
-export {
-  createSoundStream,
-  getMetaAsync,
-  getStats,
-};
+export { createSoundStream, getMetaAsync, getStats };

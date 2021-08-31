@@ -30,7 +30,9 @@ describe('features/EventBus', () => {
 
     expect(mocks.info).toHaveBeenCalledTimes(1);
     expect(mocks.info).toHaveBeenCalledWith({
-      event: PUBLIC_EVENTS[eventName], message, timings: 10,
+      event: PUBLIC_EVENTS[eventName],
+      message,
+      timings: 10,
     });
   });
 });

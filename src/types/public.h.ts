@@ -6,8 +6,8 @@ export interface TStation {
   start(): void;
   addFolder(folder: string): void;
   next(): void;
-  reorderPlaylist(cb: ReorderCb): TrackList
+  reorderPlaylist(cb: ReorderCb): TrackList;
   getPlaylist(): TrackList;
   connectListener(req: Request | undefined, res: Response, cb: () => void): void;
-  on: TEmitter['on']
+  on: TEmitter['on'];
 }
