@@ -4,6 +4,8 @@ import { captureTime } from '../utils/time';
 import { Prebuffer } from '../features/Prebuffer';
 import { EventBus } from '../features/EventBus/EventBus';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
+import { DEFAULTS } from '../constants';
+
 import type { TPlaylist } from './Playlist/Playlist.types';
 
 type Deps = {
@@ -26,7 +28,9 @@ export class QueueStream {
   private _trackStream: Readable;
 
   // prebuffering for faster client response (side-effect)
-  private _prebuffer = new Prebuffer();
+  private _prebuffer = new Prebuffer({
+    prebufferLength: DEFAULTS.PREBUFFER_LENGTH,
+  });
 
   constructor(deps: Deps) {
     this._deps = deps;
@@ -35,7 +39,11 @@ export class QueueStream {
   }
 
   private _handleError(error: Error, event: string) {
-    this._deps.eventBus.emit(PUBLIC_EVENTS.ERROR, { name: 'queuestream', error, event });
+    this._deps.eventBus.emit(PUBLIC_EVENTS.ERROR, {
+      name: 'queuestream',
+      error,
+      event,
+    });
     this.next();
   }
 
