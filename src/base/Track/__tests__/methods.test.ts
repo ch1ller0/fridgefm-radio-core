@@ -35,7 +35,10 @@ describe('base/Track/methods', () => {
         encodingTechnology: 'LAME 64bits version 3.100 (http://lame.sf.net)',
         length: '7485',
         raw: {
-          TIT2: 'Track1', TLEN: '7485', TPE1: 'Artist1', TSSE: 'LAME 64bits version 3.100 (http://lame.sf.net)',
+          TIT2: 'Track1',
+          TLEN: '7485',
+          TPE1: 'Artist1',
+          TSSE: 'LAME 64bits version 3.100 (http://lame.sf.net)',
         },
       };
 

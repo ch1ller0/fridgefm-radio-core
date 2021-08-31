@@ -39,9 +39,8 @@ describe('public/HappyPath/events', () => {
     station.next();
 
     // returns playlist
-    expect(checker.restart.mock.calls[0][0].map((v) => v.fsStats))
-      .toEqual(station.getPlaylist().map((v) => v.fsStats));
+    expect(checker.restart.mock.calls[0][0].map((v) => v.fsStats)).toEqual(station.getPlaylist().map((v) => v.fsStats));
 
-  // @TODO find some way to test error event
+    // @TODO find some way to test error event
   });
 });

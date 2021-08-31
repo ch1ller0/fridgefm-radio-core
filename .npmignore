@@ -1,7 +1,7 @@
 /examples
 .circleci
 coverage
-.eslintrc.js
-tsconfig.json
+.eslintrc.json
+tsconfig.*
 jest.config.json
 **/__tests__

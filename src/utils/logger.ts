@@ -21,7 +21,9 @@ const fridgeformat = winston.format((info) => {
   };
 
   // @ts-ignore
-  info.message = `${colors.time(getHHMMSS(Date.now()))} ${chalked(add.event)} ${info.message || ''} ${chalked(add.timings)}`;
+  info.message = `${colors.time(getHHMMSS(Date.now()))} ${chalked(add.event)} ${info.message || ''} ${chalked(
+    add.timings
+  )}`;
   return info;
 });
 

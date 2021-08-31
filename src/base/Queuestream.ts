@@ -7,8 +7,8 @@ import { PUBLIC_EVENTS } from '../features/EventBus/events';
 import type { TPlaylist } from './Playlist/Playlist.types';
 
 type Deps = {
-  playlist: TPlaylist,
-  eventBus: EventBus
+  playlist: TPlaylist;
+  eventBus: EventBus;
 };
 
 export class QueueStream {

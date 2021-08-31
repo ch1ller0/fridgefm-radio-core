@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-/* eslint-disable jest/no-export */
 import * as fs from 'fs-extra';
 import * as id3 from 'node-id3';
 

@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "project": "tsconfig.dev.json"
+  },
+  "rules": {
+    "import/prefer-default-export": 0,
+    "import/no-default-export": 2,
+    "@typescript-eslint/no-explicit-any": 2,
+    "no-underscore-dangle": 0,
+    "prettier/prettier": [
+      2,
+      {
+        "singleQuote": true,
+        "semi": true,
+        "bracketSpacing": true,
+        "printWidth": 120
+      }
+    ]
+  }
+}
