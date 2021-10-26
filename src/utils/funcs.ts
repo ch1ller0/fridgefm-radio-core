@@ -1,7 +1,8 @@
-export const extractLast = (str: string, symb: string) => {
+export const extractLast = (str: string, symb: string): [string, string] => {
   const temp = str.split(symb);
   const last = temp.pop() || '';
   const arr = temp.join(symb);
+
   return [arr, last];
 };
 

@@ -1,12 +1,11 @@
-import { noop } from 'lodash';
-import type { Response, Request } from 'express';
-import { QueueStream } from './Queuestream';
-import { Playlist } from './Playlist/Playlist';
 import { EventBus } from '../features/EventBus/EventBus';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
 import { captureTime } from '../utils/time';
 import { mergeConfig, Config } from '../config/index';
+import { Playlist } from './Playlist/Playlist';
+import { QueueStream } from './Queuestream';
 
+import type { ClientRequest, ServerResponse } from 'http';
 import type { TStation } from '../types/public.h';
 import type { TEmitter } from '../features/EventBus/events';
 import type { TPlaylist, ReorderCb } from './Playlist/Playlist.types';
@@ -58,7 +57,7 @@ export class Station implements TStation {
     return this._deps.playlist.getList();
   }
 
-  public connectListener(_: Request, res: Response, cb = noop) {
+  public connectListener(_: ClientRequest, res: ServerResponse, cb = () => {}) {
     const { currentPipe, getPrebuffer } = this._deps.queuestream;
 
     res.writeHead(200, this._deps.config.responseHeaders);

@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { ClientRequest, ServerResponse } from 'http';
 import type { TrackList, ReorderCb } from '../base/Playlist/Playlist.types';
 import type { TEmitter } from '../features/EventBus/events';
 
@@ -8,6 +8,6 @@ export interface TStation {
   next(): void;
   reorderPlaylist(cb: ReorderCb): TrackList;
   getPlaylist(): TrackList;
-  connectListener(req: Request | undefined, res: Response, cb: () => void): void;
+  connectListener(req: ClientRequest | undefined, res: ServerResponse, cb: () => void): void;
   on: TEmitter['on'];
 }

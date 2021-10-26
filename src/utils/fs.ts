@@ -1,6 +1,6 @@
-import * as klaw from 'klaw-sync';
-import * as fs from 'fs-extra';
-import * as Mp3 from './mp3';
+import klaw from 'klaw-sync';
+import fs from 'fs-extra';
+import Mp3 from './mp3';
 
 const getPaths = (fullPath: string): readonly string[] => {
   const stats = fs.statSync(fullPath);

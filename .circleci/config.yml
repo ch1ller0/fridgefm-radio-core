@@ -6,7 +6,7 @@ orbs:
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:10.15
+    - image: cimg/node:lts
 
 tag-filter: &tag-filter
   filters:

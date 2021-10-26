@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { logger } from '../../utils/logger';
-import { PUBLIC_EVENTS } from './events';
 import { defaultConfig } from '../../config/index';
+import { PUBLIC_EVENTS } from './events';
 
 import type { TEmitter, InfoEvent, ErrorEvent } from './events';
 
@@ -17,7 +17,7 @@ export class EventBus {
     this.on(PUBLIC_EVENTS.INFO, ({ level, ...rest }: InfoEvent) => logger.log(level || 'info', { ...rest }));
 
     this.on(PUBLIC_EVENTS.ERROR, (event: ErrorEvent) =>
-      logger.log('error', { ...event, message: event.error.message })
+      logger.log('error', { ...event, message: event.error.message }),
     );
   }
 
@@ -27,7 +27,7 @@ export class EventBus {
         event: PUBLIC_EVENTS.NEXT_TRACK,
         message: tr.fsStats.stringified,
         timings,
-      })
+      }),
     );
 
     this.on(PUBLIC_EVENTS.START, (_, timings) =>
@@ -35,7 +35,7 @@ export class EventBus {
         event: PUBLIC_EVENTS.START,
         message: 'Station started',
         timings,
-      })
+      }),
     );
 
     this.on(PUBLIC_EVENTS.RESTART, (_, timings) =>
@@ -43,7 +43,7 @@ export class EventBus {
         event: PUBLIC_EVENTS.RESTART,
         message: 'Station restarted',
         timings,
-      })
+      }),
     );
   }
 

@@ -1,4 +1,4 @@
-import * as Mp3 from '../../utils/mp3';
+import Mp3 from '../../utils/mp3';
 import { extractLast, shuffleArray } from '../../utils/funcs';
 import { Track } from '../Track/Track';
 
@@ -25,7 +25,9 @@ export const SHUFFLE_METHODS = {
     ({ to, from }: { to: number; from: number }) =>
     (arr: TrackList) => {
       const movedElement = arr.splice(from, 1)[0];
-      arr.splice(to, 0, movedElement);
+      if (movedElement) {
+        arr.splice(to, 0, movedElement);
+      }
 
       return arr;
     },

@@ -1,7 +1,7 @@
 import { createList } from '../../utils/fs';
-import { createTrackMap } from './methods';
 import { captureTime } from '../../utils/time';
 import { PUBLIC_EVENTS } from '../../features/EventBus/events';
+import { createTrackMap } from './methods';
 
 import type { TPlaylist, TrackMap, TrackList, ReorderCb, PathList, PlaylistElement } from './Playlist.types';
 import type { EventBus } from '../../features/EventBus/EventBus';
@@ -54,7 +54,7 @@ export class Playlist implements TPlaylist {
     } else {
       this._currentIndex += 1;
     }
-    const nextPath = this._list[this._currentIndex];
+    const nextPath = this._list[this._currentIndex] as string;
     const nextTrack = this._tracksMap.get(nextPath);
 
     if (!nextTrack) {

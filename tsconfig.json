@@ -1,18 +1,38 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
     "target": "es6",
-    "strict": true,
+    "outDir": "lib",
+    "rootDir": "src",
     "moduleResolution": "node",
     "module": "commonjs",
     "sourceMap": false,
-    "strictNullChecks": true,
     "declaration": true,
-    "listEmittedFiles": true,
-    "experimentalDecorators": true
+    "inlineSourceMap": true,
+    "esModuleInterop": true,
+    "strict": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "importsNotUsedAsValues": "error",
+    "noUncheckedIndexedAccess": true,
+
+    /* Debugging Options */
+    "traceResolution": false,
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "pretty": true,
+
+    /* Experimental Options */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "incremental": true,
+
+    "lib": ["es2020"],
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": ["node_modules", "**/__tests__/**/*.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/**", "**/__tests__/"],
+  "compileOnSave": false
 }
