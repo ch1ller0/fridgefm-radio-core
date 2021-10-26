@@ -30,7 +30,7 @@ const getTagsSize = (buffer: Buffer): number => {
 const getDuration = (buffer: Buffer): number => getMp3DurationBits(buffer);
 
 const isSupported = (file: string): boolean => {
-  const format = extractLast(file, '.')[1] as string;
+  const format = extractLast(file, '.')[1];
   return SUPPORTED_FORMATS.includes(format);
 };
 

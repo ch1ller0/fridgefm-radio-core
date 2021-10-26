@@ -32,11 +32,11 @@ const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
 
 const getStats = (fullPath: TrackPath): TrackStats => {
   const file = fs.readFileSync(fullPath);
-  const [directory, fullName] = extractLast(fullPath, '/') as [string, string];
+  const [directory, fullName] = extractLast(fullPath, '/');
   const duration = Mp3.getDuration(file);
   const tagsSize = Mp3.getTagsSize(file);
   const { size } = fs.statSync(fullPath);
-  const [name, format] = extractLast(fullName, '.') as [string, string];
+  const [name, format] = extractLast(fullName, '.');
 
   return {
     size,

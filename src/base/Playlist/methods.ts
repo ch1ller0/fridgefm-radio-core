@@ -8,10 +8,8 @@ export const createTrackMap = (paths: readonly string[]): TrackMap =>
   paths
     .filter((path) => {
       const f = extractLast(path, '/');
-      if (f[1]) {
-        return Mp3.isSupported(f[1]);
-      }
-      return false;
+
+      return Mp3.isSupported(f[1]);
     })
     .reduce((acc, path) => {
       // deduplicate if already in map
