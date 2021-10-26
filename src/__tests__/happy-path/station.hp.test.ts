@@ -19,11 +19,13 @@ describe('public/HappyPath/Station', () => {
   });
 
   describe('control methods', () => {
-    const station = new Station();
     const getPlaying = (pl) => pl.filter((track) => track.isPlaying);
 
+    // as
     describe('start method', () => {
       it('playlist empty - start method wont execute', () => {
+        const station = new Station();
+
         station.start();
         expect(getPlaying(station.getPlaylist())).toEqual([]);
 
@@ -33,12 +35,17 @@ describe('public/HappyPath/Station', () => {
       });
 
       it('playlist not empty - start method executes', () => {
+        const station = new Station();
+        station.addFolder(pathToMusic);
         station.start();
         expect(getPlaying(station.getPlaylist()).length).toEqual(1);
       });
     });
 
     it('next method - switches to next track', () => {
+      const station = new Station();
+      station.addFolder(pathToMusic);
+
       const playing1 = getPlaying(station.getPlaylist());
 
       station.next();

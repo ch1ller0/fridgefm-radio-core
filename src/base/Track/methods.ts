@@ -1,11 +1,12 @@
-import * as fs from 'fs-extra';
-import * as _ from 'highland';
-import * as id3 from 'node-id3';
-import type { Tags } from 'node-id3';
-import { Readable } from 'stream';
+import fs from 'fs-extra';
+import _ from 'highland';
+import id3 from 'node-id3';
 import { extractLast } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
-import * as Mp3 from '../../utils/mp3';
+import Mp3 from '../../utils/mp3';
+
+import type { Readable } from 'stream';
+import type { Tags } from 'node-id3';
 import type { ShallowTrackMeta, TrackPath, TrackStats } from './Track.types';
 
 const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
@@ -25,17 +26,17 @@ const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
         ...rest,
         origin: 'id3',
       });
-    })
+    }),
   );
 };
 
-const getStats = (fullPath: TrackPath) => {
+const getStats = (fullPath: TrackPath): TrackStats => {
   const file = fs.readFileSync(fullPath);
-  const [directory, fullName] = extractLast(fullPath, '/');
+  const [directory, fullName] = extractLast(fullPath, '/') as [string, string];
   const duration = Mp3.getDuration(file);
   const tagsSize = Mp3.getTagsSize(file);
   const { size } = fs.statSync(fullPath);
-  const [name, format] = extractLast(fullName, '.');
+  const [name, format] = extractLast(fullName, '.') as [string, string];
 
   return {
     size,
@@ -56,16 +57,19 @@ const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): [Error 
       throw new Error(`Not a file: '${fullPath}'`);
     }
 
-    const stream = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
+    // @ts-ignore
+    const hlStream = _(fs.createReadStream(fullPath, { highWaterMark: bitrate })) as Highland.Stream<Buffer>;
 
     const comp = _.seq(
       // @ts-ignore
       _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
       // @ts-ignore
-      _.ratelimit(1, 1000)
+      // _.slice(60, 80), // for debuggine purposes
+      // @ts-ignore
+      _.ratelimit(1, 1000),
     );
 
-    return [null, comp(stream)];
+    return [null, comp(hlStream)];
   } catch (e) {
     // skip track if it is not accessible
     // @ts-ignore

@@ -1,4 +1,4 @@
-import * as devnull from 'dev-null';
+import devnull from 'dev-null';
 import { getStats, getMetaAsync, createSoundStream } from '../methods';
 import { pathToMusic, tracks, TestFile } from '../../../__tests__/test-utils.mock';
 

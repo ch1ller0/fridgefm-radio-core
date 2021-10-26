@@ -1,16 +1,17 @@
 import { Buffer } from 'buffer';
+import { DEFAULTS } from '../constants';
 
-type PrebufferArgs = { prebufferLength: number };
+type PrebufferArgs = { prebufferLength?: number };
 
 export class Prebuffer {
   private readonly _storage: Buffer[];
 
   private readonly _prebufferLength: number;
 
-  constructor(args: PrebufferArgs) {
+  constructor(args: PrebufferArgs = {}) {
     const { prebufferLength } = args;
     this._storage = [];
-    this._prebufferLength = prebufferLength;
+    this._prebufferLength = prebufferLength || DEFAULTS.PREBUFFER_LENGTH;
   }
 
   public modify(chunks: Buffer[]) {

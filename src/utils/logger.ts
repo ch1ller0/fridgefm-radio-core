@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
-import * as winston from 'winston';
-import * as chalk from 'chalk';
+import winston from 'winston';
+import chalk from 'chalk';
 import { getHHMMSS } from './time';
 
 const colors = {
@@ -22,7 +22,7 @@ const fridgeformat = winston.format((info) => {
 
   // @ts-ignore
   info.message = `${colors.time(getHHMMSS(Date.now()))} ${chalked(add.event)} ${info.message || ''} ${chalked(
-    add.timings
+    add.timings,
   )}`;
   return info;
 });

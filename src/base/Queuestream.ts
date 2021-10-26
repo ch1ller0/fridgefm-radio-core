@@ -1,11 +1,10 @@
-import * as devnull from 'dev-null';
 import { Readable, Transform, Writable } from 'stream';
+import devnull from 'dev-null';
 import { captureTime } from '../utils/time';
 import { Prebuffer } from '../features/Prebuffer';
-import { EventBus } from '../features/EventBus/EventBus';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
-import { DEFAULTS } from '../constants';
 
+import type { EventBus } from '../features/EventBus/EventBus';
 import type { TPlaylist } from './Playlist/Playlist.types';
 
 type Deps = {
@@ -18,7 +17,7 @@ export class QueueStream {
 
   // this stream is always live
   private _current = new Transform({
-    transform: (chunk, encoding, callback) => {
+    transform: (chunk, _, callback) => {
       this._prebuffer.modify([chunk]);
       callback(undefined, chunk);
     },
@@ -28,9 +27,7 @@ export class QueueStream {
   private _trackStream: Readable;
 
   // prebuffering for faster client response (side-effect)
-  private _prebuffer = new Prebuffer({
-    prebufferLength: DEFAULTS.PREBUFFER_LENGTH,
-  });
+  private _prebuffer = new Prebuffer();
 
   constructor(deps: Deps) {
     this._deps = deps;

@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import * as fs from 'fs-extra';
-import * as id3 from 'node-id3';
+import fs from 'fs-extra';
+import id3 from 'node-id3';
 
 export const pathToMusic = `${process.cwd()}/examples/music`;
 
