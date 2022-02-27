@@ -326,6 +326,13 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@fridgefm/inverter@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@fridgefm/inverter/-/inverter-0.1.7.tgz#69e0f9b2ff433d024e8e27ba67b17df308fb4fa8"
+  integrity sha512-O5LuGlSmdRerEqQUQyFaYwWTb11ctp9bCzwgzvCjVe5I0Uxc+b179bkhJ81BquW8msqKPr+49Mb4/M3CCXYMKA==
+  dependencies:
+    debug "^4.3.3"
+
 "@humanwhocodes/config-array@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.6.0.tgz#b5621fdb3b32309d2d16575456cbc277fa8f021a"
@@ -1397,6 +1404,13 @@ debug@^3.2.7:
   integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
   dependencies:
     ms "^2.1.1"
+
+debug@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
+  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
+  dependencies:
+    ms "2.1.2"
 
 decimal.js@^10.2.1:
   version "10.3.1"
