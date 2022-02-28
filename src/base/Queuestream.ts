@@ -12,6 +12,12 @@ type Deps = {
   eventBus: EventBus;
 };
 
+export type Queuestream = {
+  getPrebuffer: () => Buffer;
+  currentPipe: (wrstr: Writable, opts?: { end?: boolean }) => Writable;
+  next: () => void;
+};
+
 export class QueueStream {
   private _deps: Deps;
 

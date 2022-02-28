@@ -326,10 +326,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fridgefm/inverter@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@fridgefm/inverter/-/inverter-0.1.7.tgz#69e0f9b2ff433d024e8e27ba67b17df308fb4fa8"
-  integrity sha512-O5LuGlSmdRerEqQUQyFaYwWTb11ctp9bCzwgzvCjVe5I0Uxc+b179bkhJ81BquW8msqKPr+49Mb4/M3CCXYMKA==
+"@fridgefm/inverter@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@fridgefm/inverter/-/inverter-0.1.9.tgz#64fed3b7bebe7a95b2c2194141e2b26d0a27d90e"
+  integrity sha512-eKg0M8xK461TXdU1JtLv8IhtLX1fXREEoKH848SzT9imM6W4YKhQ6uskJFnMnS6gaYJyD1AnpXkdEBYthaEc6g==
   dependencies:
     debug "^4.3.3"
 

@@ -9,6 +9,7 @@ export const defaultConfig = {
    * If set to true enables verbose info logging
    */
   verbose: false,
+  prebufferLength: 12,
 };
 
 export const mergeConfig = (cfg: Partial<Config>) =>
@@ -17,4 +18,8 @@ export const mergeConfig = (cfg: Partial<Config>) =>
     responseHeaders: responseHeaders(cfg.responseHeaders),
   } as Config);
 
-export type Config = typeof defaultConfig;
+export type Config = {
+  responseHeaders: Record<string, string>;
+  verbose: boolean;
+  prebufferLength: number;
+};

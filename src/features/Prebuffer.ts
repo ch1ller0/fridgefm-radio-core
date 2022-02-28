@@ -3,6 +3,11 @@ import { DEFAULTS } from '../constants';
 
 type PrebufferArgs = { prebufferLength?: number };
 
+export type PrebufferT = {
+  getStorage: () => Buffer;
+  modify: (chunks: Buffer[]) => void;
+};
+
 export class Prebuffer {
   private readonly _storage: Buffer[];
 

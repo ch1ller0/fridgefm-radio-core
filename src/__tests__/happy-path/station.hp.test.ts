@@ -1,10 +1,10 @@
-import { Station } from '../../index';
+import { createStation } from '../../index';
 import { pathToMusic } from '../test-utils.mock';
 
 describe('public/HappyPath/Station', () => {
   describe('playlist methods', () => {
     it('adding folders - deduplicates same tracks', () => {
-      const station = new Station();
+      const station = createStation();
 
       expect(station.getPlaylist().length).toEqual(0);
       station.addFolder(pathToMusic);
@@ -24,7 +24,7 @@ describe('public/HappyPath/Station', () => {
     // as
     describe('start method', () => {
       it('playlist empty - start method wont execute', () => {
-        const station = new Station();
+        const station = createStation();
 
         station.start();
         expect(getPlaying(station.getPlaylist())).toEqual([]);
@@ -35,7 +35,7 @@ describe('public/HappyPath/Station', () => {
       });
 
       it('playlist not empty - start method executes', () => {
-        const station = new Station();
+        const station = createStation();
         station.addFolder(pathToMusic);
         station.start();
         expect(getPlaying(station.getPlaylist()).length).toEqual(1);
@@ -43,7 +43,7 @@ describe('public/HappyPath/Station', () => {
     });
 
     it('next method - switches to next track', () => {
-      const station = new Station();
+      const station = createStation();
       station.addFolder(pathToMusic);
 
       const playing1 = getPlaying(station.getPlaylist());
@@ -67,7 +67,7 @@ describe('public/HappyPath/Station', () => {
 
     const cbMock = jest.fn();
 
-    const station = new Station();
+    const station = createStation();
 
     station.addFolder(pathToMusic);
     // @ts-ignore
