@@ -1,7 +1,5 @@
-import { Station } from './base/Station';
-import { PUBLIC_EVENTS } from './features/EventBus/events';
-import { SHUFFLE_METHODS } from './base/Playlist/methods';
-import { DEFAULTS } from './constants';
+import { PUBLIC_EVENTS } from './providers/events/events.provider';
+import { SHUFFLE_METHODS } from './providers/playlist/playlist.methods';
 
-export { Station, PUBLIC_EVENTS, SHUFFLE_METHODS, DEFAULTS };
-export { createStation } from './module-system/index';
+export { PUBLIC_EVENTS, SHUFFLE_METHODS };
+export { Station } from './providers/station';
