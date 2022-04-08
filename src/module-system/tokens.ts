@@ -1,7 +1,7 @@
 import { createToken } from '@fridgefm/inverter';
 import type { TEmitter } from '../features/EventBus/events';
 import type { PrebufferT } from '../features/Prebuffer';
-import type { TStation } from '../types/public.h';
+import type { TStation } from '../types/public';
 import type { TPlaylist } from '../base/Playlist/Playlist.types';
 import type { Queuestream } from '../base/Queuestream';
 import type { Config } from '../config/index';
