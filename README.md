@@ -139,4 +139,5 @@ yarn dev [path/to/your_mp3tracks]
 ```
 
 ## Demo
-Fully working demo is available on https://fridgefm.com
+Sandbox is available here on [Codesandbox](https://codesandbox.io/s/fridgefm-radio-core-xb5rkw)\
+Fully working demo is available on [FridgeFM](https://fridgefm.com)
