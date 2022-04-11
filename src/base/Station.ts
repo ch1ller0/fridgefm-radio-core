@@ -6,7 +6,7 @@ import { Playlist } from './Playlist/Playlist';
 import { QueueStream } from './Queuestream';
 
 import type { ClientRequest, ServerResponse } from 'http';
-import type { TStation } from '../types/public.h';
+import type { TStation } from '../types/public';
 import type { TEmitter } from '../features/EventBus/events';
 import type { TPlaylist, ReorderCb } from './Playlist/Playlist.types';
 

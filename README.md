@@ -130,21 +130,12 @@ station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 > or just go to [examples](./examples/server.js)
 ## Development
 ```
-yarn build
-node examples/server.js
+yarn dev
 ```
 or
 ```
-yarn build
-node examples/server.js [path/to/your_mp3tracks]
+yarn dev [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
-```
-There is also a watch mode - you need two tabs in a terminal
-```
-yarn watch
-```
-```
-node examples/server.js [path/to/your_mp3tracks]
 ```
 
 ## Demo
