@@ -2,7 +2,7 @@
 import path from 'path';
 import express from 'express';
 import { SHUFFLE_METHODS, PUBLIC_EVENTS, Station } from '../src/index';
-import type { ShallowTrackMeta } from '../lib/base/Track/Track.types';
+import type { ShallowTrackMeta } from '../src/index';
 
 const port = 3001;
 const server = express();
