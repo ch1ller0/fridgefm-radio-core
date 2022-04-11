@@ -28,7 +28,7 @@
     "url": "git+https://github.com/ch1ller0/fridgefm-radio-core.git"
   },
   "scripts": {
-    "dev": "tsnd ./examples/server.ts & yarn watch",
+    "dev": " yarn watch & tsnd ./examples/server.ts",
     "build": "tsc",
     "watch": "tsc --watch",
     "lint": "eslint --fix ./src/**/*",
