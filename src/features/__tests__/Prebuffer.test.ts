@@ -1,11 +1,11 @@
 import { Buffer } from 'buffer';
-import { Prebuffer } from '../Prebuffer';
+import { createPrebuffer } from '../Prebuffer';
 
 const createChunks = (from: string) => from.split('').map((v) => Buffer.from([Number(v)]));
 
 describe('features/Prebuffer', () => {
   it('adds chunks up to max', () => {
-    const instance = new Prebuffer({ prebufferLength: 10 });
+    const instance = createPrebuffer({ prebufferLength: 10 });
     expect(instance.getStorage()).toHaveLength(0);
 
     instance.modify(createChunks('1'));
@@ -15,7 +15,7 @@ describe('features/Prebuffer', () => {
   });
 
   it('does not overflow max values', () => {
-    const instance = new Prebuffer({ prebufferLength: 10 });
+    const instance = createPrebuffer({ prebufferLength: 10 });
 
     instance.modify(createChunks('1234567890'));
     expect(instance.getStorage()).toHaveLength(10);
@@ -30,7 +30,7 @@ describe('features/Prebuffer', () => {
   });
 
   it('uses default if length not set', () => {
-    const instance = new Prebuffer();
+    const instance = createPrebuffer();
     instance.modify(createChunks('1'));
 
     expect(instance.getStorage()).toHaveLength(12);

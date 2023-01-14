@@ -1,8 +1,8 @@
-import { EventBus } from '../features/EventBus/EventBus';
+import { createEventBus, EventBus } from '../features/EventBus/EventBus';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
 import { captureTime } from '../utils/time';
 import { mergeConfig, Config } from '../config/index';
-import { Playlist } from './Playlist/Playlist';
+import { createPlaylist } from './Playlist/Playlist';
 import { QueueStream } from './Queuestream';
 
 import type { ClientRequest, ServerResponse } from 'http';
@@ -22,8 +22,8 @@ export class Station implements TStation {
 
   constructor(extConfig?: Partial<Config>) {
     const config = mergeConfig(extConfig || {});
-    const eventBus = new EventBus({ config });
-    const playlist = new Playlist({ eventBus });
+    const eventBus = createEventBus({ config });
+    const playlist = createPlaylist({ eventBus });
     const queuestream = new QueueStream({ playlist, eventBus });
 
     this._deps = {
@@ -44,6 +44,8 @@ export class Station implements TStation {
 
     eventBus.emit(PUBLIC_EVENTS.START, this.getPlaylist(), ct());
   }
+
+  public togglePause(): void {}
 
   public addFolder(folder: string) {
     return this._deps.playlist.addFolder(folder);

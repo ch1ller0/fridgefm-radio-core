@@ -41,7 +41,7 @@ station.start();
 Creating a station is as simple as 
 ```javascript
 const myAwesomeStation = new Station({
-  verbose: false, // if true - enables verbose logging (great for debugging),
+  verbose: false, // if true - enables verbose logging (for debugging purposes),
   responseHeaders: { // in case you want custom response headers for your endpoint
     'icy-genre': 'jazz'
   }
