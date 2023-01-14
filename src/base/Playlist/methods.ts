@@ -1,6 +1,6 @@
 import Mp3 from '../../utils/mp3';
 import { extractLast, shuffleArray } from '../../utils/funcs';
-import { Track } from '../Track/Track';
+import { createTrack } from '../Track/Track';
 
 import type { TrackList, TrackMap } from './Playlist.types';
 
@@ -17,7 +17,7 @@ export const createTrackMap = (paths: readonly string[]): TrackMap =>
         return acc;
       }
 
-      return acc.set(path, new Track(path));
+      return acc.set(path, createTrack(path));
     }, new Map() as TrackMap);
 
 export const SHUFFLE_METHODS = {

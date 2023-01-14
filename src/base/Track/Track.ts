@@ -1,16 +1,13 @@
 import { createSoundStream, getMetaAsync, getStats } from './methods';
-import type { TTrack, TrackStats } from './Track.types';
+import type { TTrack } from './Track.types';
 
-export class Track implements TTrack {
-  public playCount = 0;
+export const createTrack = (fullPath: string): TTrack => {
+  const fsStats = getStats(fullPath);
 
-  public readonly fsStats: TrackStats;
-
-  constructor(fullPath: string) {
-    this.fsStats = getStats(fullPath);
-  }
-
-  public getMetaAsync = () => getMetaAsync(this.fsStats);
-
-  public getSound = () => createSoundStream(this.fsStats);
-}
+  return {
+    fsStats,
+    playCount: 0,
+    getMetaAsync: () => getMetaAsync(fsStats),
+    getSound: () => createSoundStream(fsStats),
+  };
+};

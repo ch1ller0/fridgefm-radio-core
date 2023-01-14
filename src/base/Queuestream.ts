@@ -1,7 +1,7 @@
 import { Readable, Transform, Writable } from 'stream';
 import devnull from 'dev-null';
 import { captureTime } from '../utils/time';
-import { Prebuffer } from '../features/Prebuffer';
+import { createPrebuffer } from '../features/Prebuffer';
 import { PUBLIC_EVENTS } from '../features/EventBus/events';
 
 import type { EventBus } from '../features/EventBus/EventBus';
@@ -27,7 +27,7 @@ export class QueueStream {
   private _trackStream: Readable;
 
   // prebuffering for faster client response (side-effect)
-  private _prebuffer = new Prebuffer();
+  private _prebuffer = createPrebuffer();
 
   constructor(deps: Deps) {
     this._deps = deps;

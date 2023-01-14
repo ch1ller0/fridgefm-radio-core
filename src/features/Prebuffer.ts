@@ -3,30 +3,28 @@ import { DEFAULTS } from '../constants';
 
 type PrebufferArgs = { prebufferLength?: number };
 
-export class Prebuffer {
-  private readonly _storage: Buffer[];
+/**
+ * Helper object that stores previous [prebufferLength] of Buffers.
+ * It enables prebuffering, simply put it just immediately returns [prebufferLength] previous seconds of the stream.
+ */
+export const createPrebuffer = (args: PrebufferArgs = {}) => {
+  const prebufferLength = args.prebufferLength || DEFAULTS.PREBUFFER_LENGTH;
+  const storage: Buffer[] = [];
 
-  private readonly _prebufferLength: number;
+  return {
+    modify: (chunks: Buffer[]) => {
+      chunks.forEach((ch) => {
+        if (storage.length >= prebufferLength) {
+          storage.shift();
+        }
 
-  constructor(args: PrebufferArgs = {}) {
-    const { prebufferLength } = args;
-    this._storage = [];
-    this._prebufferLength = prebufferLength || DEFAULTS.PREBUFFER_LENGTH;
-  }
+        storage.push(ch);
+      });
+    },
+    getStorage: () => {
+      const totalPrebufferLength = (storage[0] || []).length * prebufferLength;
 
-  public modify(chunks: Buffer[]) {
-    chunks.forEach((ch) => {
-      if (this._storage.length >= this._prebufferLength) {
-        this._storage.shift();
-      }
-
-      this._storage.push(ch);
-    });
-  }
-
-  public getStorage() {
-    const totalPrebufferLength = (this._storage[0] || []).length * this._prebufferLength;
-
-    return Buffer.concat(this._storage, totalPrebufferLength);
-  }
-}
+      return Buffer.concat(storage, totalPrebufferLength);
+    },
+  };
+};

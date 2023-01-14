@@ -3,96 +3,88 @@ import { captureTime } from '../../utils/time';
 import { PUBLIC_EVENTS } from '../../features/EventBus/events';
 import { createTrackMap } from './methods';
 
-import type { TPlaylist, TrackMap, TrackList, ReorderCb, PathList, PlaylistElement } from './Playlist.types';
+import type { TPlaylist, TrackMap, ReorderCb, PathList } from './Playlist.types';
 import type { EventBus } from '../../features/EventBus/EventBus';
 import type { InfoEvent } from '../../features/EventBus/events';
 import type { TTrack } from '../Track/Track.types';
 
 type Deps = { eventBus: EventBus };
 
-export class Playlist implements TPlaylist {
-  private _currentIndex = -1;
+export const createPlaylist = (deps: Deps) => {
+  const folders = new Set<string>();
+  const emitInfo = (a: InfoEvent) => deps.eventBus.emit(PUBLIC_EVENTS.INFO, { name: 'playlist', ...a });
 
-  private _list: PathList = [];
+  let currentIndex = -1;
+  let list: PathList = [];
+  let tracksMap: TrackMap = new Map();
 
-  private _tracksMap: TrackMap = new Map();
+  const instance: TPlaylist = {
+    addFolder: (folder: string) => {
+      folders.add(folder);
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      return revalidate();
+    },
+    getList: () => {
+      return list.map((v, i) => {
+        const tra = tracksMap.get(v) as TTrack;
 
-  private _folders: Set<string> = new Set();
-
-  private _deps: Deps;
-
-  private revalidate() {
-    const ct = captureTime();
-    this._list = createList(Array.from(this._folders));
-    this._tracksMap = createTrackMap(this._list);
-
-    const result = this.getList();
-    this._emitInfo({ event: 'revalidate', message: 'Playlist revalidated', timings: ct() });
-    return result;
-  }
-
-  private _emitInfo(a: InfoEvent) {
-    this._deps.eventBus.emit(PUBLIC_EVENTS.INFO, { name: 'playlist', ...a });
-  }
-
-  constructor(deps: Deps) {
-    this._deps = deps;
-  }
-
-  public addFolder(folder: string) {
-    this._folders.add(folder);
-    return this.revalidate();
-  }
-
-  public getNext(): PlaylistElement {
-    if (this._list.length - 1 === this._currentIndex) {
-      // the playlist drained
+        return {
+          ...tra,
+          isPlaying: currentIndex === i,
+        };
+      });
+    },
+    reorder: (cb: ReorderCb) => {
       const ct = captureTime();
-      this.revalidate();
-      this._currentIndex = 0;
-      this._deps.eventBus.emit(PUBLIC_EVENTS.RESTART, this.getList(), ct());
-    } else {
-      this._currentIndex += 1;
-    }
-    const nextPath = this._list[this._currentIndex] as string;
-    const nextTrack = this._tracksMap.get(nextPath);
+      const prevList = instance.getList();
+      const currentlyPlaying = prevList.find((v) => !!v.isPlaying);
 
-    if (!nextTrack) {
-      this._emitInfo({ level: 'warn', event: 'no-next-track', message: `No next track found for ${nextPath}` });
-      // try next tracks
-      return this.getNext();
-    }
-    nextTrack.playCount += 1;
+      list = cb(prevList).map((b) => b.fsStats.fullPath);
+      currentIndex = list.findIndex((v) => v === currentlyPlaying?.fsStats.fullPath);
 
-    return { ...nextTrack, isPlaying: true };
-  }
+      emitInfo({
+        level: 'info',
+        event: 'reorder',
+        message: 'Playlist reordered',
+        timings: ct(),
+      });
 
-  public reorder(cb: ReorderCb) {
+      return instance.getList();
+    },
+    getNext: () => {
+      if (list.length - 1 === currentIndex) {
+        // the playlist drained
+        const ct = captureTime();
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        revalidate();
+        currentIndex = 0;
+        deps.eventBus.emit(PUBLIC_EVENTS.RESTART, instance.getList(), ct());
+      } else {
+        currentIndex += 1;
+      }
+      const nextPath = list[currentIndex] as string;
+      const nextTrack = tracksMap.get(nextPath);
+
+      if (!nextTrack) {
+        emitInfo({ level: 'warn', event: 'no-next-track', message: `No next track found for ${nextPath}` });
+        // try next tracks
+        return instance.getNext();
+      }
+      nextTrack.playCount += 1;
+
+      return { ...nextTrack, isPlaying: true };
+    },
+  };
+
+  const revalidate = () => {
     const ct = captureTime();
-    const prevList = this.getList();
-    const currentlyPlaying = prevList.find((v) => !!v.isPlaying);
+    list = createList(Array.from(folders));
+    tracksMap = createTrackMap(list);
 
-    this._list = cb(prevList).map((b) => b.fsStats.fullPath);
-    this._currentIndex = this._list.findIndex((v) => v === currentlyPlaying?.fsStats.fullPath);
+    const result = instance.getList();
+    emitInfo({ event: 'revalidate', message: 'Playlist revalidated', timings: ct() });
+    return result;
+  };
 
-    this._emitInfo({
-      level: 'info',
-      event: 'reorder',
-      message: 'Playlist reordered',
-      timings: ct(),
-    });
-
-    return this.getList();
-  }
-
-  public getList(): TrackList {
-    return this._list.map((v, i) => {
-      const tra = this._tracksMap.get(v) as TTrack;
-
-      return {
-        ...tra,
-        isPlaying: this._currentIndex === i,
-      };
-    });
-  }
-}
+  return instance;
+};

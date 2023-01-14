@@ -41,7 +41,7 @@ station.start();
 Creating a station is as simple as 
 ```javascript
 const myAwesomeStation = new Station({
-  verbose: false, // if true - enables verbose logging (great for debugging),
+  verbose: false, // if true - enables verbose logging (for debugging purposes),
   responseHeaders: { // in case you want custom response headers for your endpoint
     'icy-genre': 'jazz'
   }
@@ -130,11 +130,11 @@ station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 > or just go to [examples](./examples/server.js)
 ## Development
 ```
-yarn dev
+yarn start
 ```
 or
 ```
-yarn dev [path/to/your_mp3tracks]
+yarn start [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
 ```
 

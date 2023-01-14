@@ -55,7 +55,16 @@ jobs:
           at: ~/repo
       - run:
           name: Running linter
-          command: yarn lint:ci
+          command: yarn test:lint
+
+  typecheck:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Running typechecks
+          command: yarn test:types
 
   test:
     <<: *defaults
@@ -64,7 +73,7 @@ jobs:
           at: ~/repo
       - run:
           name: Running unit tests and coverage
-          command: yarn test:cov
+          command: yarn test:unit:cov
       - persist_to_workspace:
           root: ~/repo
           <<: *whitelist
