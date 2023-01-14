@@ -1,8 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "es6",
     "outDir": "lib",
-    "rootDir": "src",
     "moduleResolution": "node",
     "module": "commonjs",
     "sourceMap": false,
@@ -21,7 +21,7 @@
 
     /* Debugging Options */
     "traceResolution": false,
-    "listEmittedFiles": false,
+    "listEmittedFiles": true,
     "listFiles": false,
     "pretty": true,
 
@@ -30,7 +30,7 @@
     "emitDecoratorMetadata": true,
     "incremental": true,
 
-    "lib": ["es2020"],
+    "lib": ["es2020"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules/**", "**/__tests__/"],
