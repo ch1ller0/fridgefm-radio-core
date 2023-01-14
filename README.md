@@ -130,11 +130,11 @@ station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 > or just go to [examples](./examples/server.js)
 ## Development
 ```
-yarn dev
+yarn start
 ```
 or
 ```
-yarn dev [path/to/your_mp3tracks]
+yarn start [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
 ```
 
