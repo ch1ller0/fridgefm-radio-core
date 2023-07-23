@@ -2,7 +2,7 @@ import type { ClientRequest, ServerResponse } from 'http';
 import type { TrackList, ReorderCb } from '../base/Playlist/Playlist.types';
 import type { TEmitter } from '../features/EventBus/events';
 
-export interface TStation {
+export type TStation = {
   /**
    * Start the radio station
    */
@@ -31,4 +31,4 @@ export interface TStation {
    * Lets you listen to various track events
    */
   on: TEmitter['on'];
-}
+};
