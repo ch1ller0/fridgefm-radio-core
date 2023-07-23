@@ -16,7 +16,6 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "importsNotUsedAsValues": "error",
     "noUncheckedIndexedAccess": true,
 
     /* Debugging Options */
@@ -34,8 +33,5 @@
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules/**", "**/__tests__/"],
-  "compileOnSave": false,
-  "ts-node": {
-    "files": true
-  }
+  "compileOnSave": false
 }
