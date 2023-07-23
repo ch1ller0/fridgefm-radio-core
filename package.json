@@ -6,26 +6,19 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "keywords": [
-    "radio",
-    "music",
-    "mp3",
-    "highland",
-    "stream",
-    "nodejs"
-  ],
+  "keywords": ["radio", "music", "broadcast", "mp3", "stream", "nodejs"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ch1ller0/fridgefm-radio-core.git"
   },
   "scripts": {
-    "start": " yarn watch & tsnd ./examples/server.ts",
     "build": "tsc",
     "watch": "tsc --watch",
+    "start": "ts-node-dev --transpile-only ./examples/server.ts",
     "test:types": "tsc --noEmit",
     "test:lint": "eslint ./src/**/*",
     "test:unit": "jest --config jest.config.json",
-    "test:unit:cov": "yarn test:unit --collectCoverage=true"
+    "test:unit:cov": "jest --config jest.config.json --collectCoverage=true"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -57,14 +50,11 @@
     "jest": "^27.3.1",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.7",
-    "ts-node-dev": "^1.1.8",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.4"
   },
   "bugs": {
     "url": "https://github.com/ch1ller0/fridgefm-radio-core/issues"
   },
-  "homepage": "http://fridgefm.com",
-  "directories": {
-    "example": "examples"
-  }
+  "homepage": "http://fridgefm.com"
 }
