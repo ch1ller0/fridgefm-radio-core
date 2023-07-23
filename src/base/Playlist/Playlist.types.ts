@@ -12,9 +12,9 @@ export type PathList = readonly string[];
 
 export type TrackMap = Map<TrackPath, TTrack>;
 
-export interface TPlaylist {
+export type TPlaylist = {
   addFolder(folder: string): TrackList;
   reorder(cb: ReorderCb): TrackList;
   getList(): TrackList;
   getNext(): TTrack;
-}
+};

@@ -21,12 +21,12 @@ export type InfoEvent = { level?: 'debug' | 'info' | 'warn' } & BaseEvent;
 
 export type ErrorEvent = { error: Error } & BaseEvent;
 
-export interface PublicEvents {
+export type PublicEvents = {
   [PUBLIC_EVENTS.ERROR]: (i: ErrorEvent) => void;
   [PUBLIC_EVENTS.INFO]: (i: InfoEvent) => void;
   [PUBLIC_EVENTS.START]: (list: TrackList, timings: number) => void;
   [PUBLIC_EVENTS.RESTART]: (list: TrackList, timings: number) => void;
   [PUBLIC_EVENTS.NEXT_TRACK]: (tr: TTrack, timings: number) => void;
-}
+};
 
 export type TEmitter = TypedEmitter<PublicEvents>;

@@ -1,9 +1,8 @@
 # Radio engine for NodeJS
 [![build](https://img.shields.io/circleci/build/github/ch1ller0/fridgefm-radio-core.svg)](https://circleci.com/gh/ch1ller0/fridgefm-radio-core)
 [![coverage](https://img.shields.io/codecov/c/gh/ch1ller0/fridgefm-radio-core.svg)](https://codecov.io/gh/ch1ller0/fridgefm-radio-core)
-[![npm](https://img.shields.io/npm/dw/@fridgefm/radio-core.svg)](https://www.npmjs.com/package/@fridgefm/radio-core)
+[![npm](https://img.shields.io/npm/dm/@fridgefm/radio-core.svg)](https://www.npmjs.com/package/@fridgefm/radio-core)
 ![GitHub](https://img.shields.io/github/license/ch1ller0/fridgefm-radio-core.svg)
-![node](https://img.shields.io/node/v/@fridgefm/radio-core.svg)
 
 ## Usage
 
@@ -130,11 +129,11 @@ station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 > or just go to [examples](./examples/server.js)
 ## Development
 ```
-yarn start
+npm run start
 ```
 or
 ```
-yarn start [path/to/your_mp3tracks]
+npm run start [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
 ```
 

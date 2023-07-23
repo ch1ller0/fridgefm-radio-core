@@ -10,12 +10,12 @@ import type { TStation } from '../types/public';
 import type { TEmitter } from '../features/EventBus/events';
 import type { TPlaylist, ReorderCb } from './Playlist/Playlist.types';
 
-interface StationDeps {
+type StationDeps = {
   queuestream: QueueStream;
   eventBus: EventBus;
   playlist: TPlaylist;
   config: Config;
-}
+};
 
 export class Station implements TStation {
   private _deps: StationDeps;
