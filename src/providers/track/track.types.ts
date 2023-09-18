@@ -15,11 +15,12 @@ export type TrackStats = {
   stringified: string;
 };
 
-export interface ShallowTrackMeta extends Tags {
+export type ShallowTrackMeta = Tags & {
   origin: 'id3' | 'fs';
-}
+};
 
 export type TTrack = {
+  playCount: number;
   fsStats: TrackStats;
   getSound: () => [Error | null, Readable];
   getMetaAsync: () => Promise<ShallowTrackMeta>;

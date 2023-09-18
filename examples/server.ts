@@ -2,17 +2,16 @@
 import path from 'path';
 import express from 'express';
 import { SHUFFLE_METHODS, PUBLIC_EVENTS, Station } from '../src/index';
-import type { ShallowTrackMeta } from '../lib/base/Track/Track.types';
+import type { ShallowTrackMeta } from '../src/index';
+
 
 const port = 3001;
 const server = express();
-const musicPath = path.resolve(__dirname, process.argv[2] || './music');
+const musicPath = path.resolve(process.cwd(), process.argv[2] || './examples/music');
 
 const station = new Station({
   verbose: true, // for verbose logging to console
-  responseHeaders: {
-    'icy-genre': 'jazz',
-  },
+  responseHeaders: { 'icy-genre': 'jazz' },
 });
 // add folder to station
 station.addFolder(musicPath);

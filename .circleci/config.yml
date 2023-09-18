@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@1.0.5
+  codecov: codecov/codecov@3.2.5
 
 defaults: &defaults
   working_directory: ~/repo
@@ -36,14 +36,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
+          - v1-dependencies-{{ checksum "package-lock.json" }}
       - run:
           name: Installing dependencies
-          command: yarn install
+          command: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: ~/repo
           <<: *whitelist
@@ -55,7 +55,16 @@ jobs:
           at: ~/repo
       - run:
           name: Running linter
-          command: yarn lint:ci
+          command: npm run test:lint
+
+  typecheck:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Running typechecks
+          command: npm run test:types
 
   test:
     <<: *defaults
@@ -64,7 +73,7 @@ jobs:
           at: ~/repo
       - run:
           name: Running unit tests and coverage
-          command: yarn test:cov
+          command: npm run test:unit:cov
       - persist_to_workspace:
           root: ~/repo
           <<: *whitelist
@@ -81,7 +90,7 @@ jobs:
 
       - run:
           name: Building code
-          command: yarn build
+          command: npm run build
 
       - persist_to_workspace:
           root: ~/repo
@@ -97,7 +106,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
           name: Publishing package
-          command: yarn publish --access=public
+          command: npm publish --access=public
 
 workflows:
   version: 2

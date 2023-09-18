@@ -4,8 +4,6 @@ export type PlaylistElement = {
   isPlaying: boolean;
 } & TTrack;
 
-export type SortAlg = (a: TTrack, b: TTrack) => number;
-
 export type ReorderCb = (current: PlaylistElement[]) => PlaylistElement[];
 
 export type TrackList = PlaylistElement[];
