@@ -8,7 +8,7 @@ import { trackProvider } from './track/track.provider';
 import { stationProvider, STATION_PUBLIC_TOKEN } from './station/station.provider';
 import { CONFIG_TOKEN } from './tokens';
 
-import type { TStation } from '../types/public';
+import type { TStation } from '../types/public.types';
 import type { ReorderCb } from './playlist/playlist.types';
 import type { ClientRequest, ServerResponse } from 'http';
 import type { TEmitter } from './events/events.types';

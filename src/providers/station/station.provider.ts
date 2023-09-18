@@ -8,7 +8,7 @@ import { CONFIG_TOKEN } from '../tokens';
 import type { ClientRequest, ServerResponse } from 'http';
 import type { ReorderCb } from '../playlist/playlist.types';
 import type { TEmitter } from '../events/events.types';
-import type { TStation } from '../../types/public';
+import type { TStation } from '../../types/public.types';
 
 export const STATION_PUBLIC_TOKEN = createToken<TStation>('station_root');
 

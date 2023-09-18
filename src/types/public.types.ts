@@ -32,3 +32,6 @@ export type TStation = {
    */
   on: TEmitter['on'];
 };
+
+export type { ReorderCb, TrackList, TPlaylist } from '../providers/playlist/playlist.types';
+export type { ShallowTrackMeta, TTrack, TrackStats } from '../providers/track/track.types';

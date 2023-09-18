@@ -1,5 +1,5 @@
 import { shuffleArray } from '../../utils/funcs';
-import type { TrackList } from './Playlist.types';
+import type { TrackList } from './playlist.types';
 
 export const SHUFFLE_METHODS = {
   rearrange:

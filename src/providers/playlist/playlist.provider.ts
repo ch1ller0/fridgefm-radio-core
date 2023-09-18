@@ -76,6 +76,7 @@ export const playlistProvider = injectable({
           // try next tracks
           return publicPlaylist.getNext();
         }
+        nextTrack.playCount += 1;
 
         return { ...nextTrack, isPlaying: true };
       },

@@ -1,3 +1,9 @@
+export type Config = {
+  responseHeaders: Record<string, string>;
+  verbose: boolean;
+  prebufferLength: number;
+};
+
 const responseHeaders = (cfg?: Record<string, string>) => ({
   ...(cfg || {
     'icy-br': '56',
@@ -19,8 +25,6 @@ export const createConfig = (cfg: Partial<Config>): Config => ({
   responseHeaders: responseHeaders(cfg.responseHeaders),
 });
 
-export type Config = {
-  responseHeaders: Record<string, string>;
-  verbose: boolean;
-  prebufferLength: number;
+export const DEFAULTS = {
+  PREBUFFER_LENGTH: 12,
 };
