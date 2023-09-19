@@ -29,12 +29,3 @@ export class TestFile {
     fs.removeSync(this.fullPath);
   }
 }
-
-// describe('test-utils', () => {
-//   it('new TestFile', () => {
-//     const t1 = new TestFile();
-//     expect(fs.statSync(t1.fullPath).isFile()).toEqual(true);
-//     t1.remove();
-//     expect(() => fs.statSync(t1.fullPath).isFile()).toThrow();
-//   });
-// });
