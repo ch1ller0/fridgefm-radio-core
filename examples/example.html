@@ -4,31 +4,42 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.12.0/dist/sortable.umd.min.js"></script>
     <style>
         .showcase {
-          margin: 10px;
+          margin: 16px;
+          font-family: Arial, Helvetica, sans-serif;
+          text-align: center;
+          max-width: 800px;
+          margin: 0 auto;
         }
-        .showcase .result {
-          background: ''
+        .showcase audio {
+          width: 100%;
         }
         .showcase button {
-          border: 1px solid black;
+          margin-right: 10px;
+          cursor: pointer;
+          border: none;
           border-radius: 6px;
-          background: aliceblue;
+          background: #f4f4f4;
           padding: 10px;
+        }
+        .showcase button:hover {
+          border-radius: 6px;
+          background: #e4e4e4;
         }
         #getPlaylist {
           margin-top: 10px;
         }
         #getPlaylist li {
+          text-align: left;
           list-style: none;
-          border: 1px solid black;
+          border: none;
           border-radius: 6px;
-          background: aliceblue;
-          padding: 6px 10px;
+          background: #f4f4f4;
+          padding: 12px;
           margin-bottom: -1px;
           cursor: pointer;
         }
         #getPlaylist li:hover {
-          background: gray;
+          background: #e4e4e4;
         }
         img#cover {
           width: 200px;
@@ -38,19 +49,16 @@
       </style>
   </head>
   <body>
-    <audio controls src='/stream' type='audio/mp3'></audio>
-    <div>
-      <div class='showcase'>
-        <button onclick="info()">Get Current Playing Track Meta</button>
-        <div class='result'>
-            <p id='artist'>Artist:</p>
-            <p id='title'>Title:</p>
-            <img id='cover' src='https://t3.ftcdn.net/jpg/01/09/40/34/240_F_109403479_3BJH2QY7zrMV5OUGPePPmxPYZf0zY4lR.jpg'></p>
-        </div>
+    <div class='showcase'>
+      <audio controls src='/stream' type='audio/mp3'></audio>
+      <div class='result'>
+          <p><i>Artist: </i><span id="artist-value"></span></p>
+          <p><i>Title: </i><span id="title-value"></span></p>
+          <img id='cover' src='https://t3.ftcdn.net/jpg/01/09/40/34/240_F_109403479_3BJH2QY7zrMV5OUGPePPmxPYZf0zY4lR.jpg'></p>
+          <code>The Artist, Title and Image (above) are the actual client state of the currently playing track. Under normal circumstances, they should be 'prebufferLength' seconds behind the server state. The controls below represent the actual server state.</code>
+          <hr/>
       </div>
-      <h2>Station controls should be private</h2>
       <div class='showcase'>
-        <button onclick="controlsGetPlaylist()">Show playlist</button>
         <button onclick="controlsShufflePlaylist()">Shuffle playlist</button>
         <button onclick="controlsNext()">Next</button>
         <div class="list-group" id='getPlaylist'></div>
@@ -62,7 +70,7 @@
       return fetch(route)
         .then(res => res.json())
         .then(x => {
-          console.log(x);
+          console.log(route, x);
           return x;
         })
     }
@@ -75,17 +83,16 @@
 
       return urlCreator.createObjectURL(blob);
     }
-    function info() {
-      request('/info')
+    function getCurrentTrack() {
+      request('/getCurrentTrackInfo')
         .then(cur => {
-          document.getElementById('artist').innerHTML = `Artist: ${cur.artist}`;
-          document.getElementById('title').innerHTML = `Title: ${cur.title}`;
+          document.getElementById('artist-value').innerHTML = cur.artist;
+          document.getElementById('title-value').innerHTML = cur.title;
           document.getElementById('cover').src = getCoverUrl(cur.image)
         })
     }
-    function controlsGetPlaylist() {
-      document.getElementById('getPlaylist').innerHTML = ''
-      request('/controls/getPlaylist')
+    function getPlaylist() {
+      request('/getPlaylist')
         .then((plist) => {
           const parent = document.getElementById('getPlaylist');
           parent.innerHTML = '';
@@ -101,14 +108,24 @@
         })
     }
     function controlsShufflePlaylist() {
-      request('/controls/shufflePlaylist').then(controlsGetPlaylist)
+      request('/controls/shufflePlaylist').then(update)
     }
     function controlsNext() {
-      request('/controls/next').then(controlsGetPlaylist).then(info)
+      request('/controls/next').then(update)
     }
     function controlsRearrange({ oldIndex, newIndex }) {
-      request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`).then(controlsGetPlaylist)
+      request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`).then(getPlaylist)
     }
+
+    // short polling results and applying them after prebuffer length is applied
+    function update() {
+      return Promise.all([getCurrentTrack(), getPlaylist()])
+    }
+    setInterval(() => {
+      update()
+    }, 2000)
+    update()
+    
     Sortable.create(document.getElementById('getPlaylist'), { onEnd: controlsRearrange });
   </script>
 </html>

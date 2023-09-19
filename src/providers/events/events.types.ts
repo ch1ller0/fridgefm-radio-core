@@ -1,14 +1,7 @@
 import type TypedEmitter from 'typed-emitter';
-import type { TrackList } from '../../base/Playlist/Playlist.types';
-import type { TTrack } from '../../base/Track/Track.types';
-
-export const PUBLIC_EVENTS = {
-  ERROR: 'error',
-  INFO: 'einfo',
-  START: 'estart',
-  RESTART: 'erestart',
-  NEXT_TRACK: 'enexttrack',
-} as const;
+import type { PUBLIC_EVENTS } from './events.provider';
+import type { TrackList } from '../playlist/playlist.types';
+import type { TTrack } from '../track/track.types';
 
 type BaseEvent = {
   event: string;

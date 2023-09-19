@@ -1,6 +1,6 @@
 import type { ClientRequest, ServerResponse } from 'http';
-import type { TrackList, ReorderCb } from '../base/Playlist/Playlist.types';
-import type { TEmitter } from '../features/EventBus/events';
+import type { TrackList, ReorderCb } from '../providers/playlist/playlist.types';
+import type { TEmitter } from '../providers/events/events.types';
 
 export type TStation = {
   /**
@@ -32,3 +32,6 @@ export type TStation = {
    */
   on: TEmitter['on'];
 };
+
+export type { ReorderCb, TrackList, TPlaylist } from '../providers/playlist/playlist.types';
+export type { ShallowTrackMeta, TTrack, TrackStats } from '../providers/track/track.types';

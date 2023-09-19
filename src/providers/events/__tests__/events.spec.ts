@@ -1,5 +1,4 @@
-import { PUBLIC_EVENTS } from '../EventBus/events';
-import { createEventBus } from '../EventBus/EventBus';
+import { eventBusFactory, PUBLIC_EVENTS } from '../events.provider';
 
 const createMocks = () => ({
   start: jest.fn(),
@@ -15,7 +14,7 @@ describe('features/EventBus', () => {
     ['NEXT_TRACK', { message: 'stringified-mock', payload: { fsStats: { stringified: 'stringified-mock' } } }],
   ])('"%s" infos public event', (eventName, { message, payload }) => {
     const mocks = createMocks();
-    const instance = createEventBus();
+    const instance = eventBusFactory({});
     const lowerCased = eventName.toLowerCase();
 
     instance.on(PUBLIC_EVENTS.INFO, mocks.info);

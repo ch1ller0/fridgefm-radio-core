@@ -1,15 +1,17 @@
+import { createToken, injectable } from '@fridgefm/inverter';
 import fs from 'fs-extra';
 import _ from 'highland';
 import id3 from 'node-id3';
 import { extractLast } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
 import Mp3 from '../../utils/mp3';
-
+import type { TTrack, TrackStats, ShallowTrackMeta, TrackPath } from './track.types';
 import type { Readable } from 'stream';
 import type { Tags } from 'node-id3';
-import type { ShallowTrackMeta, TrackPath, TrackStats } from './Track.types';
 
-const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
+export const TRACK_FACTORY_TOKEN = createToken<(path: string) => TTrack>('track');
+
+export const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
   const { fullPath, name } = stats;
 
   return new Promise((res) =>
@@ -30,7 +32,7 @@ const getMetaAsync = async (stats: TrackStats): Promise<ShallowTrackMeta> => {
   );
 };
 
-const getStats = (fullPath: TrackPath): TrackStats => {
+export const getStats = (fullPath: TrackPath): TrackStats => {
   const file = fs.readFileSync(fullPath);
   const [directory, fullName] = extractLast(fullPath, '/');
   const duration = Mp3.getDuration(file);
@@ -51,7 +53,7 @@ const getStats = (fullPath: TrackPath): TrackStats => {
   };
 };
 
-const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): [Error | null, Readable] => {
+export const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): [Error | null, Readable] => {
   try {
     if (!fs.statSync(fullPath).isFile()) {
       throw new Error(`Not a file: '${fullPath}'`);
@@ -64,7 +66,7 @@ const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): [Error 
       // @ts-ignore
       _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
       // @ts-ignore
-      // _.slice(60, 80), // for debuggine purposes
+      _.slice(60, 80), // for debuggine purposes
       // @ts-ignore
       _.ratelimit(1, 1000),
     );
@@ -77,4 +79,16 @@ const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): [Error 
   }
 };
 
-export { createSoundStream, getMetaAsync, getStats };
+export const trackProvider = injectable({
+  provide: TRACK_FACTORY_TOKEN,
+  useValue: (fullPath: string) => {
+    const fsStats = getStats(fullPath);
+
+    return {
+      getMetaAsync: () => getMetaAsync(fsStats),
+      getSound: () => createSoundStream(fsStats),
+      fsStats,
+      playCount: 0,
+    };
+  },
+});
