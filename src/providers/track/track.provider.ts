@@ -66,7 +66,7 @@ export const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): 
       // @ts-ignore
       _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
       // @ts-ignore
-      _.slice(60, 80), // for debuggine purposes
+      // _.slice(60, 80), // for debuggine purposes
       // @ts-ignore
       _.ratelimit(1, 1000),
     );
