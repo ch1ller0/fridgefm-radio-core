@@ -138,5 +138,5 @@ npm run start [path/to/your_mp3tracks]
 ```
 
 ## Demo
-Sandbox is available here on [Codesandbox](https://codesandbox.io/p/github/ch1ller0/fridgefm-radio-core/main?workspaceId=43edc635-8cf1-414e-8eb1-9ccffcc2194a)\
+Sandbox is available here on [Codesandbox](https://codesandbox.io/p/github/ch1ller0/fridgefm-radio-core/main)\
 Fully working demo is available on [FridgeFM](https://fridgefm.com)
