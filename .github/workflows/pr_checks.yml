@@ -10,7 +10,7 @@ name: PR checks
 
 jobs:
   test:
-    name: Build, Test and maybe Publish
+    name: Build, Test and Cov
     runs-on: ubuntu-latest
     strategy:
       matrix:
