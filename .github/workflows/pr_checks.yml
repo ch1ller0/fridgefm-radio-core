@@ -34,10 +34,7 @@ jobs:
           key: ${{ matrix.node-version }}-${{ runner.OS }}-npm-${{ hashFiles('package-lock.json') }}
       - name: Install deps
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: | 
-          npm ci
-          # @DEBUG remove this
-          npm publish --dry-run
+        run: npm ci
       - name: Type checking
         run: npm run test:types
       - name: ESLint
@@ -52,4 +49,3 @@ jobs:
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true # optional (default = false)
