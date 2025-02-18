@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          registry-url: 'https://registry.npmjs.org'
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v4
