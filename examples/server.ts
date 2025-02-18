@@ -4,6 +4,8 @@ import express from 'express';
 import { SHUFFLE_METHODS, PUBLIC_EVENTS, Station, DEFAULTS } from '../src/index';
 import type { ShallowTrackMeta } from '../src/index';
 
+const { NEXT_TRACK, ERROR } = PUBLIC_EVENTS;
+
 const port = 3001;
 const server = express();
 const musicPath = path.resolve(process.cwd(), process.argv[2] || './examples/music');
@@ -19,7 +21,7 @@ station.addFolder(musicPath);
 
 // update currently playing track info
 let currentTrack: ShallowTrackMeta;
-station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
+station.on(NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
   if (!currentTrack) {
     currentTrack = result;
@@ -32,7 +34,7 @@ station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
 });
 
 // add this handler - otherwise any error will exit the process as unhandled
-station.on(PUBLIC_EVENTS.ERROR, console.error);
+station.on(ERROR, console.error);
 
 // main stream route
 server.get('/stream', (req, res) => {
@@ -52,19 +54,19 @@ server.get('/getPlaylist', (_, res) => {
 });
 
 // switch to the next track immediately
-server.get('/controls/next', (_, res) => {
+server.post('/controls/next', (_, res) => {
   station.next();
   res.json('Switched to next track');
 });
 
 // shuffle playlist
-server.get('/controls/shufflePlaylist', (_, res) => {
+server.post('/controls/shufflePlaylist', (_, res) => {
   station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
   res.json('Playlist shuffled');
 });
 
 // rearrange tracks in a playlist
-server.get('/controls/rearrangePlaylist', (req, res) => {
+server.post('/controls/rearrangePlaylist', (req, res) => {
   const { newIndex, oldIndex } = req.query;
   station.reorderPlaylist(SHUFFLE_METHODS.rearrange({ from: Number(oldIndex), to: Number(newIndex) }));
   res.json(`Succesfully moved element from "${oldIndex}" to "${newIndex}"`);
