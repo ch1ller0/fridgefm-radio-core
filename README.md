@@ -129,11 +129,11 @@ station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 > or just go to [examples](./examples/server.js)
 ## Development
 ```
-npm run start
+npm run dev
 ```
 or
 ```
-npm run start [path/to/your_mp3tracks]
+npm run dev [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
 ```
 
