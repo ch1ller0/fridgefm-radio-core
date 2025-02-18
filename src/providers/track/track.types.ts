@@ -15,7 +15,7 @@ export type TrackStats = {
   stringified: string;
 };
 
-export type ShallowTrackMeta = Tags & {
+export type ShallowTrackMeta = Omit<Tags, 'generalObject'> & {
   origin: 'id3' | 'fs';
 };
 

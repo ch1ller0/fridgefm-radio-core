@@ -25,6 +25,10 @@
           border-radius: 6px;
           background: #e4e4e4;
         }
+        .list-group {
+          max-height: 600px;
+          overflow-y: scroll;
+        }
         #getPlaylist {
           margin-top: 10px;
         }
@@ -56,6 +60,7 @@
           <p><i>Title: </i><span id="title-value"></span></p>
           <img id='cover' src='https://t3.ftcdn.net/jpg/01/09/40/34/240_F_109403479_3BJH2QY7zrMV5OUGPePPmxPYZf0zY4lR.jpg'></p>
           <code>The Artist, Title and Image (above) are the actual client state of the currently playing track. Under normal circumstances, they should be 'prebufferLength' seconds behind the server state. The controls below represent the actual server state.</code>
+          <p>Tiles below are draggable</p>
           <hr/>
       </div>
       <div class='showcase'>
@@ -66,8 +71,8 @@
     </div>
   </body>
   <script>
-    function request(route) {
-      return fetch(route)
+    function request(route, method) {
+      return fetch(route, { method })
         .then(res => res.json())
         .then(x => {
           console.log(route, x);
@@ -84,7 +89,7 @@
       return urlCreator.createObjectURL(blob);
     }
     function getCurrentTrack() {
-      request('/getCurrentTrackInfo')
+      request('/getCurrentTrackInfo', 'get')
         .then(cur => {
           document.getElementById('artist-value').innerHTML = cur.artist;
           document.getElementById('title-value').innerHTML = cur.title;
@@ -92,7 +97,7 @@
         })
     }
     function getPlaylist() {
-      request('/getPlaylist')
+      request('/getPlaylist', 'get')
         .then((plist) => {
           const parent = document.getElementById('getPlaylist');
           parent.innerHTML = '';
@@ -108,22 +113,20 @@
         })
     }
     function controlsShufflePlaylist() {
-      request('/controls/shufflePlaylist').then(update)
+      request('/controls/shufflePlaylist', 'post').then(update)
     }
     function controlsNext() {
-      request('/controls/next').then(update)
+      request('/controls/next', 'post').then(update)
     }
     function controlsRearrange({ oldIndex, newIndex }) {
-      request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`).then(getPlaylist)
+      request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`, 'post').then(getPlaylist)
     }
 
     // short polling results and applying them after prebuffer length is applied
     function update() {
       return Promise.all([getCurrentTrack(), getPlaylist()])
     }
-    setInterval(() => {
-      update()
-    }, 2000)
+    setInterval(() => { update() }, 2000)
     update()
     
     Sortable.create(document.getElementById('getPlaylist'), { onEnd: controlsRearrange });

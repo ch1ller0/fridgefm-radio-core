@@ -1,5 +1,4 @@
 /examples
-.circleci
 coverage
 .eslintrc.json
 tsconfig.*

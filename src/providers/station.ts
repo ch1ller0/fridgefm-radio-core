@@ -1,4 +1,4 @@
-import { declareContainer, injectable } from '@fridgefm/inverter';
+import { createContainer, injectable } from '@fridgefm/inverter';
 import { createConfig, Config } from './config';
 import { eventBusProvider } from './events/events.provider';
 import { playlistProvider } from './playlist/playlist.provider';
@@ -17,7 +17,7 @@ export class Station implements TStation {
   private _station: TStation;
 
   constructor(extConfig?: Partial<Config>) {
-    this._station = declareContainer({
+    this._station = createContainer({
       providers: [
         injectable({
           provide: CONFIG_TOKEN,

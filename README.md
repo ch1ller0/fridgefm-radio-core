@@ -1,5 +1,5 @@
 # Radio engine for NodeJS
-[![build](https://img.shields.io/circleci/build/github/ch1ller0/fridgefm-radio-core.svg)](https://circleci.com/gh/ch1ller0/fridgefm-radio-core)
+[![build](https://img.shields.io/github/actions/workflow/status/ch1ller0/fridgefm-radio-core/publish.yml)](https://github.com/ch1ller0/fridgefm-radio-core/actions/workflows/publish.yml)
 [![coverage](https://img.shields.io/codecov/c/gh/ch1ller0/fridgefm-radio-core.svg)](https://codecov.io/gh/ch1ller0/fridgefm-radio-core)
 [![npm](https://img.shields.io/npm/dm/@fridgefm/radio-core.svg)](https://www.npmjs.com/package/@fridgefm/radio-core)
 ![GitHub](https://img.shields.io/github/license/ch1ller0/fridgefm-radio-core.svg)
@@ -129,11 +129,11 @@ station.on(PUBLIC_EVENTS.ERROR, (e) => { handleError(e) });
 > or just go to [examples](./examples/server.js)
 ## Development
 ```
-npm run start
+npm run dev
 ```
 or
 ```
-npm run start [path/to/your_mp3tracks]
+npm run dev [path/to/your_mp3tracks]
 # in this case it would take a little more time, just wait
 ```
 
