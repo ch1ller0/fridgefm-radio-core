@@ -19,16 +19,21 @@ const station = new Station({
 // add folder to station
 station.addFolder(musicPath);
 
+// Shuffle immediately
+station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
+
 // update currently playing track info
-let currentTrack: ShallowTrackMeta;
+const state: { currentTrack: ShallowTrackMeta | undefined } = {
+  currentTrack: undefined,
+};
 station.on(NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
-  if (!currentTrack) {
-    currentTrack = result;
+  if (!state.currentTrack) {
+    state.currentTrack = result;
   } else {
     // in order to compensate a lag between the server and client
     setTimeout(() => {
-      currentTrack = result;
+      state.currentTrack = result;
     }, prebufferLength * 1000);
   }
 });
@@ -42,15 +47,9 @@ server.get('/stream', (req, res) => {
   station.connectListener(req, res, () => {});
 });
 
-// get id3 tags of the track
-server.get('/getCurrentTrackInfo', (_, res) => {
-  res.json(currentTrack);
-});
-
-// just get the entire playlist
-server.get('/getPlaylist', (_, res) => {
-  const plist = station.getPlaylist();
-  res.json(plist);
+server.get('/getState', (_, res) => {
+  const playlist = station.getPlaylist();
+  res.json({ currentTrack: state.currentTrack, playlist });
 });
 
 // switch to the next track immediately
