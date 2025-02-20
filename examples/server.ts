@@ -20,11 +20,15 @@ const station = new Station({
 station.addFolder(musicPath);
 
 // Shuffle immediately
-station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
+// station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
 
 // update currently playing track info
-const state: { currentTrack: ShallowTrackMeta | undefined } = {
+const state: {
+  currentTrack: ShallowTrackMeta | undefined;
+  paused: boolean;
+} = {
   currentTrack: undefined,
+  paused: false,
 };
 station.on(NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
@@ -49,13 +53,19 @@ server.get('/stream', (req, res) => {
 
 server.get('/getState', (_, res) => {
   const playlist = station.getPlaylist();
-  res.json({ currentTrack: state.currentTrack, playlist });
+  res.json({ currentTrack: state.currentTrack, playlist, paused: state.paused });
 });
 
 // switch to the next track immediately
 server.post('/controls/next', (_, res) => {
   station.next();
   res.json('Switched to next track');
+});
+
+server.post('/controls/pause', (_, res) => {
+  const paused = station.togglePause();
+  state.paused = paused;
+  res.json(`Paused: ${paused}`);
 });
 
 // shuffle playlist

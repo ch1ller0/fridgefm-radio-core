@@ -70,12 +70,17 @@
       <div class='showcase'>
         <button onclick="stationService.controls.shufflePlaylist()">
           <img src="https://cdn-icons-png.flaticon.com/512/3580/3580329.png"/>
-          Shuffle playlist
+          Shuffle
+        </button>
+        <button onclick="stationService.controls.pause()">
+          <img src="https://cdn-icons-png.flaticon.com/128/2920/2920686.png" id="pause-icon"/>
+          <span id="pause-button">NONE</span>
         </button>
         <button onclick="stationService.controls.next()">
           <img src="https://cdn-icons-png.flaticon.com/128/2722/2722998.png"/>
           Next
         </button>
+        <!-- https://cdn-icons-png.flaticon.com/128/5577/5577228.png -->
         <p>Tiles below are draggable</p>
         <div class="list-group" id='get-playlist'></div>
       </div>
@@ -101,7 +106,7 @@
     }
     const stationService = {
         getState: () => request('/getState', 'get')
-          .then(({ playlist, currentTrack }) => {
+          .then(({ playlist, currentTrack, paused }) => {
             // update cover and artist info
             document.getElementById('artist-value').innerHTML = currentTrack.artist;
             document.getElementById('title-value').innerHTML = currentTrack.title;
@@ -118,10 +123,21 @@
               ch.innerHTML = `${i}: ${el.fsStats.stringified}`;
               parent.appendChild(ch);
             })
+            // update paused state
+            const pauseButton = document.getElementById('pause-button');
+            const pauseIcon = document.getElementById('pause-icon');
+            const pausedStates = [
+              ['Unpause', 'https://cdn-icons-png.flaticon.com/128/5577/5577228.png'],
+              ['Pause', 'https://cdn-icons-png.flaticon.com/128/2920/2920686.png']
+            ]
+            const selectedState = pausedStates[paused ? 0 : 1]
+            pauseButton.innerText = selectedState[0]
+            pauseIcon.src = selectedState[1]
           }),
         controls: {
           shufflePlaylist: () => request('/controls/shufflePlaylist', 'post').then(update),
           next: () => request('/controls/next', 'post').then(update),
+          pause: () => request('/controls/pause', 'post').then(update),
           rearrange: ({ oldIndex, newIndex }) => request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`, 'post')
             .then(update),
         }

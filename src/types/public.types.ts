@@ -1,3 +1,4 @@
+import { Queuestream } from '../providers/queuestream/queuestream.types';
 import type { ClientRequest, ServerResponse } from 'http';
 import type { TrackList, ReorderCb } from '../providers/playlist/playlist.types';
 import type { TEmitter } from '../providers/events/events.types';
@@ -7,6 +8,10 @@ export type TStation = {
    * Start the radio station
    */
   start(): void;
+  /**
+   * Pause the stream. In order to unpause, run pause again
+   */
+  togglePause: Queuestream['togglePause'];
   /**
    * Add the folder to the playlist
    */

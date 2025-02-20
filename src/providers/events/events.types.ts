@@ -20,6 +20,7 @@ export type PublicEvents = {
   [PUBLIC_EVENTS.START]: (list: TrackList, timings: number) => void;
   [PUBLIC_EVENTS.RESTART]: (list: TrackList, timings: number) => void;
   [PUBLIC_EVENTS.NEXT_TRACK]: (tr: TTrack, timings: number) => void;
+  [PUBLIC_EVENTS.PAUSE]: (isPaused: boolean) => void;
 };
 
 export type TEmitter = TypedEmitter<PublicEvents>;

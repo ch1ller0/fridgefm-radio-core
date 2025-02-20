@@ -45,6 +45,10 @@ export class Station implements TStation {
     this._station.next();
   }
 
+  public togglePause(val?: boolean) {
+    return this._station.togglePause(val);
+  }
+
   public getPlaylist() {
     return this._station.getPlaylist();
   }
