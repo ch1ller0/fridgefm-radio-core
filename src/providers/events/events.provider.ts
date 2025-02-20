@@ -14,6 +14,7 @@ export const PUBLIC_EVENTS = {
   START: 'estart',
   RESTART: 'erestart',
   NEXT_TRACK: 'enexttrack',
+  PAUSE: 'epause',
 } as const;
 
 export const eventBusFactory = (config: Config) => {
@@ -52,6 +53,13 @@ export const eventBusFactory = (config: Config) => {
       event: PUBLIC_EVENTS.RESTART,
       message: 'Station restarted',
       timings,
+    }),
+  );
+
+  publicEventBus.on(PUBLIC_EVENTS.PAUSE, (isPaused) =>
+    publicEventBus.emit(PUBLIC_EVENTS.INFO, {
+      event: PUBLIC_EVENTS.PAUSE,
+      message: `Station paused: ${isPaused}`,
     }),
   );
 

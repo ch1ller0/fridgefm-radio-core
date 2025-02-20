@@ -5,8 +5,8 @@ import id3 from 'node-id3';
 import { extractLast } from '../../utils/funcs';
 import { getDateFromMsecs } from '../../utils/time';
 import Mp3 from '../../utils/mp3';
-import type { TTrack, TrackStats, ShallowTrackMeta, TrackPath } from './track.types';
 import type { Readable } from 'stream';
+import type { TTrack, TrackStats, ShallowTrackMeta, TrackPath } from './track.types';
 import type { Tags } from 'node-id3';
 
 export const TRACK_FACTORY_TOKEN = createToken<(path: string) => TTrack>('track');
@@ -59,8 +59,7 @@ export const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): 
       throw new Error(`Not a file: '${fullPath}'`);
     }
 
-    // @ts-ignore
-    const hlStream = _(fs.createReadStream(fullPath, { highWaterMark: bitrate })) as Highland.Stream<Buffer>;
+    const hlStream = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
 
     const comp = _.seq(
       // @ts-ignore
@@ -71,11 +70,13 @@ export const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): 
       _.ratelimit(1, 1000),
     );
 
-    return [null, comp(hlStream)];
+    const createdStream = comp(hlStream);
+
+    return [null, createdStream.toNodeStream() as Readable];
   } catch (e) {
     // skip track if it is not accessible
     // @ts-ignore
-    return [e, _(new Array(0))];
+    return [e, _(new Array(0)).toNodeStream()];
   }
 };
 

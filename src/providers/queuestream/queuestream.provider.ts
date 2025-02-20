@@ -34,6 +34,10 @@ export const queuestreamProvider = injectable({
       getPrebuffer: () => prebuffer.getStorage(),
       currentPipe: (wrstr: Writable, opts?: { end?: boolean }) => currentStream.pipe(wrstr, opts),
       next: () => {
+        // don't swtich to next track if the stream is on pause
+        if (trackStream.isPaused()) {
+          return;
+        }
         const ct = captureTime();
         const nextTrack = playlist.getNext();
 
@@ -55,7 +59,27 @@ export const queuestreamProvider = injectable({
 
         eventBus.emit(PUBLIC_EVENTS.NEXT_TRACK, nextTrack, ct());
       },
-    };
+      togglePause: (shouldBePaused) => {
+        const applyPause = () => {
+          const isPaused = trackStream.isPaused();
+
+          if ((typeof shouldBePaused === 'undefined' && !isPaused) || (shouldBePaused === true && !isPaused)) {
+            trackStream.pause();
+            return !isPaused;
+          }
+          if ((typeof shouldBePaused === 'undefined' && isPaused) || (shouldBePaused === false && isPaused)) {
+            trackStream.resume();
+            return !isPaused;
+          }
+          return isPaused;
+        };
+
+        const newIsPaused = applyPause();
+        eventBus.emit(PUBLIC_EVENTS.PAUSE, newIsPaused);
+
+        return newIsPaused;
+      },
+    } satisfies Queuestream;
 
     publicQueuestream.currentPipe(devnull(), { end: false });
 

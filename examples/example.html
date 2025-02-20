@@ -7,7 +7,7 @@
           margin: 16px;
           font-family: Arial, Helvetica, sans-serif;
           text-align: center;
-          max-width: 800px;
+          max-width: 640px;
           margin: 0 auto;
         }
         .showcase audio {
@@ -16,10 +16,15 @@
         .showcase button {
           margin-right: 10px;
           cursor: pointer;
-          border: none;
+          border: 1px solid black;
           border-radius: 6px;
           background: #f4f4f4;
           padding: 10px;
+        }
+        button img {
+          vertical-align: bottom;
+          height: 16px;
+          margin-right: 4px;
         }
         .showcase button:hover {
           border-radius: 6px;
@@ -29,10 +34,10 @@
           max-height: 600px;
           overflow-y: scroll;
         }
-        #getPlaylist {
+        #get-playlist {
           margin-top: 10px;
         }
-        #getPlaylist li {
+        #get-playlist li {
           text-align: left;
           list-style: none;
           border: none;
@@ -42,7 +47,7 @@
           margin-bottom: -1px;
           cursor: pointer;
         }
-        #getPlaylist li:hover {
+        #get-playlist li:hover {
           background: #e4e4e4;
         }
         img#cover {
@@ -59,14 +64,24 @@
           <p><i>Artist: </i><span id="artist-value"></span></p>
           <p><i>Title: </i><span id="title-value"></span></p>
           <img id='cover' src='https://t3.ftcdn.net/jpg/01/09/40/34/240_F_109403479_3BJH2QY7zrMV5OUGPePPmxPYZf0zY4lR.jpg'></p>
-          <code>The Artist, Title and Image (above) are the actual client state of the currently playing track. Under normal circumstances, they should be 'prebufferLength' seconds behind the server state. The controls below represent the actual server state.</code>
-          <p>Tiles below are draggable</p>
+          <code>The Artist, Title and Image (above) are the actual client state of the currently playing track. Under normal circumstances, they should be 'prebufferLength' (default: 12 seconds) seconds behind the server state. The controls below represent the actual server state.</code>
           <hr/>
       </div>
       <div class='showcase'>
-        <button onclick="controlsShufflePlaylist()">Shuffle playlist</button>
-        <button onclick="controlsNext()">Next</button>
-        <div class="list-group" id='getPlaylist'></div>
+        <button onclick="stationService.controls.shufflePlaylist()">
+          <img src="https://cdn-icons-png.flaticon.com/512/3580/3580329.png"/>
+          Shuffle
+        </button>
+        <button onclick="stationService.controls.pause()">
+          <img src="https://cdn-icons-png.flaticon.com/128/2920/2920686.png" id="pause-icon"/>
+          <span id="pause-button">NONE</span>
+        </button>
+        <button onclick="stationService.controls.next()">
+          <img src="https://cdn-icons-png.flaticon.com/128/2722/2722998.png"/>
+          Next
+        </button>
+        <p>Tiles below are draggable</p>
+        <div class="list-group" id='get-playlist'></div>
       </div>
     </div>
   </body>
@@ -88,47 +103,53 @@
 
       return urlCreator.createObjectURL(blob);
     }
-    function getCurrentTrack() {
-      request('/getCurrentTrackInfo', 'get')
-        .then(cur => {
-          document.getElementById('artist-value').innerHTML = cur.artist;
-          document.getElementById('title-value').innerHTML = cur.title;
-          document.getElementById('cover').src = getCoverUrl(cur.image)
-        })
-    }
-    function getPlaylist() {
-      request('/getPlaylist', 'get')
-        .then((plist) => {
-          const parent = document.getElementById('getPlaylist');
-          parent.innerHTML = '';
-          plist.forEach((el, i) => {
-            const ch = document.createElement('li')
-            if (el.isPlaying) {
-              ch.style.background = 'lightgreen';
-              ch.className = 'list-group-item';
-            }
-            ch.innerHTML = `${i}: ${el.fsStats.stringified}`;
-            parent.appendChild(ch);
-          })
-        })
-    }
-    function controlsShufflePlaylist() {
-      request('/controls/shufflePlaylist', 'post').then(update)
-    }
-    function controlsNext() {
-      request('/controls/next', 'post').then(update)
-    }
-    function controlsRearrange({ oldIndex, newIndex }) {
-      request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`, 'post').then(getPlaylist)
+    const stationService = {
+        getState: () => request('/getState', 'get')
+          .then(({ playlist, currentTrack, paused }) => {
+            // update cover and artist info
+            document.getElementById('artist-value').innerHTML = currentTrack.artist;
+            document.getElementById('title-value').innerHTML = currentTrack.title;
+            document.getElementById('cover').src = getCoverUrl(currentTrack.image)
+            // update playlist info
+            const parent = document.getElementById('get-playlist');
+            parent.innerHTML = '';
+            playlist.forEach((el, i) => {
+              const ch = document.createElement('li')
+              if (el.isPlaying) {
+                ch.style.background = 'lightgreen';
+                ch.className = 'list-group-item';
+              }
+              ch.innerHTML = `${i}: ${el.fsStats.stringified}`;
+              parent.appendChild(ch);
+            })
+            // update paused state
+            const pauseButton = document.getElementById('pause-button');
+            const pauseIcon = document.getElementById('pause-icon');
+            const pausedStates = [
+              ['Unpause', 'https://cdn-icons-png.flaticon.com/128/5577/5577228.png'],
+              ['Pause', 'https://cdn-icons-png.flaticon.com/128/2920/2920686.png']
+            ]
+            const selectedState = pausedStates[paused ? 0 : 1]
+            pauseButton.innerText = selectedState[0]
+            pauseIcon.src = selectedState[1]
+          }),
+        controls: {
+          shufflePlaylist: () => request('/controls/shufflePlaylist', 'post').then(update),
+          next: () => request('/controls/next', 'post').then(update),
+          pause: () => request('/controls/pause', 'post').then(update),
+          rearrange: ({ oldIndex, newIndex }) => request(`/controls/rearrangePlaylist?oldIndex=${oldIndex}&newIndex=${newIndex}`, 'post')
+            .then(update),
+        }
     }
 
     // short polling results and applying them after prebuffer length is applied
-    function update() {
-      return Promise.all([getCurrentTrack(), getPlaylist()])
+    function update({ isRecursive }) {
+      return stationService.getState().then(() => {
+        if (isRecursive) { setTimeout(() => update({ isRecursive: true }), 2000) }
+      })
     }
-    setInterval(() => { update() }, 2000)
-    update()
-    
-    Sortable.create(document.getElementById('getPlaylist'), { onEnd: controlsRearrange });
+    update({ isRecursive: true })
+
+    Sortable.create(document.getElementById('get-playlist'), { onEnd: stationService.controls.rearrange });
   </script>
 </html>
