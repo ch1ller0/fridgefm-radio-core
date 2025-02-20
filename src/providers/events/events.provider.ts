@@ -56,13 +56,12 @@ export const eventBusFactory = (config: Config) => {
     }),
   );
 
-  // publicEventBus.on(PUBLIC_EVENTS.PAUSE, (tr, timings) =>
-  //   publicEventBus.emit(PUBLIC_EVENTS.INFO, {
-  //     event: PUBLIC_EVENTS.NEXT_TRACK,
-  //     message: tr.fsStats.stringified,
-  //     timings,
-  //   }),
-  // );
+  publicEventBus.on(PUBLIC_EVENTS.PAUSE, (isPaused) =>
+    publicEventBus.emit(PUBLIC_EVENTS.INFO, {
+      event: PUBLIC_EVENTS.PAUSE,
+      message: `Station paused: ${isPaused}`,
+    }),
+  );
 
   return publicEventBus;
 };

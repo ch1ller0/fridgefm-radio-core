@@ -60,18 +60,24 @@ export const queuestreamProvider = injectable({
         eventBus.emit(PUBLIC_EVENTS.NEXT_TRACK, nextTrack, ct());
       },
       togglePause: (shouldBePaused) => {
-        const isPaused = currentStream.isPaused();
-        console.log({ isPaused, shouldBePaused });
+        const applyPause = () => {
+          const isPaused = currentStream.isPaused();
 
-        if ((typeof shouldBePaused === 'undefined' && !isPaused) || (shouldBePaused === true && !isPaused)) {
-          currentStream.pause();
-          return !isPaused;
-        }
-        if ((typeof shouldBePaused === 'undefined' && isPaused) || (shouldBePaused === false && isPaused)) {
-          currentStream.resume();
-          return !isPaused;
-        }
-        return isPaused;
+          if ((typeof shouldBePaused === 'undefined' && !isPaused) || (shouldBePaused === true && !isPaused)) {
+            currentStream.pause();
+            return !isPaused;
+          }
+          if ((typeof shouldBePaused === 'undefined' && isPaused) || (shouldBePaused === false && isPaused)) {
+            currentStream.resume();
+            return !isPaused;
+          }
+          return isPaused;
+        };
+
+        const newIsPaused = applyPause();
+        eventBus.emit(PUBLIC_EVENTS.PAUSE, newIsPaused);
+
+        return newIsPaused;
       },
     } satisfies Queuestream;
 
