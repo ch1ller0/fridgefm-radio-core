@@ -9,7 +9,7 @@ const { NEXT_TRACK, ERROR } = PUBLIC_EVENTS;
 const port = 3001;
 const server = express();
 const musicPath = path.resolve(process.cwd(), process.argv[2] || './examples/music');
-const prebufferLength = DEFAULTS.PREBUFFER_LENGTH;
+const prebufferLength = DEFAULTS.PREBUFFER_LENGTH - 4;
 
 const station = new Station({
   verbose: true, // for verbose logging to console

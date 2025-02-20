@@ -35,7 +35,7 @@ export const queuestreamProvider = injectable({
       currentPipe: (wrstr: Writable, opts?: { end?: boolean }) => currentStream.pipe(wrstr, opts),
       next: () => {
         // don't swtich to next track if the stream is on pause
-        if (currentStream.isPaused()) {
+        if (trackStream.isPaused()) {
           return;
         }
         const ct = captureTime();
@@ -61,14 +61,14 @@ export const queuestreamProvider = injectable({
       },
       togglePause: (shouldBePaused) => {
         const applyPause = () => {
-          const isPaused = currentStream.isPaused();
+          const isPaused = trackStream.isPaused();
 
           if ((typeof shouldBePaused === 'undefined' && !isPaused) || (shouldBePaused === true && !isPaused)) {
-            currentStream.pause();
+            trackStream.pause();
             return !isPaused;
           }
           if ((typeof shouldBePaused === 'undefined' && isPaused) || (shouldBePaused === false && isPaused)) {
-            currentStream.resume();
+            trackStream.resume();
             return !isPaused;
           }
           return isPaused;
