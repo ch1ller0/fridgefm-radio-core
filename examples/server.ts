@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import path from 'path';
 import express from 'express';
-import { SHUFFLE_METHODS, PUBLIC_EVENTS, Station, DEFAULTS } from '../src/index';
+import { SHUFFLE_METHODS, PUBLIC_EVENTS, Station } from '../src/index';
 import type { ShallowTrackMeta } from '../src/index';
 
 const { NEXT_TRACK, ERROR } = PUBLIC_EVENTS;
@@ -9,7 +9,7 @@ const { NEXT_TRACK, ERROR } = PUBLIC_EVENTS;
 const port = 3001;
 const server = express();
 const musicPath = path.resolve(process.cwd(), process.argv[2] || './examples/music');
-const prebufferLength = DEFAULTS.PREBUFFER_LENGTH - 4;
+const prebufferLength = 8;
 
 const station = new Station({
   verbose: true, // for verbose logging to console
