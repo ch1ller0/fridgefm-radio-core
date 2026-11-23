@@ -1,6 +1,5 @@
 /examples
 coverage
-.eslintrc.json
 tsconfig.*
 jest.config.json
 **/__tests__
