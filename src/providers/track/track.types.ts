@@ -1,4 +1,4 @@
-import type { Readable } from 'stream';
+import type { Readable } from 'node:stream';
 import type { Tags } from 'node-id3';
 
 export type TrackPath = string;

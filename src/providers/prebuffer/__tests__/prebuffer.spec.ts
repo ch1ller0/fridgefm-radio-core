@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer';
+import { Buffer } from 'node:buffer';
 import { prebufferFactory } from '../prebuffer.provider';
 
 const createChunks = (from: string) => from.split('').map((v) => Buffer.from([Number(v)]));

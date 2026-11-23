@@ -1,4 +1,4 @@
-import { Station, PUBLIC_EVENTS } from '../../index';
+import { PUBLIC_EVENTS, Station } from '../../index';
 import { pathToMusic } from '../test-utils.mock';
 
 const createChecker = () => ({

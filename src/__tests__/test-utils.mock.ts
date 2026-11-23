@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import fs from 'fs-extra';
 import id3 from 'node-id3';
 
@@ -22,6 +21,7 @@ export class TestFile {
   }
 
   addMeta(meta = {}) {
+    // @ts-expect-error this is a test
     id3.write(meta, this.fullPath);
   }
 

@@ -1,17 +1,16 @@
+import type { ClientRequest, ServerResponse } from 'node:http';
 import { createContainer, injectable } from '@fridgefm/inverter';
-import { createConfig, Config } from './config';
-import { eventBusProvider } from './events/events.provider';
-import { playlistProvider } from './playlist/playlist.provider';
-import { queuestreamProvider } from './queuestream/queuestream.provider';
-import { prebufferProvider } from './prebuffer/prebuffer.provider';
-import { trackProvider } from './track/track.provider';
-import { stationProvider, STATION_PUBLIC_TOKEN } from './station/station.provider';
-import { CONFIG_TOKEN } from './tokens';
-
 import type { TStation } from '../types/public.types';
-import type { ReorderCb } from './playlist/playlist.types';
-import type { ClientRequest, ServerResponse } from 'http';
+import { type Config, createConfig } from './config';
+import { eventBusProvider } from './events/events.provider';
 import type { TEmitter } from './events/events.types';
+import { playlistProvider } from './playlist/playlist.provider';
+import type { ReorderCb } from './playlist/playlist.types';
+import { prebufferProvider } from './prebuffer/prebuffer.provider';
+import { queuestreamProvider } from './queuestream/queuestream.provider';
+import { STATION_PUBLIC_TOKEN, stationProvider } from './station/station.provider';
+import { CONFIG_TOKEN } from './tokens';
+import { trackProvider } from './track/track.provider';
 
 export class Station implements TStation {
   private _station: TStation;

@@ -1,7 +1,7 @@
-import type { Queuestream } from '../providers/queuestream/queuestream.types';
-import type { ClientRequest, ServerResponse } from 'http';
-import type { TrackList, ReorderCb } from '../providers/playlist/playlist.types';
+import type { ClientRequest, ServerResponse } from 'node:http';
 import type { TEmitter } from '../providers/events/events.types';
+import type { ReorderCb, TrackList } from '../providers/playlist/playlist.types';
+import type { Queuestream } from '../providers/queuestream/queuestream.types';
 
 export type TStation = {
   /**
@@ -42,5 +42,5 @@ export type TStation = {
   on: TEmitter['on'];
 };
 
-export type { ReorderCb, TrackList, TPlaylist } from '../providers/playlist/playlist.types';
-export type { ShallowTrackMeta, TTrack, TrackStats } from '../providers/track/track.types';
+export type { ReorderCb, TPlaylist, TrackList } from '../providers/playlist/playlist.types';
+export type { ShallowTrackMeta, TrackStats, TTrack } from '../providers/track/track.types';

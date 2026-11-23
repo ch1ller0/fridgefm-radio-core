@@ -1,7 +1,7 @@
 import type TypedEmitter from 'typed-emitter';
-import type { PUBLIC_EVENTS } from './events.provider';
 import type { TrackList } from '../playlist/playlist.types';
 import type { TTrack } from '../track/track.types';
+import type { PUBLIC_EVENTS } from './events.provider';
 
 type BaseEvent = {
   event: string;

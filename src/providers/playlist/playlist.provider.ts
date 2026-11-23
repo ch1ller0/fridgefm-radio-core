@@ -1,14 +1,13 @@
-import { injectable, createToken } from '@fridgefm/inverter';
+import { createToken, injectable } from '@fridgefm/inverter';
 import { createList } from '../../utils/fs';
-import { captureTime } from '../../utils/time';
-import { PUBLIC_EVENTS, EVENT_BUS_TOKEN } from '../events/events.provider';
-import { TRACK_FACTORY_TOKEN } from '../track/track.provider';
 import { extractLast } from '../../utils/funcs';
 import Mp3 from '../../utils/mp3';
-
-import type { TTrack } from '../track/track.types';
+import { captureTime } from '../../utils/time';
+import { EVENT_BUS_TOKEN, PUBLIC_EVENTS } from '../events/events.provider';
 import type { InfoEvent } from '../events/events.types';
-import type { TrackMap, TrackList, ReorderCb, PathList, PlaylistElement, TPlaylist } from './playlist.types';
+import { TRACK_FACTORY_TOKEN } from '../track/track.provider';
+import type { TTrack } from '../track/track.types';
+import type { PathList, PlaylistElement, ReorderCb, TPlaylist, TrackList, TrackMap } from './playlist.types';
 
 export const PLAYLIST_TOKEN = createToken<TPlaylist>('playlist');
 
@@ -89,8 +88,12 @@ export const playlistProvider = injectable({
         const prevList = publicPlaylist.getList();
         const currentlyPlaying = prevList.find((v) => !!v.isPlaying);
 
+        if (!currentlyPlaying) {
+          return publicPlaylist.getList();
+        }
+
         list = cb(prevList).map((b) => b.fsStats.fullPath);
-        currentIndex = list.findIndex((v) => v === currentlyPlaying?.fsStats.fullPath);
+        currentIndex = list.indexOf(currentlyPlaying?.fsStats.fullPath);
 
         emitInfo({
           level: 'info',
