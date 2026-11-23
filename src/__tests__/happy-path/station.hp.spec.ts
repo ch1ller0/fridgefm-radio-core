@@ -56,6 +56,46 @@ describe('public/HappyPath/Station', () => {
     });
   });
 
+  describe('getReadableStream method', () => {
+    it('returns a web ReadableStream', () => {
+      const station = new Station();
+      const stream = station.getReadableStream();
+
+      expect(typeof stream.getReader).toEqual('function');
+      stream.cancel();
+    });
+
+    it('streams live audio chunks once the station started', async () => {
+      const station = new Station();
+      station.addFolder(pathToMusic);
+      station.start();
+
+      const reader = station.getReadableStream().getReader();
+      const { value, done } = await reader.read();
+
+      expect(done).toEqual(false);
+      expect(value).toBeInstanceOf(Uint8Array);
+      expect(value.length).toBeGreaterThan(0);
+      await reader.cancel();
+    });
+
+    it('cancelling one listener leaves the others streaming', async () => {
+      const station = new Station();
+      station.addFolder(pathToMusic);
+      station.start();
+
+      const readerA = station.getReadableStream().getReader();
+      const readerB = station.getReadableStream().getReader();
+
+      await readerA.cancel();
+      const { value, done } = await readerB.read();
+
+      expect(done).toEqual(false);
+      expect(value).toBeInstanceOf(Uint8Array);
+      await readerB.cancel();
+    });
+  });
+
   it('listner connects - response methods are called', () => {
     const resMock = {
       writeHead: jest.fn(),

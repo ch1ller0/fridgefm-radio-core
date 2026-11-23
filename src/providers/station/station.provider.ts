@@ -1,4 +1,5 @@
 import type { ClientRequest, ServerResponse } from 'node:http';
+import { PassThrough, Readable } from 'node:stream';
 import { createToken, injectable } from '@fridgefm/inverter';
 import type { TStation } from '../../types/public.types';
 import { captureTime } from '../../utils/time';
@@ -35,6 +36,12 @@ export const stationProvider = injectable({
         res.write(getPrebuffer());
         currentPipe(res);
         cb();
+      },
+      getReadableStream(): ReadableStream<Uint8Array> {
+        const listener = new PassThrough();
+        listener.write(queuestream.getPrebuffer());
+        queuestream.currentPipe(listener, { end: false });
+        return Readable.toWeb(listener);
       },
     };
 

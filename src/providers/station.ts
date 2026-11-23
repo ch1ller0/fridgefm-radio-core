@@ -56,6 +56,13 @@ export class Station implements TStation {
     return this._station.reorderPlaylist(cb);
   }
 
+  public getReadableStream(): ReadableStream {
+    return this._station.getReadableStream();
+  }
+  /**
+   *
+   * @deprecated
+   */
   public connectListener(req: ClientRequest, res: ServerResponse, cb = () => {}) {
     this._station.connectListener(req, res, cb);
   }
