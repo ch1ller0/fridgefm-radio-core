@@ -104,7 +104,7 @@
       return urlCreator.createObjectURL(blob);
     }
     const stationService = {
-        getState: () => request('/getState', 'get')
+        getState: () => request('/state', 'get')
           .then(({ playlist, currentTrack, paused }) => {
             // update cover and artist info
             document.getElementById('artist-value').innerHTML = currentTrack.artist;

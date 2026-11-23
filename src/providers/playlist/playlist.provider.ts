@@ -88,12 +88,8 @@ export const playlistProvider = injectable({
         const prevList = publicPlaylist.getList();
         const currentlyPlaying = prevList.find((v) => !!v.isPlaying);
 
-        if (!currentlyPlaying) {
-          return publicPlaylist.getList();
-        }
-
         list = cb(prevList).map((b) => b.fsStats.fullPath);
-        currentIndex = list.indexOf(currentlyPlaying?.fsStats.fullPath);
+        currentIndex = currentlyPlaying ? list.indexOf(currentlyPlaying?.fsStats.fullPath) : -1;
 
         emitInfo({
           level: 'info',

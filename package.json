@@ -1,7 +1,7 @@
 {
   "name": "@fridgefm/radio-core",
   "author": "ch1ller0",
-  "version": "3.3.2",
+  "version": "3.4.0",
   "description": "Internet live radio engine for NodeJS / bun ",
   "license": "MIT",
   "main": "./lib/index.js",

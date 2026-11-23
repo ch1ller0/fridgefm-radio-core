@@ -17,12 +17,20 @@ npm i @fridgefm/radio-core --save
 ### Server
 ```ts
 const { Station } = require('@fridgefm/radio-core');
+const { pipeline, Readable } = require('node:stream');
 const station = new Station();
 
 station.addFolder('User/Music');
 
 server.get('/stream', (req, res) => {
-  station.connectListener(req, res);
+  res.writeHead(200, { 'icy-genre': 'jazz' });
+  const stream = station.getReadableStream();
+
+  pipeline(Readable.fromWeb(stream), res, (err) => {
+    if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+      console.error(err);
+    }
+  });
 });
 
 station.start();
@@ -48,10 +56,10 @@ const myAwesomeStation = new Station({
 ```
 
 ## Station methods
-`connectListener` connects real users to your station, this is the only method that should be exposed to listeners  
-response argument is required
+`getReadableStream` returns a web `ReadableStream` with the live audio for one listener, starting with the prebuffer  
+pipe it to the listener's response, ideally with `pipeline` so the listener is removed when the client disconnects. The HTTP status and headers are set by your server
 ```ts
-station.connectListener(request, response, callback);
+const stream = station.getReadableStream();
 ```
 `addFolder` adds track within a folder to the playlist
 ```ts

@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { pipeline, Readable } from 'node:stream';
 import express from 'express';
 import type { ShallowTrackMeta } from '../src/index';
 import { PUBLIC_EVENTS, SHUFFLE_METHODS, Station } from '../src/index';
@@ -20,7 +21,7 @@ const createStation = () => {
   station.addFolder(musicPath);
 
   // Shuffle immediately
-  // station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
+  station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
 
   // update currently playing track info
   const stationState: {
@@ -52,12 +53,19 @@ const createStation = () => {
 const { station, stationState } = createStation();
 
 // main stream route
-server.get('/stream', (req, res) => {
-  // @ts-expect-error
-  station.connectListener(req, res, () => {});
+server.get('/stream', (_, res) => {
+  res.writeHead(200, { 'icy-genre': 'jazz' });
+  const stream = station.getReadableStream();
+
+  // @ts-expect-error this is ok
+  pipeline(Readable.fromWeb(stream), res, (err) => {
+    if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+      console.error(err);
+    }
+  });
 });
 
-server.get('/getState', (_, res) => {
+server.get('/state', (_, res) => {
   const playlist = station.getPlaylist();
   res.json({ currentTrack: stationState.currentTrack, playlist, paused: stationState.paused });
 });
