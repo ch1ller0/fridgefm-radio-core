@@ -1,5 +1,6 @@
 {
   "roots": ["<rootDir>/src"],
+  "resetMocks": true,
   "transform": {
     "^.+\\.ts$": [
       "ts-jest",
