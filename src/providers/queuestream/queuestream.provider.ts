@@ -1,10 +1,10 @@
-import { Readable, Transform, Writable } from 'stream';
-import { injectable, createToken } from '@fridgefm/inverter';
+import { Readable, Transform, type Writable } from 'node:stream';
+import { createToken, injectable } from '@fridgefm/inverter';
 import devnull from 'dev-null';
 import { captureTime } from '../../utils/time';
-import { PUBLIC_EVENTS, EVENT_BUS_TOKEN } from '../events/events.provider';
-import { PREBUFFER_TOKEN } from '../prebuffer/prebuffer.provider';
+import { EVENT_BUS_TOKEN, PUBLIC_EVENTS } from '../events/events.provider';
 import { PLAYLIST_TOKEN } from '../playlist/playlist.provider';
+import { PREBUFFER_TOKEN } from '../prebuffer/prebuffer.provider';
 import type { Queuestream } from './queuestream.types';
 
 export const QUEUESTREAM_TOKEN = createToken<Queuestream>('queuestream');

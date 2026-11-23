@@ -70,7 +70,7 @@ describe('public/HappyPath/Station', () => {
     const station = new Station();
 
     station.addFolder(pathToMusic);
-    // @ts-ignore
+    // @ts-expect-error
     station.connectListener(null, resMock, cbMock);
     expect(resMock.writeHead.mock.calls[0][0]).toEqual(200); // success code
     expect(resMock.writeHead.mock.calls[0][1]).toBeInstanceOf(Object); // response headers
@@ -78,7 +78,7 @@ describe('public/HappyPath/Station', () => {
     expect(resMock.emit.mock.calls[0][0]).toEqual('pipe'); // pipes stream
     expect(cbMock).toBeCalledTimes(1); // callback executed
 
-    // @ts-ignore
+    // @ts-expect-error
     station.connectListener(null, resMock);
     expect(resMock.writeHead.mock.calls[1][0]).toEqual(200); // success code
     expect(resMock.writeHead.mock.calls[1][1]).toBeInstanceOf(Object); // response headers

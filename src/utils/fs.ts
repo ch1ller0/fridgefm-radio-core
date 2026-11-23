@@ -1,5 +1,5 @@
-import klaw from 'klaw-sync';
 import fs from 'fs-extra';
+import klaw from 'klaw-sync';
 import Mp3 from './mp3';
 
 const getPaths = (fullPath: string): readonly string[] => {
@@ -18,4 +18,5 @@ const getPaths = (fullPath: string): readonly string[] => {
 };
 
 export const createList = (folders: string[]) =>
+  // biome-ignore lint/performance/noAccumulatingSpread: this is ok
   folders.reduce((acc, cur) => [...acc, ...getPaths(cur).filter(Mp3.isSupported)], [] as string[]);

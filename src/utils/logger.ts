@@ -1,6 +1,5 @@
-/* eslint-disable no-param-reassign */
-import winston from 'winston';
 import chalk from 'chalk';
+import winston from 'winston';
 import { getHHMMSS } from './time';
 
 const colors = {
@@ -12,7 +11,7 @@ const colors = {
 };
 
 const fridgeformat = winston.format((info) => {
-  // @ts-ignore
+  // @ts-expect-error
   const chalked = colors[info.level] || colors.default;
 
   const add = {
@@ -20,7 +19,6 @@ const fridgeformat = winston.format((info) => {
     event: `${info.name || ''}:${info.event}::`,
   };
 
-  // @ts-ignore
   info.message = `${colors.time(getHHMMSS(Date.now()))} ${chalked(add.event)} ${info.message || ''} ${chalked(
     add.timings,
   )}`;

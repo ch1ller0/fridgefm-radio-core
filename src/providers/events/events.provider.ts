@@ -1,10 +1,9 @@
-import { EventEmitter } from 'events';
-import { injectable, createToken } from '@fridgefm/inverter';
+import { EventEmitter } from 'node:events';
+import { createToken, injectable } from '@fridgefm/inverter';
 import { logger } from '../../utils/logger';
-import { CONFIG_TOKEN } from '../tokens';
-
-import type { ErrorEvent, InfoEvent, TEmitter } from './events.types';
 import type { Config } from '../config';
+import { CONFIG_TOKEN } from '../tokens';
+import type { ErrorEvent, InfoEvent, TEmitter } from './events.types';
 
 export const EVENT_BUS_TOKEN = createToken<Pick<TEmitter, 'emit' | 'on'>>('event_bus');
 

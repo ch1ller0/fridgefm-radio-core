@@ -1,13 +1,13 @@
+import type { Readable } from 'node:stream';
 import { createToken, injectable } from '@fridgefm/inverter';
 import fs from 'fs-extra';
 import _ from 'highland';
+import type { Tags } from 'node-id3';
 import id3 from 'node-id3';
 import { extractLast } from '../../utils/funcs';
-import { getDateFromMsecs } from '../../utils/time';
 import Mp3 from '../../utils/mp3';
-import type { Readable } from 'stream';
-import type { TTrack, TrackStats, ShallowTrackMeta, TrackPath } from './track.types';
-import type { Tags } from 'node-id3';
+import { getDateFromMsecs } from '../../utils/time';
+import type { ShallowTrackMeta, TrackPath, TrackStats, TTrack } from './track.types';
 
 export const TRACK_FACTORY_TOKEN = createToken<(path: string) => TTrack>('track');
 
@@ -62,11 +62,10 @@ export const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): 
     const hlStream = _(fs.createReadStream(fullPath, { highWaterMark: bitrate }));
 
     const comp = _.seq(
-      // @ts-ignore
+      // @ts-expect-error
       _.drop(Math.floor(tagsSize / bitrate)), // remove id3tags from stream
-      // @ts-ignore
       // _.slice(60, 80), // for debuggine purposes
-      // @ts-ignore
+      // @ts-expect-error
       _.ratelimit(1, 1000),
     );
 
@@ -75,7 +74,7 @@ export const createSoundStream = ({ fullPath, bitrate, tagsSize }: TrackStats): 
     return [null, createdStream.toNodeStream() as Readable];
   } catch (e) {
     // skip track if it is not accessible
-    // @ts-ignore
+    // @ts-expect-error
     return [e, _(new Array(0)).toNodeStream()];
   }
 };

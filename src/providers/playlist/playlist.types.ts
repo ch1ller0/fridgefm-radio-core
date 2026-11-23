@@ -1,4 +1,4 @@
-import type { TTrack, TrackPath } from '../track/track.types';
+import type { TrackPath, TTrack } from '../track/track.types';
 
 export type PlaylistElement = {
   isPlaying: boolean;

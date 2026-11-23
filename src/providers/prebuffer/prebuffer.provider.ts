@@ -1,4 +1,4 @@
-import { injectable, createToken } from '@fridgefm/inverter';
+import { createToken, injectable } from '@fridgefm/inverter';
 import { CONFIG_TOKEN } from '../tokens';
 
 type PrebufferArgs = { prebufferLength: number };

@@ -1,6 +1,6 @@
 import devnull from 'dev-null';
-import { getStats, getMetaAsync, createSoundStream } from '../track.provider';
-import { pathToMusic, tracks, TestFile } from '../../../__tests__/test-utils.mock';
+import { pathToMusic, TestFile, tracks } from '../../../__tests__/test-utils.mock';
+import { createSoundStream, getMetaAsync, getStats } from '../track.provider';
 
 describe('track/methods', () => {
   it('getStats', () => {
@@ -71,7 +71,7 @@ describe('track/methods', () => {
       jest.useFakeTimers();
 
       const [, stream] = createSoundStream({ fullPath: tracks[0].fullPath, bitrate: 16036 });
-      const prom = new Promise((res, rej) => stream.on('error', (e) => rej(e)));
+      const prom = new Promise((_res, rej) => stream.on('error', (e) => rej(e)));
       const err = new Error('test_error');
       stream.pipe(devnull());
 

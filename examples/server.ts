@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
-import path from 'path';
+import path from 'node:path';
 import express from 'express';
-import { SHUFFLE_METHODS, PUBLIC_EVENTS, Station } from '../src/index';
 import type { ShallowTrackMeta } from '../src/index';
+import { PUBLIC_EVENTS, SHUFFLE_METHODS, Station } from '../src/index';
 
 const { NEXT_TRACK, ERROR } = PUBLIC_EVENTS;
 
@@ -43,11 +42,12 @@ station.on(NEXT_TRACK, async (track) => {
 });
 
 // add this handler - otherwise any error will exit the process as unhandled
+// biome-ignore lint/suspicious/noConsole: We need logging here
 station.on(ERROR, console.error);
 
 // main stream route
 server.get('/stream', (req, res) => {
-  // @ts-ignore
+  // @ts-expect-error
   station.connectListener(req, res, () => {});
 });
 
@@ -87,6 +87,6 @@ server.get('*', (_, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);
+  console.log(`Example server started, open http://localhost:${port}/ in the browser`);
   station.start();
 });

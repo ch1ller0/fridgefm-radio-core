@@ -6,7 +6,7 @@ export const extractLast = (str: string, symb: string): [string, string] => {
   return [arr, last];
 };
 
-export const shuffleArray = <T extends unknown>(arr: T[]): T[] =>
+export const shuffleArray = <T>(arr: T[]): T[] =>
   arr
     .map((a) => {
       const tuple: [number, typeof a] = [Math.random(), a];

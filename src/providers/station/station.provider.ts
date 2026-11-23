@@ -1,12 +1,11 @@
-import { injectable, createToken } from '@fridgefm/inverter';
+import type { ClientRequest, ServerResponse } from 'node:http';
+import { createToken, injectable } from '@fridgefm/inverter';
+import type { TStation } from '../../types/public.types';
 import { captureTime } from '../../utils/time';
+import { EVENT_BUS_TOKEN, PUBLIC_EVENTS } from '../events/events.provider';
 import { PLAYLIST_TOKEN } from '../playlist/playlist.provider';
 import { QUEUESTREAM_TOKEN } from '../queuestream/queuestream.provider';
-import { PUBLIC_EVENTS, EVENT_BUS_TOKEN } from '../events/events.provider';
 import { CONFIG_TOKEN } from '../tokens';
-
-import type { ClientRequest, ServerResponse } from 'http';
-import type { TStation } from '../../types/public.types';
 
 export const STATION_PUBLIC_TOKEN = createToken<TStation>('station_root');
 
