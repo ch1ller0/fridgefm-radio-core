@@ -10,40 +10,46 @@ const server = express();
 const musicPath = path.resolve(process.cwd(), process.argv[2] || './examples/music');
 const prebufferLength = 8;
 
-const station = new Station({
-  verbose: true, // for verbose logging to console
-  responseHeaders: { 'icy-genre': 'jazz' },
-  prebufferLength,
-});
-// add folder to station
-station.addFolder(musicPath);
+const createStation = () => {
+  const station = new Station({
+    verbose: true, // for verbose logging to console
+    responseHeaders: { 'icy-genre': 'jazz' },
+    prebufferLength,
+  });
+  // add folder to station
+  station.addFolder(musicPath);
 
-// Shuffle immediately
-// station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
+  // Shuffle immediately
+  // station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
 
-// update currently playing track info
-const state: {
-  currentTrack: ShallowTrackMeta | undefined;
-  paused: boolean;
-} = {
-  currentTrack: undefined,
-  paused: false,
+  // update currently playing track info
+  const stationState: {
+    currentTrack: ShallowTrackMeta | undefined;
+    paused: boolean;
+  } = {
+    currentTrack: undefined,
+    paused: false,
+  };
+  station.on(NEXT_TRACK, async (track) => {
+    const result = await track.getMetaAsync();
+    if (!stationState.currentTrack) {
+      stationState.currentTrack = result;
+    } else {
+      // in order to compensate a lag between the server and client
+      setTimeout(() => {
+        stationState.currentTrack = result;
+      }, prebufferLength * 1000);
+    }
+  });
+
+  // add this handler - otherwise any error will exit the process as unhandled
+  // biome-ignore lint/suspicious/noConsole: We need logging here
+  station.on(ERROR, console.error);
+
+  return { station, stationState };
 };
-station.on(NEXT_TRACK, async (track) => {
-  const result = await track.getMetaAsync();
-  if (!state.currentTrack) {
-    state.currentTrack = result;
-  } else {
-    // in order to compensate a lag between the server and client
-    setTimeout(() => {
-      state.currentTrack = result;
-    }, prebufferLength * 1000);
-  }
-});
 
-// add this handler - otherwise any error will exit the process as unhandled
-// biome-ignore lint/suspicious/noConsole: We need logging here
-station.on(ERROR, console.error);
+const { station, stationState } = createStation();
 
 // main stream route
 server.get('/stream', (req, res) => {
@@ -53,7 +59,7 @@ server.get('/stream', (req, res) => {
 
 server.get('/getState', (_, res) => {
   const playlist = station.getPlaylist();
-  res.json({ currentTrack: state.currentTrack, playlist, paused: state.paused });
+  res.json({ currentTrack: stationState.currentTrack, playlist, paused: stationState.paused });
 });
 
 // switch to the next track immediately
@@ -64,7 +70,7 @@ server.post('/controls/next', (_, res) => {
 
 server.post('/controls/pause', (_, res) => {
   const paused = station.togglePause();
-  state.paused = paused;
+  stationState.paused = paused;
   res.json(`Paused: ${paused}`);
 });
 

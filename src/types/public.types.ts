@@ -34,11 +34,14 @@ export type TStation = {
   getPlaylist(): TrackList;
   /**
    * Starts piping the stream to the listener
+   * @deprecated Use getReadableStream instead and pipe manually
+   *
    */
   connectListener(req: ClientRequest | undefined, res: ServerResponse, cb: () => void): void;
   /**
    * Lets you listen to various track events
    */
+  getReadableStream(): ReadableStream;
   on: TEmitter['on'];
 };
 
