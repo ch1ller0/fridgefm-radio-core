@@ -60,6 +60,7 @@ server.get('/stream', (_, res) => {
   // @ts-expect-error this is ok
   pipeline(Readable.fromWeb(stream), res, (err) => {
     if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+      // biome-ignore lint/suspicious/noConsole: We need logging here
       console.error(err);
     }
   });
