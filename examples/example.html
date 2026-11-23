@@ -99,6 +99,7 @@
       }, 1000)
     }
     audioEl.onerror = (event, source, lineno, colno, error)=> {
+      // the error happens mostly when tracks have different bitrate
       console.log("stream error", event, error)
       reconnect()
     }

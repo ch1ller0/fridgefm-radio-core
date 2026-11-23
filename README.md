@@ -154,9 +154,3 @@ npm run dev [path/to/your_mp3tracks]
 ## Demo
 Sandbox is available here on [Codesandbox](https://codesandbox.io/p/github/ch1ller0/fridgefm-radio-core/main)\
 Fully working demo is available on [FridgeFM](https://fridgefm.com)
-
-## Plan
-- update all dependencies
-- get rid of logger
-- get rid of express
-- method to get info of the currently playing track
