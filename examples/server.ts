@@ -87,6 +87,7 @@ server.get('*', (_, res) => {
 });
 
 server.listen(port, () => {
+  // biome-ignore lint/suspicious/noConsole: We need logging here
   console.log(`Example server started, open http://localhost:${port}/ in the browser`);
   station.start();
 });
