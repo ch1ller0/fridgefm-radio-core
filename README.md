@@ -16,8 +16,8 @@ npm i @fridgefm/radio-core --save
 ```
 ### Server
 ```ts
-const { Station } = require('@fridgefm/radio-core');
-const { pipeline, Readable } = require('node:stream');
+import { Station } from '@fridgefm/radio-core';
+import { Readable, pipeline } from 'node:stream';
 const station = new Station();
 
 station.addFolder('User/Music');
@@ -95,7 +95,7 @@ station.reorderPlaylist(myShuffleMethod);
 ```
 There are also some built-in shuffle methods
 ```ts
-const { SHUFFLE_METHODS } = require('@fridgefm/radio-core')
+import { SHUFFLE_METHODS } from '@fridgefm/radio-core';
 
 // This one randomly shuffles the playlist (keeping the length the same)
 station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
@@ -109,7 +109,7 @@ station.reorderPlaylist(SHUFFLE_METHODS.rearrange({ from: 1, to: 2 }));
 ## Station events
 Station emits several events - they are available via 
 ```ts
-const { PUBLIC_EVENTS } = require('@fridgefm/radio-core')
+import { PUBLIC_EVENTS } from '@fridgefm/radio-core';
 ```
 #### `NEXT_TRACK`
 event fires when track changes  
@@ -154,3 +154,9 @@ npm run dev [path/to/your_mp3tracks]
 ## Demo
 Sandbox is available here on [Codesandbox](https://codesandbox.io/p/github/ch1ller0/fridgefm-radio-core/main)\
 Fully working demo is available on [FridgeFM](https://fridgefm.com)
+
+## Plan
+- update all dependencies
+- get rid of logger
+- get rid of express
+- method to get info of the currently playing track

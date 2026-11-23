@@ -1,13 +1,13 @@
+import { readFile } from 'node:fs/promises';
+import { createServer, type ServerResponse } from 'node:http';
 import path from 'node:path';
 import { pipeline, Readable } from 'node:stream';
-import express from 'express';
 import type { ShallowTrackMeta } from '../src/index';
 import { PUBLIC_EVENTS, SHUFFLE_METHODS, Station } from '../src/index';
 
 const { NEXT_TRACK, ERROR } = PUBLIC_EVENTS;
 
 const port = 3001;
-const server = express();
 const musicPath = path.resolve(process.cwd(), process.argv[2] || './examples/music');
 const prebufferLength = 8;
 
@@ -52,53 +52,83 @@ const createStation = () => {
 
 const { station, stationState } = createStation();
 
-// main stream route
-server.get('/stream', (_, res) => {
-  res.writeHead(200, { 'icy-genre': 'jazz' });
-  const stream = station.getReadableStream();
+const sendJson = (res: ServerResponse, data: unknown) => {
+  res.writeHead(200, { 'content-type': 'application/json' });
+  res.end(JSON.stringify(data));
+};
 
-  // @ts-expect-error this is ok
-  pipeline(Readable.fromWeb(stream), res, (err) => {
-    if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+const server = createServer(async (req, res) => {
+  const url = new URL(req.url || '/', 'http://localhost');
+  const { pathname, searchParams } = url;
+
+  // main stream route
+  if (req.method === 'GET' && pathname === '/stream') {
+    res.writeHead(200, { 'icy-genre': 'jazz' });
+    const stream = station.getReadableStream();
+
+    // @ts-expect-error this is ok
+    pipeline(Readable.fromWeb(stream), res, (err) => {
+      if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+        // biome-ignore lint/suspicious/noConsole: We need logging here
+        console.error(err);
+      }
+    });
+    return;
+  }
+
+  if (req.method === 'GET' && pathname === '/state') {
+    const playlist = station.getPlaylist();
+    sendJson(res, { currentTrack: stationState.currentTrack, playlist, paused: stationState.paused });
+    return;
+  }
+
+  // switch to the next track immediately
+  if (req.method === 'POST' && pathname === '/controls/next') {
+    station.next();
+    sendJson(res, 'Switched to next track');
+    return;
+  }
+
+  if (req.method === 'POST' && pathname === '/controls/pause') {
+    const paused = station.togglePause();
+    stationState.paused = paused;
+    sendJson(res, `Paused: ${paused}`);
+    return;
+  }
+
+  // shuffle playlist
+  if (req.method === 'POST' && pathname === '/controls/shufflePlaylist') {
+    station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
+    sendJson(res, 'Playlist shuffled');
+    return;
+  }
+
+  // rearrange tracks in a playlist
+  if (req.method === 'POST' && pathname === '/controls/rearrangePlaylist') {
+    const oldIndex = searchParams.get('oldIndex');
+    const newIndex = searchParams.get('newIndex');
+    station.reorderPlaylist(SHUFFLE_METHODS.rearrange({ from: Number(oldIndex), to: Number(newIndex) }));
+    sendJson(res, `Succesfully moved element from "${oldIndex}" to "${newIndex}"`);
+    return;
+  }
+
+  // route for serving static
+  if (req.method === 'GET') {
+    try {
+      const html = await readFile(path.resolve(__dirname, './example.html'));
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.end(html);
+    } catch (err) {
       // biome-ignore lint/suspicious/noConsole: We need logging here
       console.error(err);
+      res.writeHead(500);
+      res.end();
     }
-  });
-});
+    return;
+  }
 
-server.get('/state', (_, res) => {
-  const playlist = station.getPlaylist();
-  res.json({ currentTrack: stationState.currentTrack, playlist, paused: stationState.paused });
-});
-
-// switch to the next track immediately
-server.post('/controls/next', (_, res) => {
-  station.next();
-  res.json('Switched to next track');
-});
-
-server.post('/controls/pause', (_, res) => {
-  const paused = station.togglePause();
-  stationState.paused = paused;
-  res.json(`Paused: ${paused}`);
-});
-
-// shuffle playlist
-server.post('/controls/shufflePlaylist', (_, res) => {
-  station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
-  res.json('Playlist shuffled');
-});
-
-// rearrange tracks in a playlist
-server.post('/controls/rearrangePlaylist', (req, res) => {
-  const { newIndex, oldIndex } = req.query;
-  station.reorderPlaylist(SHUFFLE_METHODS.rearrange({ from: Number(oldIndex), to: Number(newIndex) }));
-  res.json(`Succesfully moved element from "${oldIndex}" to "${newIndex}"`);
-});
-
-// route for serving static
-server.get('*', (_, res) => {
-  res.sendFile(path.resolve(__dirname, './example.html'));
+  res.writeHead(404);
+  res.end();
 });
 
 server.listen(port, () => {
