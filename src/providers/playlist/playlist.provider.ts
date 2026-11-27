@@ -26,6 +26,7 @@ export const playlistProvider = injectable({
 
     const revalidate = () => {
       const ct = captureTime();
+      const prevTracks = tracksMap;
       list = createList(Array.from(folders));
       tracksMap = list
         .filter((path) => {
@@ -39,7 +40,11 @@ export const playlistProvider = injectable({
             return acc;
           }
 
-          return acc.set(path, createTrack(path));
+          const track = createTrack(path);
+          // keep play counts of tracks that were already known
+          track.playCount = prevTracks.get(path)?.playCount ?? 0;
+
+          return acc.set(path, track);
         }, new Map() as TrackMap);
 
       const result = publicPlaylist.getList();

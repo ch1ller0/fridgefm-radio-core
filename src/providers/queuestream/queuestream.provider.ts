@@ -42,7 +42,7 @@ export const queuestreamProvider = injectable({
         const nextTrack = playlist.getNext();
 
         // destroy previous track stream if there was one
-        trackStream?.destroy();
+        trackStream.unpipe(currentStream).destroy();
 
         // populate newly created stream with some handlers
         const [error, newStream] = nextTrack.getSound();

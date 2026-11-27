@@ -59,7 +59,7 @@
   </head>
   <body>
     <div class='showcase'>
-      <audio controls src='/stream' type='audio/mp3'></audio>
+      <audio id="audio" controls src='/stream' type='audio/mp3'></audio>
       <div class='result'>
           <p><span id="artist-value">Artist</span></p>
           <p><span id="title-value">Trackname</span></p>
@@ -86,6 +86,28 @@
     </div>
   </body>
   <script>
+    const audioEl = document.getElementById("audio")
+    let reconnectTimer = null
+    const reconnect = () => {
+      // error and ended can both fire for the same failure, so schedule only one reconnect
+      if (reconnectTimer) return
+      reconnectTimer = setTimeout(() => {
+        reconnectTimer = null
+        // timestamp avoids reusing a cached response
+        audioEl.src = `/stream?t=${Date.now()}`
+        audioEl.play().catch((err) => console.log("play failed", err))
+      }, 1000)
+    }
+    audioEl.onerror = (event, source, lineno, colno, error)=> {
+      // the error happens mostly when tracks have different bitrate
+      console.log("stream error", event, error)
+      reconnect()
+    }
+    audioEl.onended = () => {
+      console.log("stream ended")
+      reconnect()
+    }
+
     function request(route, method) {
       return fetch(route, { method })
         .then(res => res.json())
@@ -145,7 +167,7 @@
     // short polling results and applying them after prebuffer length is applied
     function update({ isRecursive }) {
       return stationService.getState().then(() => {
-        if (isRecursive) { setTimeout(() => update({ isRecursive: true }), 2000) }
+        if (isRecursive) { setTimeout(() => update({ isRecursive: true }), 2500) }
       })
     }
     update({ isRecursive: true })
